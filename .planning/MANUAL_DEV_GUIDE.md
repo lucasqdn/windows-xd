@@ -7,6 +7,7 @@ This document helps developers work on windows-xd without using the GSD framewor
 **What we're building:** A pixel-perfect Windows 98 recreation in Next.js 16 with real-time multiplayer chat and LLM-powered Clippy assistant.
 
 **Tech stack:**
+
 - Next.js 16.1.6 (App Router)
 - React 19.2.3
 - TypeScript 5 (strict mode)
@@ -15,6 +16,7 @@ This document helps developers work on windows-xd without using the GSD framewor
 - Gemini API (@google/genai v1.39.0) for LLM Clippy
 
 **Core libraries:**
+
 - react-rnd v10.5.2 (window dragging/resizing)
 - zustand (window state management)
 - fabric.js v7.1.0 (Paint canvas)
@@ -77,11 +79,13 @@ npm run build
 Follow `AGENTS.md` strictly:
 
 **File naming:**
+
 - Components: `PascalCase.tsx` (e.g., `WindowManager.tsx`)
 - Utilities: `camelCase.ts` (e.g., `windowHelpers.ts`)
 - Pages: `lowercase.tsx` (e.g., `page.tsx`, `layout.tsx`)
 
 **Import order:**
+
 ```typescript
 // 1. External packages
 import { useState } from "react";
@@ -101,29 +105,33 @@ import "./styles.css";
 ```
 
 **Naming conventions:**
+
 - Components: `PascalCase` — `function WindowManager()`
 - Functions: `camelCase` — `const openWindow = ()`
 - Constants: `UPPER_SNAKE_CASE` — `const MAX_Z_INDEX = 9999`
 - Types: `PascalCase` — `type WindowState = {}`
 
 **TypeScript:**
+
 - Strict mode enabled (no `any`)
 - Explicit return types for functions
 - Use `type` over `interface`
 - Props type for components:
+
   ```typescript
   type ButtonProps = {
     label: string;
     onClick: () => void;
     disabled?: boolean;
   };
-  
+
   export default function Button({ label, onClick, disabled }: ButtonProps) {
     return <button onClick={onClick} disabled={disabled}>{label}</button>;
   }
   ```
 
 **Tailwind CSS class order:**
+
 ```tsx
 <div className="
   flex               {/* Layout */}
@@ -144,6 +152,7 @@ import "./styles.css";
 **Priority:** HIGHEST — Everything depends on this
 
 #### Requirements
+
 - WIN-01 to WIN-07: Window drag, resize, minimize, maximize, close, focus, z-index
 - DESK-01 to DESK-06: Desktop background, icons, taskbar, Start button, system tray
 - MENU-01 to MENU-04: Start menu with Programs submenu
@@ -152,6 +161,7 @@ import "./styles.css";
 #### Key Files to Create
 
 **1. Window Management Context** (`app/contexts/WindowManagerContext.tsx`)
+
 ```typescript
 type WindowState = {
   id: string;
@@ -167,7 +177,7 @@ type WindowState = {
 
 type WindowManagerContextType = {
   windows: WindowState[];
-  openWindow: (window: Omit<WindowState, 'id' | 'isOpen' | 'zIndex'>) => void;
+  openWindow: (window: Omit<WindowState, "id" | "isOpen" | "zIndex">) => void;
   closeWindow: (id: string) => void;
   minimizeWindow: (id: string) => void;
   maximizeWindow: (id: string) => void;
@@ -176,30 +186,35 @@ type WindowManagerContextType = {
 ```
 
 **2. Desktop Component** (`app/components/Desktop.tsx`)
+
 - Teal background (#008080)
 - Renders desktop icons
 - Handles desktop clicks (close Start menu)
 - Container for all windows
 
 **3. Window Component** (`app/components/Window.tsx`)
+
 - Reusable window chrome (title bar, borders, buttons)
 - Uses react-rnd for drag/resize
 - Integrates with WindowManager context
 - Windows 98 styling (3D bevels)
 
 **4. Taskbar Component** (`app/components/Taskbar.tsx`)
+
 - Fixed at bottom
 - Start button (left)
 - Window buttons (middle)
 - System tray with clock (right)
 
 **5. Start Menu Component** (`app/components/StartMenu.tsx`)
+
 - Opens on Start button click
 - Programs submenu
 - Shut Down option
 - Classic Windows 98 layout
 
 **6. Desktop Icons** (`app/components/DesktopIcon.tsx`)
+
 - My Computer, Recycle Bin, etc.
 - Double-click to open (use double-click detection)
 - Windows 98 icon styling
@@ -207,42 +222,48 @@ type WindowManagerContextType = {
 #### Critical Implementation Details
 
 **Z-index Management (CRITICAL - See PITFALLS.md)**
+
 ```typescript
 // WRONG: Incrementing z-index infinitely
 const focusWindow = (id: string) => {
-  setWindows(windows.map(w => 
-    w.id === id ? { ...w, zIndex: w.zIndex + 1 } : w
-  ));
+  setWindows(
+    windows.map((w) => (w.id === id ? { ...w, zIndex: w.zIndex + 1 } : w)),
+  );
 };
 
 // RIGHT: Reorder all z-indexes
 const focusWindow = (id: string) => {
   const sorted = [...windows].sort((a, b) => a.zIndex - b.zIndex);
-  setWindows(sorted.map((w, i) => ({
-    ...w,
-    zIndex: w.id === id ? sorted.length : i
-  })));
+  setWindows(
+    sorted.map((w, i) => ({
+      ...w,
+      zIndex: w.id === id ? sorted.length : i,
+    })),
+  );
 };
 ```
 
 **Window Dragging Performance**
+
 - Use react-rnd's `onDragStop` instead of `onDrag` to reduce re-renders
 - Throttle position updates if using `onDrag`
 
 **Memory Leak Prevention**
+
 ```typescript
 // Clean up event listeners in Window component
 useEffect(() => {
   const handleClick = () => focusWindow(id);
-  window.addEventListener('click', handleClick);
-  
-  return () => window.removeEventListener('click', handleClick);
+  window.addEventListener("click", handleClick);
+
+  return () => window.removeEventListener("click", handleClick);
 }, [id]);
 ```
 
 **Windows 98 Styling**
 
 Tailwind config for 3D bevels (`globals.css`):
+
 ```css
 /* 3D raised bevel (buttons, windows) */
 .win98-raised {
@@ -250,7 +271,9 @@ Tailwind config for 3D bevels (`globals.css`):
   border-left: 2px solid #ffffff;
   border-right: 2px solid #808080;
   border-bottom: 2px solid #808080;
-  box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #dfdfdf;
+  box-shadow:
+    inset -1px -1px 0 #000000,
+    inset 1px 1px 0 #dfdfdf;
 }
 
 /* 3D inset bevel (pressed buttons, text inputs) */
@@ -259,7 +282,9 @@ Tailwind config for 3D bevels (`globals.css`):
   border-left: 2px solid #808080;
   border-right: 2px solid #ffffff;
   border-bottom: 2px solid #ffffff;
-  box-shadow: inset 1px 1px 0 #000000, inset -1px -1px 0 #dfdfdf;
+  box-shadow:
+    inset 1px 1px 0 #000000,
+    inset -1px -1px 0 #dfdfdf;
 }
 
 /* Window title bar (active) */
@@ -278,6 +303,7 @@ Tailwind config for 3D bevels (`globals.css`):
 **Authentic Windows 98 Fonts**
 
 Add to `app/layout.tsx`:
+
 ```typescript
 import localFont from 'next/font/local';
 
@@ -301,6 +327,7 @@ npm install react-rnd zustand
 #### Testing Phase 1
 
 Before moving to Phase 2, verify:
+
 - [ ] Desktop shows teal background with icons
 - [ ] Taskbar fixed at bottom with Start button
 - [ ] Start menu opens/closes properly
@@ -313,6 +340,7 @@ Before moving to Phase 2, verify:
 - [ ] Fonts look authentic (MS Sans Serif)
 
 **No memory leaks:**
+
 ```bash
 # Open Chrome DevTools → Memory tab → Take heap snapshot
 # Open 10 windows, close them all, take another snapshot
@@ -328,6 +356,7 @@ Before moving to Phase 2, verify:
 **Depends on:** Phase 1 complete
 
 #### Requirements
+
 - NOTE-01: Text editing
 - NOTE-02: File menu (New, Open, Save, Exit)
 - NOTE-03: Edit menu (Cut, Copy, Paste, Undo)
@@ -335,6 +364,7 @@ Before moving to Phase 2, verify:
 #### Key Files to Create
 
 **1. Notepad Component** (`app/components/apps/Notepad.tsx`)
+
 ```typescript
 export default function Notepad() {
   const [text, setText] = useState('');
@@ -395,29 +425,32 @@ export default function Notepad() {
 ```
 
 **2. Menu Bar Component** (`app/components/apps/MenuBar.tsx`)
+
 - Reusable menu bar for apps
 - Dropdown menus on click
 - Keyboard shortcuts display
 - Windows 98 styling
 
 **3. Register Notepad in Desktop**
+
 ```typescript
 // In Desktop.tsx or page.tsx
 const handleIconDoubleClick = (appName: string) => {
-  if (appName === 'Notepad') {
+  if (appName === "Notepad") {
     openWindow({
-      title: 'Untitled - Notepad',
+      title: "Untitled - Notepad",
       component: Notepad,
       isMinimized: false,
       isMaximized: false,
       position: { x: 100, y: 100 },
-      size: { width: 600, height: 400 }
+      size: { width: 600, height: 400 },
     });
   }
 };
 ```
 
 #### Testing Phase 2
+
 - [ ] Can launch Notepad from desktop icon or Start menu
 - [ ] Can type and edit text
 - [ ] Menus appear on click
@@ -434,16 +467,19 @@ const handleIconDoubleClick = (appName: string) => {
 **Depends on:** Phase 1 complete
 
 #### Requirements
+
 - PAINT-01 to PAINT-07: Canvas, pencil, line, rectangle, fill, palette, undo/redo
 
 #### Key Files to Create
 
 **1. Paint Component** (`app/components/apps/Paint.tsx`)
+
 - Container for canvas and palettes
 - Tool state management
 - Color state management
 
 **2. Canvas Component** (`app/components/apps/paint/Canvas.tsx`)
+
 ```typescript
 import { useEffect, useRef } from 'react';
 import { fabric } from 'fabric';
@@ -473,56 +509,59 @@ export default function Canvas() {
 ```
 
 **3. Tool Palette** (`app/components/apps/paint/ToolPalette.tsx`)
+
 - Grid of tool icons
 - Selected tool highlight
 - Windows 98 button styling
 
 **4. Tool Implementations** (`app/lib/paintTools.ts`)
+
 ```typescript
 export const tools = {
   pencil: (canvas: fabric.Canvas) => {
     canvas.isDrawingMode = true;
     canvas.freeDrawingBrush.width = 1;
   },
-  
+
   line: (canvas: fabric.Canvas) => {
     canvas.isDrawingMode = false;
     let line: fabric.Line;
     let isDrawing = false;
-    
-    canvas.on('mouse:down', (e) => {
+
+    canvas.on("mouse:down", (e) => {
       isDrawing = true;
       const pointer = canvas.getPointer(e.e);
       line = new fabric.Line([pointer.x, pointer.y, pointer.x, pointer.y], {
         stroke: canvas.freeDrawingBrush.color,
-        strokeWidth: 2
+        strokeWidth: 2,
       });
       canvas.add(line);
     });
-    
-    canvas.on('mouse:move', (e) => {
+
+    canvas.on("mouse:move", (e) => {
       if (!isDrawing) return;
       const pointer = canvas.getPointer(e.e);
       line.set({ x2: pointer.x, y2: pointer.y });
       canvas.renderAll();
     });
-    
-    canvas.on('mouse:up', () => {
+
+    canvas.on("mouse:up", () => {
       isDrawing = false;
     });
   },
-  
+
   rectangle: (canvas: fabric.Canvas) => {
     // Similar to line but with fabric.Rect
   },
-  
+
   fill: (canvas: fabric.Canvas, color: string) => {
     // Flood fill algorithm (complex - see fabric.js docs)
-  }
+  },
 };
 ```
 
 **5. Undo/Redo**
+
 ```typescript
 const [history, setHistory] = useState<string[]>([]);
 const [historyStep, setHistoryStep] = useState(-1);
@@ -544,17 +583,20 @@ const undo = (canvas: fabric.Canvas) => {
 ```
 
 #### Installation
+
 ```bash
 npm install fabric
 npm install --save-dev @types/fabric
 ```
 
 #### Performance Considerations
+
 - Debounce canvas state saves (don't save on every mouse move)
 - Limit history to 50 states
 - Use `canvas.renderOnAddRemove = false` during bulk operations
 
 #### Testing Phase 3
+
 - [ ] Can launch Paint
 - [ ] Canvas renders white background
 - [ ] Tool palette shows all tools
@@ -574,6 +616,7 @@ npm install --save-dev @types/fabric
 **Depends on:** Phase 1 complete
 
 #### Requirements
+
 - FILE-01: Folder tree
 - FILE-02: Double-click navigation
 - FILE-03: Back/forward buttons
@@ -581,70 +624,74 @@ npm install --save-dev @types/fabric
 #### Key Files to Create
 
 **1. File Explorer Component** (`app/components/apps/FileExplorer.tsx`)
+
 - Split view: folder tree (left) + file list (right)
 - Back/forward navigation state
 - Address bar
 
 **2. Virtual Filesystem** (`app/lib/virtualFilesystem.ts`)
+
 ```typescript
 export type FileSystemNode = {
   name: string;
-  type: 'file' | 'folder';
+  type: "file" | "folder";
   children?: FileSystemNode[];
   icon?: string;
 };
 
 export const virtualFS: FileSystemNode = {
-  name: 'My Computer',
-  type: 'folder',
+  name: "My Computer",
+  type: "folder",
   children: [
     {
-      name: 'C:',
-      type: 'folder',
+      name: "C:",
+      type: "folder",
       children: [
         {
-          name: 'Program Files',
-          type: 'folder',
+          name: "Program Files",
+          type: "folder",
           children: [
-            { name: 'Internet Explorer', type: 'folder', children: [] },
-            { name: 'Windows Media Player', type: 'folder', children: [] }
-          ]
+            { name: "Internet Explorer", type: "folder", children: [] },
+            { name: "Windows Media Player", type: "folder", children: [] },
+          ],
         },
         {
-          name: 'Windows',
-          type: 'folder',
+          name: "Windows",
+          type: "folder",
           children: [
-            { name: 'System32', type: 'folder', children: [] },
-            { name: 'Fonts', type: 'folder', children: [] }
-          ]
+            { name: "System32", type: "folder", children: [] },
+            { name: "Fonts", type: "folder", children: [] },
+          ],
         },
         {
-          name: 'My Documents',
-          type: 'folder',
+          name: "My Documents",
+          type: "folder",
           children: [
-            { name: 'readme.txt', type: 'file' },
-            { name: 'picture.bmp', type: 'file' }
-          ]
-        }
-      ]
+            { name: "readme.txt", type: "file" },
+            { name: "picture.bmp", type: "file" },
+          ],
+        },
+      ],
     },
     {
-      name: 'D:',
-      type: 'folder',
-      children: []
-    }
-  ]
+      name: "D:",
+      type: "folder",
+      children: [],
+    },
+  ],
 };
 ```
 
 **3. Folder Tree Component** (`app/components/apps/explorer/FolderTree.tsx`)
+
 - Recursive tree rendering
 - Expand/collapse arrows
 - Selected folder highlight
 
 **4. Navigation State**
+
 ```typescript
-const [history, setHistory] = useState<string[]>(['/My Computer']);
+const [history, setHistory] = useState<string[]>(["/My Computer"]);
 const [currentIndex, setCurrentIndex] = useState(0);
 
 const navigate = (path: string) => {
@@ -663,6 +710,7 @@ const goForward = () => {
 ```
 
 #### Testing Phase 4
+
 - [ ] Can launch File Explorer (My Computer)
 - [ ] Folder tree displays hierarchy
 - [ ] Can expand/collapse folders
@@ -680,6 +728,7 @@ const goForward = () => {
 **Depends on:** Phase 1 complete
 
 #### Requirements
+
 - CHAT-01: Yahoo-style retro UI
 - CHAT-02: Real-time messaging (WebSocket)
 - CHAT-03: Auto-generated usernames
@@ -688,13 +737,14 @@ const goForward = () => {
 #### Key Files to Create
 
 **1. Custom Next.js Server** (`server.ts`)
-```typescript
-import { createServer } from 'http';
-import { parse } from 'url';
-import next from 'next';
-import { Server } from 'socket.io';
 
-const dev = process.env.NODE_ENV !== 'production';
+```typescript
+import { createServer } from "http";
+import { parse } from "url";
+import next from "next";
+import { Server } from "socket.io";
+
+const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -705,42 +755,43 @@ app.prepare().then(() => {
   });
 
   const io = new Server(server, {
-    cors: { origin: '*' }
+    cors: { origin: "*" },
   });
 
-  io.on('connection', (socket) => {
+  io.on("connection", (socket) => {
     const username = generateUsername();
     socket.data.username = username;
 
-    io.emit('user-joined', { username });
+    io.emit("user-joined", { username });
 
-    socket.on('message', (msg: string) => {
-      io.emit('message', {
+    socket.on("message", (msg: string) => {
+      io.emit("message", {
         username: socket.data.username,
         text: msg,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     });
 
-    socket.on('disconnect', () => {
-      io.emit('user-left', { username: socket.data.username });
+    socket.on("disconnect", () => {
+      io.emit("user-left", { username: socket.data.username });
     });
   });
 
   server.listen(3000, () => {
-    console.log('> Ready on http://localhost:3000');
+    console.log("> Ready on http://localhost:3000");
   });
 });
 
 function generateUsername(): string {
-  const adjectives = ['Cool', 'Retro', 'Super', 'Epic', 'Mega', 'Rad'];
-  const nouns = ['User', 'Gamer', 'Fan', 'Dude', 'Legend', 'Pro'];
+  const adjectives = ["Cool", "Retro", "Super", "Epic", "Mega", "Rad"];
+  const nouns = ["User", "Gamer", "Fan", "Dude", "Legend", "Pro"];
   const num = Math.floor(Math.random() * 100);
   return `${adjectives[Math.floor(Math.random() * adjectives.length)]}${nouns[Math.floor(Math.random() * nouns.length)]}${num}`;
 }
 ```
 
 Update `package.json`:
+
 ```json
 {
   "scripts": {
@@ -752,9 +803,10 @@ Update `package.json`:
 ```
 
 **2. Chat Client Hook** (`app/hooks/useChat.ts`)
+
 ```typescript
-import { useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
 type Message = {
   username: string;
@@ -765,31 +817,37 @@ type Message = {
 export function useChat() {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [username, setUsername] = useState<string>('');
+  const [username, setUsername] = useState<string>("");
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3000');
+    const newSocket = io("http://localhost:3000");
     setSocket(newSocket);
 
-    newSocket.on('user-joined', ({ username: joinedUser }) => {
-      setMessages(prev => [...prev, {
-        username: 'System',
-        text: `${joinedUser} joined the chat`,
-        timestamp: Date.now()
-      }]);
+    newSocket.on("user-joined", ({ username: joinedUser }) => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          username: "System",
+          text: `${joinedUser} joined the chat`,
+          timestamp: Date.now(),
+        },
+      ]);
       if (!username) setUsername(joinedUser);
     });
 
-    newSocket.on('message', (msg: Message) => {
-      setMessages(prev => [...prev, msg]);
+    newSocket.on("message", (msg: Message) => {
+      setMessages((prev) => [...prev, msg]);
     });
 
-    newSocket.on('user-left', ({ username: leftUser }) => {
-      setMessages(prev => [...prev, {
-        username: 'System',
-        text: `${leftUser} left the chat`,
-        timestamp: Date.now()
-      }]);
+    newSocket.on("user-left", ({ username: leftUser }) => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          username: "System",
+          text: `${leftUser} left the chat`,
+          timestamp: Date.now(),
+        },
+      ]);
     });
 
     return () => {
@@ -798,7 +856,7 @@ export function useChat() {
   }, []);
 
   const sendMessage = (text: string) => {
-    socket?.emit('message', text);
+    socket?.emit("message", text);
   };
 
   return { messages, username, sendMessage };
@@ -806,6 +864,7 @@ export function useChat() {
 ```
 
 **3. Chatroom Component** (`app/components/apps/Chatroom.tsx`)
+
 ```typescript
 'use client';
 
@@ -849,12 +908,14 @@ export default function Chatroom() {
 ```
 
 #### Installation
+
 ```bash
 npm install socket.io socket.io-client
 npm install --save-dev tsx @types/node
 ```
 
 #### Testing Phase 5
+
 - [ ] Custom server starts on `npm run dev`
 - [ ] Can launch Chatroom window
 - [ ] Assigned auto-generated username (visible in UI)
@@ -872,6 +933,7 @@ npm install --save-dev tsx @types/node
 **Depends on:** Phases 1, 2, 3, 4 complete (needs app context)
 
 #### Requirements
+
 - CLIP-01: Context-aware help
 - CLIP-02: Idle detection
 - CLIP-03: Manual summon
@@ -880,25 +942,28 @@ npm install --save-dev tsx @types/node
 #### Key Files to Create
 
 **1. Environment Variables** (`.env.local`)
+
 ```bash
 GEMINI_API_KEY=your_api_key_here
 ```
 
 Add to `.gitignore`:
+
 ```
 .env.local
 ```
 
 **2. Gemini API Route** (`app/api/clippy/route.ts`)
+
 ```typescript
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(request: Request) {
   const { context, prompt } = await request.json();
 
-  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
   const systemPrompt = `You are Clippy, the helpful Microsoft Office assistant from Windows 98. 
 You are cheerful, slightly enthusiastic, and always eager to help.
@@ -916,8 +981,9 @@ Provide brief, helpful assistance (2-3 sentences max). Stay in character as Clip
 ```
 
 **3. Idle Detection Hook** (`app/hooks/useIdleDetection.ts`)
+
 ```typescript
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function useIdleDetection(timeoutMs: number = 30000) {
   const [isIdle, setIsIdle] = useState(false);
@@ -929,8 +995,8 @@ export function useIdleDetection(timeoutMs: number = 30000) {
       setIsIdle(false);
     };
 
-    const events = ['mousemove', 'keydown', 'click', 'scroll'];
-    events.forEach(event => window.addEventListener(event, resetTimer));
+    const events = ["mousemove", "keydown", "click", "scroll"];
+    events.forEach((event) => window.addEventListener(event, resetTimer));
 
     const interval = setInterval(() => {
       if (Date.now() - lastActivity > timeoutMs) {
@@ -939,7 +1005,7 @@ export function useIdleDetection(timeoutMs: number = 30000) {
     }, 1000);
 
     return () => {
-      events.forEach(event => window.removeEventListener(event, resetTimer));
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
       clearInterval(interval);
     };
   }, [lastActivity, timeoutMs]);
@@ -949,24 +1015,29 @@ export function useIdleDetection(timeoutMs: number = 30000) {
 ```
 
 **4. Context Collection** (`app/lib/clippyContext.ts`)
+
 ```typescript
 export function collectContext(windows: WindowState[]): string {
-  const activeWindow = windows.find(w => !w.isMinimized && w.zIndex === Math.max(...windows.map(w => w.zIndex)));
-  
-  if (!activeWindow) return 'User is on desktop';
-  
+  const activeWindow = windows.find(
+    (w) =>
+      !w.isMinimized && w.zIndex === Math.max(...windows.map((w) => w.zIndex)),
+  );
+
+  if (!activeWindow) return "User is on desktop";
+
   const context: Record<string, string> = {
-    'Notepad': 'User is writing in Notepad',
-    'Paint': 'User is drawing in Paint',
-    'File Explorer': 'User is browsing files',
-    'Chatroom': 'User is in the chatroom'
+    Notepad: "User is writing in Notepad",
+    Paint: "User is drawing in Paint",
+    "File Explorer": "User is browsing files",
+    Chatroom: "User is in the chatroom",
   };
-  
+
   return context[activeWindow.title] || `User is using ${activeWindow.title}`;
 }
 ```
 
 **5. Clippy Component** (`app/components/Clippy.tsx`)
+
 ```typescript
 'use client';
 
@@ -987,13 +1058,13 @@ export default function Clippy() {
   const askClippy = async (prompt: string) => {
     setIsLoading(true);
     const context = collectContext(windows);
-    
+
     const res = await fetch('/api/clippy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ context, prompt })
     });
-    
+
     const data = await res.json();
     setResponse(data.response);
     setIsLoading(false);
@@ -1020,6 +1091,7 @@ export default function Clippy() {
 ```
 
 **6. Manual Summon** (Add to Desktop or Menu)
+
 ```typescript
 <button onClick={() => setClippyVisible(true)}>
   Help / Clippy
@@ -1027,6 +1099,7 @@ export default function Clippy() {
 ```
 
 #### Installation
+
 ```bash
 npm install @google/generative-ai
 ```
@@ -1034,6 +1107,7 @@ npm install @google/generative-ai
 **IMPORTANT:** Use `@google/generative-ai` (NOT `@google/genai`). The SDK name changed.
 
 #### Rate Limiting (CRITICAL)
+
 ```typescript
 // Add to API route
 const RATE_LIMIT = 10; // requests per minute
@@ -1042,18 +1116,19 @@ const requests = new Map<string, number[]>();
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const userRequests = requests.get(ip) || [];
-  const recentRequests = userRequests.filter(time => now - time < 60000);
-  
+  const recentRequests = userRequests.filter((time) => now - time < 60000);
+
   if (recentRequests.length >= RATE_LIMIT) {
     return false;
   }
-  
+
   requests.set(ip, [...recentRequests, now]);
   return true;
 }
 ```
 
 #### Testing Phase 6
+
 - [ ] Clippy appears after 30s of no activity
 - [ ] Can manually summon Clippy
 - [ ] Gemini API returns responses (not errors)
@@ -1068,6 +1143,7 @@ function checkRateLimit(ip: string): boolean {
 ### General Prompting Strategy
 
 **Start with context:**
+
 ```
 I'm working on windows-xd, a Windows 98 recreation in Next.js 16.
 
@@ -1088,6 +1164,7 @@ Please read:
 ```
 
 **Be specific:**
+
 ```
 // BAD
 "Create the window component"
@@ -1103,6 +1180,7 @@ Please read:
 ```
 
 **Request verification:**
+
 ```
 After implementing, verify:
 1. Does this follow AGENTS.md style?
@@ -1115,6 +1193,7 @@ After implementing, verify:
 ### Handling AI Mistakes
 
 **Style violations:**
+
 ```
 This doesn't follow AGENTS.md. Please refactor:
 - Use camelCase for function names (not snake_case)
@@ -1123,6 +1202,7 @@ This doesn't follow AGENTS.md. Please refactor:
 ```
 
 **Wrong architecture:**
+
 ```
 This component should not manage its own state.
 Window state lives in WindowManagerContext.
@@ -1130,6 +1210,7 @@ Please refactor to use useWindowManager() hook instead.
 ```
 
 **Performance issues:**
+
 ```
 This re-renders on every mouse move (60fps).
 Use react-rnd's onDragStop instead of onDrag.
@@ -1143,6 +1224,7 @@ Throttle updates if you must use onDrag.
 ### Issue: "react-rnd windows get stuck"
 
 **Solution:** Ensure bounds are set correctly
+
 ```typescript
 <Rnd
   bounds="parent"  // Constrain to parent element
@@ -1160,7 +1242,8 @@ Throttle updates if you must use onDrag.
 
 ### Issue: "Canvas drawing is laggy"
 
-**Solution:** 
+**Solution:**
+
 - Disable render on add: `canvas.renderOnAddRemove = false`
 - Batch operations
 - Use `requestAnimationFrame` for smooth updates
@@ -1176,6 +1259,7 @@ Throttle updates if you must use onDrag.
 ### Issue: "TypeScript strict mode errors"
 
 **Solution:**
+
 - Don't use `any`
 - Add proper types: `const windows: WindowState[] = []`
 - Use type guards for nullable values:
@@ -1188,6 +1272,7 @@ Throttle updates if you must use onDrag.
 ### Issue: "Desktop icons don't double-click"
 
 **Solution:** Implement double-click detection:
+
 ```typescript
 const [lastClick, setLastClick] = useState(0);
 
@@ -1225,6 +1310,7 @@ git push origin feature/phase-1-window-system
 ### Commit Message Format
 
 Follow Conventional Commits:
+
 - `feat:` — New feature
 - `fix:` — Bug fix
 - `refactor:` — Code restructure
@@ -1243,6 +1329,7 @@ git commit -m "style(desktop): apply Windows 98 teal background"
 ### Pull Request Checklist
 
 Before creating PR:
+
 - [ ] Code follows AGENTS.md style
 - [ ] No TypeScript errors (`npm run build`)
 - [ ] No linting errors (`npm run lint`)
@@ -1283,6 +1370,7 @@ Before creating PR:
 ## Testing Checklist (Before Declaring Phase Complete)
 
 ### Phase 1: Desktop Shell & Window System
+
 - [ ] Desktop background is teal (#008080)
 - [ ] Icons render (My Computer, Recycle Bin, Notepad, Paint, etc.)
 - [ ] Taskbar fixed at bottom
@@ -1304,6 +1392,7 @@ Before creating PR:
 - [ ] No memory leaks (check DevTools Memory tab)
 
 ### Phase 2: Notepad
+
 - [ ] Notepad launches from icon double-click
 - [ ] Notepad launches from Start → Programs
 - [ ] Can type text
@@ -1318,6 +1407,7 @@ Before creating PR:
 - [ ] Textarea has no outline on focus
 
 ### Phase 3: Paint
+
 - [ ] Paint launches from icon/Start menu
 - [ ] Canvas displays white background
 - [ ] Tool palette shows tools (pencil, line, rectangle, fill, etc.)
@@ -1332,6 +1422,7 @@ Before creating PR:
 - [ ] No canvas memory issues (can draw for 5+ minutes)
 
 ### Phase 4: File Explorer
+
 - [ ] Explorer launches (My Computer)
 - [ ] Folder tree shows hierarchy
 - [ ] Can expand folder (shows children)
@@ -1344,6 +1435,7 @@ Before creating PR:
 - [ ] Address bar shows current path
 
 ### Phase 5: Chatroom
+
 - [ ] Chatroom launches from icon/Start menu
 - [ ] User assigned auto-generated username (visible in UI)
 - [ ] Can type message
@@ -1357,6 +1449,7 @@ Before creating PR:
 - [ ] WebSocket reconnects if connection drops
 
 ### Phase 6: Clippy
+
 - [ ] Clippy appears after 30s of idle (no mouse/keyboard)
 - [ ] Can manually summon Clippy (Help button/icon)
 - [ ] Clippy window has yellow background (#ffffcc)
@@ -1376,6 +1469,7 @@ Before creating PR:
 ### Claim Your Work
 
 Before starting, announce in team chat:
+
 ```
 Working on: Phase [N] - [Name]
 Branch: feature/phase-[N]-[name]
