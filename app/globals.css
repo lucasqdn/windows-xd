@@ -1,26 +1,203 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --win98-gray: #c0c0c0;
+  --win98-desktop: #008080;
+  --win98-blue: #000080;
+  --win98-highlight: #0000ff;
+  --win98-white: #ffffff;
+  --win98-black: #000000;
+  --win98-darkgray: #808080;
+  --win98-lightgray: #dfdfdf;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif;
+  font-size: 11px;
+  color: var(--win98-black);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Windows 98 3D Bevel Effects */
+.win98-raised {
+  border-top: 2px solid var(--win98-white);
+  border-left: 2px solid var(--win98-white);
+  border-right: 2px solid var(--win98-black);
+  border-bottom: 2px solid var(--win98-black);
+  box-shadow: inset -1px -1px 0 var(--win98-darkgray), inset 1px 1px 0 var(--win98-lightgray);
+  background: var(--win98-gray);
+}
+
+.win98-inset {
+  border-top: 2px solid var(--win98-darkgray);
+  border-left: 2px solid var(--win98-darkgray);
+  border-right: 2px solid var(--win98-white);
+  border-bottom: 2px solid var(--win98-white);
+  box-shadow: inset 1px 1px 0 var(--win98-black), inset -1px -1px 0 var(--win98-lightgray);
+  background: var(--win98-white);
+}
+
+.win98-button {
+  border-top: 2px solid var(--win98-white);
+  border-left: 2px solid var(--win98-white);
+  border-right: 2px solid var(--win98-black);
+  border-bottom: 2px solid var(--win98-black);
+  box-shadow: inset -1px -1px 0 var(--win98-darkgray), inset 1px 1px 0 var(--win98-lightgray);
+  background: var(--win98-gray);
+  padding: 4px 12px;
+  font-size: 11px;
+  cursor: pointer;
+  outline: none;
+}
+
+.win98-button:active {
+  border-top: 2px solid var(--win98-black);
+  border-left: 2px solid var(--win98-black);
+  border-right: 2px solid var(--win98-white);
+  border-bottom: 2px solid var(--win98-white);
+  box-shadow: inset 1px 1px 0 var(--win98-darkgray);
+  padding: 5px 11px 3px 13px;
+}
+
+/* Title Bar Styles */
+.win98-titlebar-active {
+  background: linear-gradient(to right, var(--win98-blue) 0%, #1084d0 100%);
+  color: var(--win98-white);
+  font-weight: bold;
+}
+
+.win98-titlebar-inactive {
+  background: linear-gradient(to right, var(--win98-darkgray) 0%, #b5b5b5 100%);
+  color: var(--win98-lightgray);
+  font-weight: bold;
+}
+
+/* Window Styles */
+.win98-window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--win98-gray);
+  border-top: 2px solid var(--win98-white);
+  border-left: 2px solid var(--win98-white);
+  border-right: 2px solid var(--win98-black);
+  border-bottom: 2px solid var(--win98-black);
+  box-shadow: inset -1px -1px 0 var(--win98-darkgray), inset 1px 1px 0 var(--win98-lightgray);
+}
+
+/* Desktop Icon Styles */
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--win98-white);
+  text-align: center;
+  width: 80px;
+}
+
+.desktop-icon.selected {
+  background: rgba(0, 0, 128, 0.5);
+}
+
+.desktop-icon-text {
+  margin-top: 4px;
+  font-size: 11px;
+  text-shadow: 1px 1px 1px var(--win98-black);
+  word-wrap: break-word;
+}
+
+/* Start Menu Styles */
+.start-menu {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  width: 200px;
+  background: var(--win98-gray);
+  border-top: 2px solid var(--win98-white);
+  border-left: 2px solid var(--win98-white);
+  border-right: 2px solid var(--win98-black);
+  border-bottom: 2px solid var(--win98-black);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.start-menu-item {
+  padding: 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.start-menu-item:hover {
+  background: var(--win98-blue);
+  color: var(--win98-white);
+}
+
+/* Taskbar Styles */
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: var(--win98-gray);
+  border-top: 2px solid var(--win98-white);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  gap: 2px;
+  z-index: 9999;
+}
+
+.taskbar-button {
+  height: 24px;
+  min-width: 54px;
+  max-width: 160px;
+  padding: 0 6px;
+  border-top: 2px solid var(--win98-white);
+  border-left: 2px solid var(--win98-white);
+  border-right: 2px solid var(--win98-black);
+  border-bottom: 2px solid var(--win98-black);
+  background: var(--win98-gray);
+  font-size: 11px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskbar-button.active {
+  border-top: 2px solid var(--win98-black);
+  border-left: 2px solid var(--win98-black);
+  border-right: 2px solid var(--win98-white);
+  border-bottom: 2px solid var(--win98-white);
+  box-shadow: inset 1px 1px 0 var(--win98-darkgray);
+}
+
+.system-tray {
+  margin-left: auto;
+  height: 24px;
+  padding: 0 4px;
+  border-top: 1px solid var(--win98-darkgray);
+  border-left: 1px solid var(--win98-darkgray);
+  border-right: 1px solid var(--win98-white);
+  border-bottom: 1px solid var(--win98-white);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
 }
