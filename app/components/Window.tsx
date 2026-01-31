@@ -15,11 +15,25 @@ export function Window({ id, title, children }: WindowProps) {
   
   const windowState = windows.find(w => w.id === id);
   
-  if (!windowState || windowState.isMinimized) {
+  if (!windowState || (windowState.isMinimized && windowState.animationState !== 'minimizing')) {
     return null;
   }
 
   const isActive = windowState.zIndex === Math.max(...windows.map(w => w.zIndex));
+  
+  // Determine animation class
+  const getAnimationClass = () => {
+    switch (windowState.animationState) {
+      case 'opening':
+        return 'window-opening';
+      case 'minimizing':
+        return 'window-minimizing';
+      case 'restoring':
+        return 'window-restoring';
+      default:
+        return '';
+    }
+  };
 
   const handleMinimize = () => {
     minimizeWindow(id);
@@ -59,7 +73,7 @@ export function Window({ id, title, children }: WindowProps) {
       disableDragging={windowState.isMaximized}
       enableResizing={!windowState.isMaximized}
     >
-      <div className="win98-window h-full flex flex-col">
+      <div className={`win98-window h-full flex flex-col ${getAnimationClass()}`}>
         {/* Title Bar */}
         <div
           className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-move ${

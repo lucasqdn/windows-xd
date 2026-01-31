@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 
 export type WindowState = {
   id: string;
@@ -13,6 +13,7 @@ export type WindowState = {
   size: { width: number; height: number };
   zIndex: number;
   icon?: string;
+  animationState?: 'opening' | 'minimizing' | 'restoring' | 'none';
 };
 
 type WindowManagerContextType = {
@@ -31,15 +32,51 @@ const WindowManagerContext = createContext<WindowManagerContextType | undefined>
 export function WindowManagerProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [windows, setWindows] = useState<WindowState[]>([]);
 
-  const openWindow = useCallback((window: Omit<WindowState, 'id' | 'isOpen' | 'zIndex'>): string => {
+  // Load window state from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('windows-xd-state');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        // Don't restore windows, just desktop icon positions if needed
+        console.log('Saved state loaded:', parsed);
+      } catch (e) {
+        console.error('Failed to load saved state:', e);
+      }
+    }
+  }, []);
+
+  // Save window positions to localStorage when they change
+  useEffect(() => {
+    if (windows.length > 0) {
+      const stateToSave = windows.map(w => ({
+        title: w.title,
+        position: w.position,
+        size: w.size,
+        isMaximized: w.isMaximized,
+      }));
+      localStorage.setItem('windows-xd-state', JSON.stringify(stateToSave));
+    }
+  }, [windows]);
+
+  const openWindow = useCallback((window: Omit<WindowState, 'id' | 'isOpen' | 'zIndex' | 'animationState'>): string => {
     const id = `window-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const newWindow: WindowState = {
       ...window,
       id,
       isOpen: true,
-      zIndex: windows.length
+      zIndex: windows.length,
+      animationState: 'opening'
     };
     setWindows(prev => [...prev, newWindow]);
+    
+    // Clear animation state after animation completes
+    setTimeout(() => {
+      setWindows(prev => prev.map(w =>
+        w.id === id ? { ...w, animationState: 'none' } : w
+      ));
+    }, 150);
+    
     return id;
   }, [windows.length]);
 
@@ -49,8 +86,15 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
 
   const minimizeWindow = useCallback((id: string) => {
     setWindows(prev => prev.map(w =>
-      w.id === id ? { ...w, isMinimized: true } : w
+      w.id === id ? { ...w, animationState: 'minimizing' } : w
     ));
+    
+    // Wait for animation to complete before actually minimizing
+    setTimeout(() => {
+      setWindows(prev => prev.map(w =>
+        w.id === id ? { ...w, isMinimized: true, animationState: 'none' } : w
+      ));
+    }, 200);
   }, []);
 
   const maximizeWindow = useCallback((id: string) => {
@@ -66,9 +110,17 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
       return sorted.map((w, i) => ({
         ...w,
         zIndex: w.id === id ? sorted.length : i,
-        isMinimized: w.id === id ? false : w.isMinimized
+        isMinimized: w.id === id ? false : w.isMinimized,
+        animationState: w.id === id && w.isMinimized ? 'restoring' : w.animationState
       }));
     });
+    
+    // Clear restoring animation after it completes
+    setTimeout(() => {
+      setWindows(prev => prev.map(w =>
+        w.id === id ? { ...w, animationState: 'none' } : w
+      ));
+    }, 200);
   }, []);
 
   const updateWindowPosition = useCallback((id: string, position: { x: number; y: number }) => {

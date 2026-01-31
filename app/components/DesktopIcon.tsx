@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 type DesktopIconProps = {
   id: string;
@@ -33,7 +34,14 @@ export function DesktopIcon({ icon, label, onDoubleClick }: DesktopIconProps) {
       onClick={handleClick}
       onBlur={() => setSelected(false)}
     >
-      <div className="text-4xl">{icon}</div>
+      <div className="w-12 h-12 relative">
+        <Image
+          src={icon}
+          alt={label}
+          fill
+          className="object-contain"
+        />
+      </div>
       <div className="desktop-icon-text">{label}</div>
     </div>
   );

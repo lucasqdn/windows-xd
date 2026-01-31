@@ -16,6 +16,20 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-in;
+}
+
 /* Pixel/Retro Font Fallback for authentic Windows 98 feel */
 @font-face {
   font-family: 'MS Sans Serif';
@@ -101,6 +115,52 @@ body {
   border-right: 2px solid var(--win98-black);
   border-bottom: 2px solid var(--win98-black);
   box-shadow: inset -1px -1px 0 var(--win98-darkgray), inset 1px 1px 0 var(--win98-lightgray);
+}
+
+/* Window Animations */
+@keyframes windowOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes windowMinimize {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.1) translateY(calc(100vh - 30px));
+  }
+}
+
+@keyframes windowRestore {
+  from {
+    opacity: 0;
+    transform: scale(0.1) translateY(calc(100vh - 30px));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.window-opening {
+  animation: windowOpen 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.window-minimizing {
+  animation: windowMinimize 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.window-restoring {
+  animation: windowRestore 0.2s cubic-bezier(0, 0, 0.2, 1);
 }
 
 /* Desktop Icon Styles */
@@ -210,3 +270,35 @@ body {
   gap: 4px;
   font-size: 11px;
 }
+
+/* Context Menu Styles */
+.context-menu {
+  min-width: 150px;
+  background: var(--win98-gray);
+  border-top: 2px solid var(--win98-white);
+  border-left: 2px solid var(--win98-white);
+  border-right: 2px solid var(--win98-black);
+  border-bottom: 2px solid var(--win98-black);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  padding: 2px;
+}
+
+.context-menu-item {
+  padding: 4px 20px 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  position: relative;
+}
+
+.context-menu-item:hover:not(.disabled) {
+  background: var(--win98-blue);
+  color: var(--win98-white);
+}
+
+.context-menu-item.disabled {
+  color: var(--win98-darkgray);
+  cursor: not-allowed;
+}
+

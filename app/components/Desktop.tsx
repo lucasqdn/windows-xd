@@ -7,6 +7,10 @@ import { Window } from "./Window";
 import { Notepad } from "./apps/Notepad";
 import { Paint } from "./apps/Paint";
 import { FileExplorer } from "./apps/FileExplorer";
+import { ContextMenu, useContextMenu, type ContextMenuItem } from "./ContextMenu";
+import { useKeyboardShortcuts } from "@/app/hooks/useKeyboardShortcuts";
+import { useSoundEffects } from "@/app/hooks/useSoundEffects";
+import Image from "next/image";
 
 // Placeholder for Chat Room
 function ChatRoomContent({ id }: { id: string }) {
@@ -25,15 +29,20 @@ type DesktopIconData = {
 };
 
 const desktopIcons: DesktopIconData[] = [
-  { id: "my-computer", icon: "💻", label: "My Computer", component: FileExplorer },
-  { id: "recycle-bin", icon: "🗑️", label: "Recycle Bin", component: FileExplorer },
-  { id: "notepad", icon: "📝", label: "Notepad", component: Notepad },
-  { id: "paint", icon: "🎨", label: "Paint", component: Paint },
-  { id: "chatroom", icon: "💬", label: "Chat Room", component: ChatRoomContent },
+  { id: "my-computer", icon: "/computer_explorer-2.png", label: "My Computer", component: FileExplorer },
+  { id: "recycle-bin", icon: "/recycle_bin_empty-2.png", label: "Recycle Bin", component: FileExplorer },
+  { id: "notepad", icon: "/directory_closed-3.png", label: "Notepad", component: Notepad },
+  { id: "paint", icon: "/directory_closed-3.png", label: "Paint", component: Paint },
+  { id: "chatroom", icon: "/directory_closed-3.png", label: "Chat Room", component: ChatRoomContent },
 ];
 
 function DesktopContent() {
   const { windows, openWindow } = useWindowManager();
+  const { contextMenu, showContextMenu, hideContextMenu } = useContextMenu();
+  
+  // Initialize keyboard shortcuts and sound effects
+  useKeyboardShortcuts();
+  useSoundEffects();
 
   const handleIconDoubleClick = (iconData: DesktopIconData) => {
     // Check if window is already open
@@ -58,13 +67,65 @@ function DesktopContent() {
     }
   };
 
+  const handleDesktopContextMenu = (e: React.MouseEvent) => {
+    const menuItems: ContextMenuItem[] = [
+      {
+        label: "Arrange Icons",
+        icon: "📋",
+        submenu: [
+          { label: "By Name", onClick: () => console.log("Arrange by name") },
+          { label: "By Type", onClick: () => console.log("Arrange by type") },
+          { label: "By Size", onClick: () => console.log("Arrange by size") },
+          { label: "Auto Arrange", onClick: () => console.log("Auto arrange") },
+        ],
+      },
+      { divider: true },
+      {
+        label: "Refresh",
+        icon: "🔄",
+        onClick: () => window.location.reload(),
+      },
+      { divider: true },
+      {
+        label: "Paste",
+        icon: "📋",
+        disabled: true,
+      },
+      { divider: true },
+      {
+        label: "New",
+        icon: "📄",
+        submenu: [
+          { label: "Folder", onClick: () => console.log("New folder") },
+          { label: "Text Document", onClick: () => handleProgramLaunch("notepad") },
+        ],
+      },
+      { divider: true },
+      {
+        label: "Properties",
+        icon: "⚙️",
+        onClick: () => console.log("Desktop properties"),
+      },
+    ];
+
+    showContextMenu(e, menuItems);
+  };
+
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
-      style={{ background: "#008080" }}
+      onContextMenu={handleDesktopContextMenu}
     >
+      {/* Desktop Background */}
+      <Image
+        src="/windows-xd backgroud.png"
+        alt="Desktop Background"
+        fill
+        className="object-cover"
+        priority
+      />
       {/* Desktop Icons */}
-      <div className="absolute top-2 left-2 flex flex-col gap-2">
+      <div className="absolute top-2 left-2 flex flex-col gap-2 z-10">
         {desktopIcons.map((icon) => (
           <DesktopIcon
             key={icon.id}
@@ -82,6 +143,16 @@ function DesktopContent() {
           <window.component id={window.id} />
         </Window>
       ))}
+
+      {/* Context Menu */}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          items={contextMenu.items}
+          onClose={hideContextMenu}
+        />
+      )}
 
       {/* Taskbar */}
       <Taskbar onProgramLaunch={handleProgramLaunch} />
