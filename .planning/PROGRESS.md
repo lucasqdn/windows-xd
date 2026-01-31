@@ -2,7 +2,7 @@
 
 > **Purpose**: This file tracks which phases/tasks are IN PROGRESS, COMPLETE, or AVAILABLE. All AI agents MUST check and update this file before starting work to avoid conflicts.
 
-**Last Updated**: 2025-01-31 14:30 UTC
+**Last Updated**: 2025-01-31 16:15 UTC
 
 ---
 
@@ -24,7 +24,7 @@
 | Phase 2 | 🟢 AVAILABLE | - | - | - | - |
 | Phase 3 | 🟢 AVAILABLE | - | - | - | - |
 | Phase 4 | 🟢 AVAILABLE | - | - | - | - |
-| Phase 5 | 🟢 AVAILABLE | - | - | - | - |
+| Phase 5 | ✅ COMPLETE | AI Agent | 2025-01-31 15:00 | 2025-01-31 16:15 | 9af91f5 |
 | Phase 6 | ✅ COMPLETE | AI Agent | 2025-01-31 15:00 | 2025-01-31 16:00 | aa9992c |
 
 **Legend**:
@@ -61,12 +61,14 @@
 
 ### Phase 2: Notepad Application 🟢
 
-**Status**: 🔵 IN PROGRESS - Agent-2025-01-31-Phase5  
+**Status**: ✅ COMPLETE  
 **Depends on**: Phase 1 ✅  
 **Assigned**: AI Agent (2025-01-31)  
 **Started**: 2025-01-31 15:00 UTC  
-**Estimated Duration**: 3-4 hours  
-**Branch**: chatroom
+**Completed**: 2025-01-31 16:15 UTC  
+**Duration**: ~1.25 hours  
+**Branch**: chatroom  
+**Commit**: 9af91f5
 
 **Requirements**: PAINT-01, PAINT-02, PAINT-03, PAINT-04, PAINT-05, PAINT-06, PAINT-07
 
@@ -138,17 +140,17 @@
 **Requirements**: CHAT-01, CHAT-02, CHAT-03, CHAT-04, CHAT-05
 
 **Tasks to complete**:
-- [ ] Install Socket.IO: `npm install socket.io socket.io-client`
-- [ ] Create WebSocket server (server.js or custom Next.js server)
-- [ ] Create ChatRoom component (app/components/apps/ChatRoom.tsx)
-- [ ] Implement auto-generated username system (adjective + noun format)
-- [ ] Create message input and display UI
-- [ ] Implement real-time message broadcasting
-- [ ] Add online user list
-- [ ] Wire up to WindowManagerContext
-- [ ] Update Desktop.tsx to use real ChatRoom component
-- [ ] Test multi-client messaging works
-- [ ] Commit with message: "feat(phase-5): implement real-time chatroom"
+- [x] Install Socket.IO: `npm install socket.io socket.io-client`
+- [x] Create WebSocket server (server.ts - custom Next.js server)
+- [x] Create ChatRoom component (app/components/apps/ChatRoom.tsx)
+- [x] Implement auto-generated username system (adjective + noun + number)
+- [x] Create message input and display UI
+- [x] Implement real-time message broadcasting
+- [x] Add online user list (left sidebar with connection status)
+- [x] Wire up to WindowManagerContext (Desktop.tsx updated)
+- [x] Update Desktop.tsx to use real ChatRoom component
+- [x] Test multi-client messaging works
+- [x] Commit with message: "feat(phase-5): implement real-time chatroom"
 
 **Success Criteria**:
 1. Users get auto-generated usernames on connection
@@ -160,6 +162,29 @@
 - Next.js 16 App Router doesn't have built-in WebSocket support
 - Need custom server setup with Socket.IO
 - See .planning/research/ARCHITECTURE.md for WebSocket pattern
+
+**Implementation Summary**:
+- Created custom server (server.ts) that runs Next.js + Socket.IO on same HTTP server
+- Auto-generated usernames using random adjective + noun + number (e.g., "CoolGamer42")
+- User list tracked server-side in Map, broadcast to all clients on join/leave
+- Message history limited to 100 messages (performance consideration)
+- Vintage beep sound using Web Audio API (square wave at 800Hz)
+- Yahoo-style UI: left sidebar for users, main area for messages
+- Timestamps format: 12:34 PM (without seconds as requested)
+- Purple text for your messages, blue for others, gray italic for system
+- Enter key sends, input disabled when disconnected
+- Auto-scroll to newest message on arrival
+
+**Files Created**:
+- server.ts (148 lines) - Custom Next.js + Socket.IO server
+- app/types/chat.ts (11 lines) - Message and ChatState types
+- app/hooks/useChat.ts (90 lines) - WebSocket connection hook
+- app/components/apps/ChatRoom.tsx (169 lines) - Chat UI component
+
+**Files Modified**:
+- app/components/Desktop.tsx - Import ChatRoom, replace placeholder
+- package.json - Update scripts to use tsx server.ts
+- package-lock.json - Added socket.io dependencies
 
 **How to claim**: Replace "🟢 AVAILABLE" with "🔵 IN PROGRESS - [Your Session ID]" and commit
 
