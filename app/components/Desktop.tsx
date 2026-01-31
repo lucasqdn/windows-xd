@@ -8,20 +8,12 @@ import { Window } from "./Window";
 import { Notepad } from "./apps/Notepad";
 import { Paint } from "./apps/Paint";
 import { FileExplorer } from "./apps/FileExplorer";
+import ChatRoom from "./apps/ChatRoom";
 import { ContextMenu, useContextMenu, type ContextMenuItem } from "./ContextMenu";
 import { useKeyboardShortcuts } from "@/app/hooks/useKeyboardShortcuts";
 import { useSoundEffects } from "@/app/hooks/useSoundEffects";
 import Image from "next/image";
 import { Clippy } from "./Clippy";
-
-// Placeholder for Chat Room
-function ChatRoomContent({ id }: { id: string }) {
-  return (
-    <div className="h-full flex items-center justify-center text-gray-500 bg-white">
-      <p>Chat Room (Phase 5 - Coming Soon)</p>
-    </div>
-  );
-}
 
 type DesktopIconData = {
   id: string;
@@ -35,7 +27,7 @@ const desktopIcons: DesktopIconData[] = [
   { id: "recycle-bin", icon: "/recycle_bin_empty-2.png", label: "Recycle Bin", component: FileExplorer },
   { id: "notepad", icon: "/directory_closed-3.png", label: "Notepad", component: Notepad },
   { id: "paint", icon: "/directory_closed-3.png", label: "Paint", component: Paint },
-  { id: "chatroom", icon: "/directory_closed-3.png", label: "Chat Room", component: ChatRoomContent },
+  { id: "chatroom", icon: "/directory_closed-3.png", label: "Chat Room", component: ChatRoom },
 ];
 
 function DesktopContent() {
