@@ -1,0 +1,8 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Ensure package-lock.json always uses LF (prevents merge conflicts)
+package-lock.json text eol=lf
+
+# Shell scripts should always use LF
+*.sh text eol=lf
