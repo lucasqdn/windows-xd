@@ -8,14 +8,11 @@ import { Window } from "./Window";
 import { Notepad } from "./apps/Notepad";
 import { Paint } from "./apps/Paint";
 import { FileExplorer } from "./apps/FileExplorer";
-<<<<<<< HEAD
 import { ContextMenu, useContextMenu, type ContextMenuItem } from "./ContextMenu";
 import { useKeyboardShortcuts } from "@/app/hooks/useKeyboardShortcuts";
 import { useSoundEffects } from "@/app/hooks/useSoundEffects";
 import Image from "next/image";
-=======
 import { Clippy } from "./Clippy";
->>>>>>> aa9992c (feat(phase-6): implement LLM-powered Clippy)
 
 // Placeholder for Chat Room
 function ChatRoomContent({ id }: { id: string }) {
@@ -43,15 +40,12 @@ const desktopIcons: DesktopIconData[] = [
 
 function DesktopContent() {
   const { windows, openWindow } = useWindowManager();
-<<<<<<< HEAD
   const { contextMenu, showContextMenu, hideContextMenu } = useContextMenu();
+  const [showClippy, setShowClippy] = useState(false);
   
   // Initialize keyboard shortcuts and sound effects
   useKeyboardShortcuts();
   useSoundEffects();
-=======
-  const [showClippy, setShowClippy] = useState(false);
->>>>>>> aa9992c (feat(phase-6): implement LLM-powered Clippy)
 
   const handleIconDoubleClick = (iconData: DesktopIconData) => {
     // Check if window is already open

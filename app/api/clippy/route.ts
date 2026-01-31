@@ -1,7 +1,9 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const genAI = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY || "",
+});
 
 // Simple rate limiting (in-memory)
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
@@ -58,19 +60,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
-    const systemPrompt = `You are Clippy, the helpful Microsoft Office assistant from Windows 98. 
+    const result = await genAI.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: prompt,
+      config: {
+        systemInstruction: `You are Clippy, the helpful Microsoft Office assistant from Windows 98. 
 You are cheerful, slightly enthusiastic, and always eager to help.
 
 Current context:
 ${context || "User is on the desktop"}
 
 Provide brief, helpful assistance (2-3 sentences max). Stay in character as Clippy.
-Be encouraging and helpful, but keep responses concise.`;
+Be encouraging and helpful, but keep responses concise.`,
+      },
+    });
 
-    const result = await model.generateContent([systemPrompt, prompt]);
-    const response = result.response.text();
+    const response = result.text;
 
     return NextResponse.json({ response });
   } catch (error) {
