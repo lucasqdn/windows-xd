@@ -4,39 +4,15 @@ import { WindowManagerProvider, useWindowManager } from "@/app/contexts/WindowMa
 import { DesktopIcon } from "./DesktopIcon";
 import { Taskbar } from "./Taskbar";
 import { Window } from "./Window";
+import { Notepad } from "./apps/Notepad";
+import { Paint } from "./apps/Paint";
+import { FileExplorer } from "./apps/FileExplorer";
 
-// Placeholder components for apps
-function NotepadContent() {
+// Placeholder for Chat Room
+function ChatRoomContent({ id }: { id: string }) {
   return (
-    <div className="h-full flex flex-col">
-      <textarea
-        className="flex-1 w-full p-2 font-mono text-sm border-0 outline-none resize-none"
-        placeholder="Type here..."
-      />
-    </div>
-  );
-}
-
-function PaintContent() {
-  return (
-    <div className="h-full flex items-center justify-center text-gray-500">
-      <p>Paint application (Phase 4)</p>
-    </div>
-  );
-}
-
-function ExplorerContent() {
-  return (
-    <div className="h-full flex items-center justify-center text-gray-500">
-      <p>File Explorer (Phase 3)</p>
-    </div>
-  );
-}
-
-function ChatRoomContent() {
-  return (
-    <div className="h-full flex items-center justify-center text-gray-500">
-      <p>Chat Room (Phase 5)</p>
+    <div className="h-full flex items-center justify-center text-gray-500 bg-white">
+      <p>Chat Room (Phase 5 - Coming Soon)</p>
     </div>
   );
 }
@@ -49,10 +25,10 @@ type DesktopIconData = {
 };
 
 const desktopIcons: DesktopIconData[] = [
-  { id: "my-computer", icon: "💻", label: "My Computer", component: ExplorerContent },
-  { id: "recycle-bin", icon: "🗑️", label: "Recycle Bin", component: ExplorerContent },
-  { id: "notepad", icon: "📝", label: "Notepad", component: NotepadContent },
-  { id: "paint", icon: "🎨", label: "Paint", component: PaintContent },
+  { id: "my-computer", icon: "💻", label: "My Computer", component: FileExplorer },
+  { id: "recycle-bin", icon: "🗑️", label: "Recycle Bin", component: FileExplorer },
+  { id: "notepad", icon: "📝", label: "Notepad", component: Notepad },
+  { id: "paint", icon: "🎨", label: "Paint", component: Paint },
   { id: "chatroom", icon: "💬", label: "Chat Room", component: ChatRoomContent },
 ];
 

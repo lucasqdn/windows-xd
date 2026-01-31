@@ -16,6 +16,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Pixel/Retro Font Fallback for authentic Windows 98 feel */
+@font-face {
+  font-family: 'MS Sans Serif';
+  src: local('MS Sans Serif'), local('Microsoft Sans Serif');
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -107,10 +113,12 @@ body {
   color: var(--win98-white);
   text-align: center;
   width: 80px;
+  transition: background-color 0.1s ease;
 }
 
 .desktop-icon.selected {
   background: rgba(0, 0, 128, 0.5);
+  outline: 1px dotted var(--win98-white);
 }
 
 .desktop-icon-text {
@@ -161,6 +169,7 @@ body {
   padding: 2px;
   gap: 2px;
   z-index: 9999;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .taskbar-button {

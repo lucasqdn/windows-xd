@@ -35,8 +35,14 @@ export function Window({ id, title, children }: WindowProps) {
 
   return (
     <Rnd
-      size={{ width: windowState.size.width, height: windowState.size.height }}
-      position={{ x: windowState.position.x, y: windowState.position.y }}
+      size={{ 
+        width: windowState.isMaximized ? window.innerWidth : windowState.size.width, 
+        height: windowState.isMaximized ? window.innerHeight - 30 : windowState.size.height 
+      }}
+      position={{ 
+        x: windowState.isMaximized ? 0 : windowState.position.x, 
+        y: windowState.isMaximized ? 0 : windowState.position.y 
+      }}
       onDragStop={(e, d) => {
         updateWindowPosition(id, { x: d.x, y: d.y });
       }}
@@ -50,6 +56,8 @@ export function Window({ id, title, children }: WindowProps) {
       dragHandleClassName="window-title-bar"
       style={{ zIndex: windowState.zIndex }}
       onMouseDown={() => focusWindow(id)}
+      disableDragging={windowState.isMaximized}
+      enableResizing={!windowState.isMaximized}
     >
       <div className="win98-window h-full flex flex-col">
         {/* Title Bar */}
