@@ -163,54 +163,54 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| WIN-01 | TBD | Pending |
-| WIN-02 | TBD | Pending |
-| WIN-03 | TBD | Pending |
-| WIN-04 | TBD | Pending |
-| WIN-05 | TBD | Pending |
-| WIN-06 | TBD | Pending |
-| WIN-07 | TBD | Pending |
-| DESK-01 | TBD | Pending |
-| DESK-02 | TBD | Pending |
-| DESK-03 | TBD | Pending |
-| DESK-04 | TBD | Pending |
-| DESK-05 | TBD | Pending |
-| DESK-06 | TBD | Pending |
-| MENU-01 | TBD | Pending |
-| MENU-02 | TBD | Pending |
-| MENU-03 | TBD | Pending |
-| MENU-04 | TBD | Pending |
-| STYLE-01 | TBD | Pending |
-| STYLE-02 | TBD | Pending |
-| STYLE-03 | TBD | Pending |
-| STYLE-04 | TBD | Pending |
-| NOTE-01 | TBD | Pending |
-| NOTE-02 | TBD | Pending |
-| NOTE-03 | TBD | Pending |
-| PAINT-01 | TBD | Pending |
-| PAINT-02 | TBD | Pending |
-| PAINT-03 | TBD | Pending |
-| PAINT-04 | TBD | Pending |
-| PAINT-05 | TBD | Pending |
-| PAINT-06 | TBD | Pending |
-| PAINT-07 | TBD | Pending |
-| FILE-01 | TBD | Pending |
-| FILE-02 | TBD | Pending |
-| FILE-03 | TBD | Pending |
-| CHAT-01 | TBD | Pending |
-| CHAT-02 | TBD | Pending |
-| CHAT-03 | TBD | Pending |
-| CHAT-04 | TBD | Pending |
-| CLIP-01 | TBD | Pending |
-| CLIP-02 | TBD | Pending |
-| CLIP-03 | TBD | Pending |
-| CLIP-04 | TBD | Pending |
+| WIN-01 | Phase 1 | Pending |
+| WIN-02 | Phase 1 | Pending |
+| WIN-03 | Phase 1 | Pending |
+| WIN-04 | Phase 1 | Pending |
+| WIN-05 | Phase 1 | Pending |
+| WIN-06 | Phase 1 | Pending |
+| WIN-07 | Phase 1 | Pending |
+| DESK-01 | Phase 1 | Pending |
+| DESK-02 | Phase 1 | Pending |
+| DESK-03 | Phase 1 | Pending |
+| DESK-04 | Phase 1 | Pending |
+| DESK-05 | Phase 1 | Pending |
+| DESK-06 | Phase 1 | Pending |
+| MENU-01 | Phase 1 | Pending |
+| MENU-02 | Phase 1 | Pending |
+| MENU-03 | Phase 1 | Pending |
+| MENU-04 | Phase 1 | Pending |
+| STYLE-01 | Phase 1 | Pending |
+| STYLE-02 | Phase 1 | Pending |
+| STYLE-03 | Phase 1 | Pending |
+| STYLE-04 | Phase 1 | Pending |
+| NOTE-01 | Phase 2 | Pending |
+| NOTE-02 | Phase 2 | Pending |
+| NOTE-03 | Phase 2 | Pending |
+| PAINT-01 | Phase 3 | Pending |
+| PAINT-02 | Phase 3 | Pending |
+| PAINT-03 | Phase 3 | Pending |
+| PAINT-04 | Phase 3 | Pending |
+| PAINT-05 | Phase 3 | Pending |
+| PAINT-06 | Phase 3 | Pending |
+| PAINT-07 | Phase 3 | Pending |
+| FILE-01 | Phase 4 | Pending |
+| FILE-02 | Phase 4 | Pending |
+| FILE-03 | Phase 4 | Pending |
+| CHAT-01 | Phase 5 | Pending |
+| CHAT-02 | Phase 5 | Pending |
+| CHAT-03 | Phase 5 | Pending |
+| CHAT-04 | Phase 5 | Pending |
+| CLIP-01 | Phase 6 | Pending |
+| CLIP-02 | Phase 6 | Pending |
+| CLIP-03 | Phase 6 | Pending |
+| CLIP-04 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 41 total
-- Mapped to phases: 0 (pending roadmap creation)
-- Unmapped: 41 ⚠️
+- v1 requirements: 42 total
+- Mapped to phases: 42 (100% coverage ✓)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2025-01-31*
-*Last updated: 2025-01-31 after initial definition*
+*Last updated: 2025-01-31 after roadmap creation (phase mappings added)*
