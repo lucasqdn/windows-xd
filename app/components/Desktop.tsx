@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { WindowManagerProvider, useWindowManager } from "@/app/contexts/WindowManagerContext";
 import { DesktopIcon } from "./DesktopIcon";
 import { Taskbar } from "./Taskbar";
@@ -7,10 +8,14 @@ import { Window } from "./Window";
 import { Notepad } from "./apps/Notepad";
 import { Paint } from "./apps/Paint";
 import { FileExplorer } from "./apps/FileExplorer";
+<<<<<<< HEAD
 import { ContextMenu, useContextMenu, type ContextMenuItem } from "./ContextMenu";
 import { useKeyboardShortcuts } from "@/app/hooks/useKeyboardShortcuts";
 import { useSoundEffects } from "@/app/hooks/useSoundEffects";
 import Image from "next/image";
+=======
+import { Clippy } from "./Clippy";
+>>>>>>> aa9992c (feat(phase-6): implement LLM-powered Clippy)
 
 // Placeholder for Chat Room
 function ChatRoomContent({ id }: { id: string }) {
@@ -38,11 +43,15 @@ const desktopIcons: DesktopIconData[] = [
 
 function DesktopContent() {
   const { windows, openWindow } = useWindowManager();
+<<<<<<< HEAD
   const { contextMenu, showContextMenu, hideContextMenu } = useContextMenu();
   
   // Initialize keyboard shortcuts and sound effects
   useKeyboardShortcuts();
   useSoundEffects();
+=======
+  const [showClippy, setShowClippy] = useState(false);
+>>>>>>> aa9992c (feat(phase-6): implement LLM-powered Clippy)
 
   const handleIconDoubleClick = (iconData: DesktopIconData) => {
     // Check if window is already open
@@ -61,6 +70,10 @@ function DesktopContent() {
   };
 
   const handleProgramLaunch = (programId: string) => {
+    if (programId === "clippy") {
+      setShowClippy(true);
+      return;
+    }
     const iconData = desktopIcons.find(icon => icon.id === programId);
     if (iconData) {
       handleIconDoubleClick(iconData);
@@ -156,6 +169,9 @@ function DesktopContent() {
 
       {/* Taskbar */}
       <Taskbar onProgramLaunch={handleProgramLaunch} />
+
+      {/* Clippy */}
+      <Clippy manualTrigger={showClippy} onClose={() => setShowClippy(false)} />
     </div>
   );
 }

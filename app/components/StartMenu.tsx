@@ -29,6 +29,7 @@ const programItems: MenuItem[] = [
   { id: "my-computer", label: "My Computer", icon: "💻" },
   { id: "recycle-bin", label: "Recycle Bin", icon: "🗑️" },
   { id: "chatroom", label: "Chat Room", icon: "💬" },
+  { id: "clippy", label: "Help (Clippy)", icon: "📎" },
 ];
 
 export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
