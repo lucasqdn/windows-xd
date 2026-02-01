@@ -32,8 +32,18 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
         body: JSON.stringify({ context, prompt }),
       });
 
+      if (!res.ok) {
+        throw new Error(`API returned ${res.status}: ${res.statusText}`);
+      }
+
       const data = await res.json();
-      setResponse(data.response || "Well? What do you want? I haven't got all day.");
+      
+      if (data.error) {
+        console.error("Clippy API error:", data.error);
+        setResponse("Ugh, I crashed. Just like Internet Explorer. Have you tried turning me off and on again?");
+      } else {
+        setResponse(data.response || "Well? What do you want? I haven't got all day.");
+      }
     } catch (error) {
       console.error("Failed to fetch Clippy response:", error);
       setResponse(
@@ -83,7 +93,17 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
         body: JSON.stringify({ context, prompt: userInput, selectedText }),
       });
 
+      if (!res.ok) {
+        throw new Error(`API returned ${res.status}: ${res.statusText}`);
+      }
+
       const data = await res.json();
+      
+      if (data.error) {
+        console.error("Clippy API error:", data.error);
+        setResponse("Ugh, I crashed. Just like Internet Explorer. Have you tried turning me off and on again?");
+        return;
+      }
       
       // Check if API wants us to open an app
       if (data.action === "openApp" && data.appId) {

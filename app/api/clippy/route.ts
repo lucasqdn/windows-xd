@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
           ? `Improve and rewrite this text (keep it concise, max 200 words): "${selectedText}"`
           : `Continue writing from where this text left off (add 50-100 words): "${selectedText}"`;
         
-        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
         const result = await model.generateContent(writingPrompt);
         const generatedText = result.response?.text() || selectedText;
         
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
         const topic = writeMatch[1].trim();
         const writingPrompt = `Write a brief text about: ${topic}. Keep it under 150 words, natural and engaging.`;
         
-        const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
         const result = await model.generateContent(writingPrompt);
         const generatedText = result.response?.text() || `Here's something about ${topic}.`;
         
@@ -267,12 +267,18 @@ Now respond to the user's query with your signature snark:`;
     return NextResponse.json({ response });
   } catch (error) {
     console.error("Clippy API error:", error);
+    
+    // Log more details about the error
+    if (error instanceof Error) {
+      console.error("Error details:", error.message, error.stack);
+    }
+    
     return NextResponse.json(
       {
-        response:
-          "Ugh, I crashed. Just like Internet Explorer. Have you tried turning me off and on again? No, seriously.",
+        error: "Internal server error",
+        response: "Ugh, I crashed. Just like Internet Explorer. Have you tried turning me off and on again? No, seriously.",
       },
-      { status: 200 }
+      { status: 500 }
     );
   }
 }

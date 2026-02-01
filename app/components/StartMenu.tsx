@@ -80,10 +80,10 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
             bottom: 0,
           }}
         >
-          Windows 98
+          Windows<span className="font-black tracking-wider">XD</span>
         </div>
         
-        <div className="ml-6">
+        <div className="ml-[28px] flex-1">
           {menuItems.map((item) => (
             <div
               key={item.id}

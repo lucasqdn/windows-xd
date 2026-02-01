@@ -626,6 +626,7 @@ body {
   border-right: 2px solid var(--button-dark-shadow);
   border-bottom: 2px solid var(--button-dark-shadow);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  overflow: hidden; /* Prevent any content from spilling out */
 }
 
 .start-menu-item {
