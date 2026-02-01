@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useWindowManager } from "@/app/contexts/WindowManagerContext";
 import { StartMenu } from "./StartMenu";
+import Image from "next/image";
 
 type TaskbarProps = {
   onProgramLaunch: (program: string) => void;
@@ -50,7 +51,13 @@ export function Taskbar({ onProgramLaunch }: TaskbarProps) {
           className="win98-button flex items-center gap-1 px-2 font-bold"
           onClick={() => setStartMenuOpen(!startMenuOpen)}
         >
-          <span className="text-sm">🪟</span>
+          <Image 
+            src="/windows_slanted-1.png" 
+            alt="Start" 
+            width={16} 
+            height={16}
+            className="flex-shrink-0"
+          />
           <span>Start</span>
         </button>
         
