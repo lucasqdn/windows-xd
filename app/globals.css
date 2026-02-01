@@ -417,7 +417,14 @@ body {
   color: var(--win98-white);
   text-align: center;
   width: 80px;
-  transition: background-color 0.1s ease;
+  user-select: none;
+}
+
+.desktop-icon.dragging {
+  opacity: 0.7;
+  cursor: grabbing;
+  z-index: 1000;
+  transition: none !important;
 }
 
 .desktop-icon.selected {
@@ -437,6 +444,8 @@ body {
   line-height: 1.2;
   text-shadow: 1px 1px 1px var(--win98-black);
   word-wrap: break-word;
+  user-select: none;
+  pointer-events: none;
 }
 
 /* Start Menu Styles */

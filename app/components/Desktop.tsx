@@ -104,14 +104,14 @@ const desktopIcons: DesktopIconData[] = [
   },
   {
     id: "media-player",
-    icon: "/media-player-icon.png",
+    icon: "/media_player-0.png",
     label: "Windows Media Player",
     component: MediaPlayer,
   },
 ];
 
 function DesktopContent() {
-  const { windows, openWindow, focusWindow, selectMultipleIcons, clearSelection, theme } = useWindowManager();
+  const { windows, openWindow, focusWindow, selectMultipleIcons, clearSelection, theme, iconOrder, moveIcon } = useWindowManager();
   const { contextMenu, showContextMenu, hideContextMenu } = useContextMenu();
   const [showClippy, setShowClippy] = useState(false);
   const [showVirusNotification, setShowVirusNotification] = useState(false);
@@ -119,6 +119,22 @@ function DesktopContent() {
   const [isDragSelecting, setIsDragSelecting] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragCurrent, setDragCurrent] = useState({ x: 0, y: 0 });
+  const [currentIconOrder, setCurrentIconOrder] = useState<string[]>([]);
+  const [draggedIconId, setDraggedIconId] = useState<string | null>(null);
+
+  // Initialize icon order
+  useEffect(() => {
+    if (currentIconOrder.length === 0 && desktopIcons.length > 0) {
+      setCurrentIconOrder(desktopIcons.map(icon => icon.id));
+    }
+  }, [currentIconOrder.length]);
+
+  // Sync with context iconOrder when it changes
+  useEffect(() => {
+    if (iconOrder.length > 0) {
+      setCurrentIconOrder(iconOrder);
+    }
+  }, [iconOrder]);
 
   // Initialize keyboard shortcuts and sound effects
   useKeyboardShortcuts();
@@ -314,6 +330,73 @@ function DesktopContent() {
     showContextMenu(e, menuItems);
   };
 
+  // Calculate grid position for an icon based on its index
+  const getGridPosition = (index: number) => {
+    const ICON_WIDTH = 90;
+    const ICON_HEIGHT = 90;
+    const PADDING = 8;
+    const TASKBAR_HEIGHT = 40;
+    const MAX_ROWS = Math.floor((window.innerHeight - TASKBAR_HEIGHT - PADDING * 2) / ICON_HEIGHT);
+    
+    const col = Math.floor(index / MAX_ROWS);
+    const row = index % MAX_ROWS;
+    
+    return {
+      x: PADDING + (col * ICON_WIDTH),
+      y: PADDING + (row * ICON_HEIGHT),
+    };
+  };
+
+  const handleIconDragStart = (iconId: string) => {
+    setDraggedIconId(iconId);
+  };
+
+  const handleIconDragMove = (mouseX: number, mouseY: number) => {
+    if (!draggedIconId) return;
+
+    // Calculate which grid position we're over
+    const ICON_WIDTH = 90;
+    const ICON_HEIGHT = 90;
+    const PADDING = 8;
+    const TASKBAR_HEIGHT = 40;
+    const MAX_ROWS = Math.floor((window.innerHeight - TASKBAR_HEIGHT - PADDING * 2) / ICON_HEIGHT);
+    
+    const col = Math.floor((mouseX - PADDING) / ICON_WIDTH);
+    const row = Math.floor((mouseY - PADDING) / ICON_HEIGHT);
+    
+    // Clamp values
+    const clampedCol = Math.max(0, col);
+    const clampedRow = Math.max(0, Math.min(row, MAX_ROWS - 1));
+    
+    const targetIndex = clampedRow + (clampedCol * MAX_ROWS);
+    
+    const currentIndex = currentIconOrder.indexOf(draggedIconId);
+    if (currentIndex === -1 || currentIndex === targetIndex) return;
+    
+    // Only reorder if target index is within bounds
+    if (targetIndex >= 0 && targetIndex < currentIconOrder.length) {
+      const newOrder = [...currentIconOrder];
+      newOrder.splice(currentIndex, 1);
+      newOrder.splice(targetIndex, 0, draggedIconId);
+      setCurrentIconOrder(newOrder);
+    }
+  };
+
+  const handleIconDragEnd = () => {
+    if (draggedIconId) {
+      const finalIndex = currentIconOrder.indexOf(draggedIconId);
+      if (finalIndex !== -1) {
+        moveIcon(draggedIconId, finalIndex);
+      }
+      setDraggedIconId(null);
+    }
+  };
+
+  // Get ordered icons
+  const orderedIcons = currentIconOrder.length > 0
+    ? currentIconOrder.map(id => desktopIcons.find(icon => icon.id === id)).filter(Boolean) as DesktopIconData[]
+    : desktopIcons;
+
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
@@ -332,21 +415,30 @@ function DesktopContent() {
       />
       {/* Desktop Icons */}
       <div 
-        className="absolute top-2 left-2 z-10 flex flex-wrap flex-col gap-2"
+        className="absolute top-0 left-0 z-10"
         style={{
-          maxHeight: 'calc(100vh - 80px)', // Leave space for taskbar (40px) and padding
-          alignContent: 'flex-start',
+          width: '100vw',
+          height: 'calc(100vh - 40px)',
         }}
       >
-        {desktopIcons.map((icon) => (
-          <DesktopIcon
-            key={icon.id}
-            id={icon.id}
-            icon={icon.icon}
-            label={icon.label}
-            onDoubleClick={() => handleIconDoubleClick(icon)}
-          />
-        ))}
+        {orderedIcons.map((icon, index) => {
+          const gridPosition = getGridPosition(index);
+
+          return (
+            <DesktopIcon
+              key={icon.id}
+              id={icon.id}
+              icon={icon.icon}
+              label={icon.label}
+              onDoubleClick={() => handleIconDoubleClick(icon)}
+              index={index}
+              onDragStart={handleIconDragStart}
+              onDragMove={handleIconDragMove}
+              onDragEnd={handleIconDragEnd}
+              gridPosition={gridPosition}
+            />
+          );
+        })}
       </div>
 
       {/* Windows */}

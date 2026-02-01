@@ -19,6 +19,11 @@ export type WindowState = {
   isFlashing?: boolean;
 };
 
+export type IconPosition = {
+  id: string;
+  gridIndex: number;
+};
+
 type WindowManagerContextType = {
   windows: WindowState[];
   openWindow: (window: Omit<WindowState, 'id' | 'isOpen' | 'zIndex'>) => string;
@@ -38,6 +43,8 @@ type WindowManagerContextType = {
   selectIcon: (id: string, multiSelect?: boolean) => void;
   selectMultipleIcons: (ids: string[]) => void;
   clearSelection: () => void;
+  iconOrder: string[];
+  moveIcon: (iconId: string, targetIndex: number) => void;
 };
 
 const WindowManagerContext = createContext<WindowManagerContextType | undefined>(undefined);
@@ -45,6 +52,7 @@ const WindowManagerContext = createContext<WindowManagerContextType | undefined>
 export function WindowManagerProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [selectedIcons, setSelectedIcons] = useState<string[]>([]);
+  const [iconOrder, setIconOrder] = useState<string[]>([]);
   const theme = useTheme();
 
   const openWindow = useCallback((window: Omit<WindowState, 'id' | 'isOpen' | 'zIndex' | 'animationState'>): string => {
@@ -153,6 +161,22 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
     setSelectedIcons([]);
   }, []);
 
+  const moveIcon = useCallback((iconId: string, targetIndex: number) => {
+    setIconOrder(prev => {
+      // If iconOrder is empty, return as is
+      if (prev.length === 0) return prev;
+      
+      const currentIndex = prev.indexOf(iconId);
+      if (currentIndex === -1) return prev;
+      
+      const newOrder = [...prev];
+      newOrder.splice(currentIndex, 1);
+      newOrder.splice(targetIndex, 0, iconId);
+      
+      return newOrder;
+    });
+  }, []);
+
   return (
     <WindowManagerContext.Provider value={{
       windows,
@@ -169,6 +193,8 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
       selectIcon,
       selectMultipleIcons,
       clearSelection,
+      iconOrder,
+      moveIcon,
     }}>
       {children}
     </WindowManagerContext.Provider>
