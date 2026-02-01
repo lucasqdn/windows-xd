@@ -22,6 +22,13 @@ export function VirusNotification({ onRun, onCancel }: VirusNotificationProps) {
   });
 
   useEffect(() => {
+    // Play notification sound
+    const audio = new Audio('/sounds/notify_sound.mp3');
+    audio.volume = 0.4;
+    audio.play().catch(() => {
+      // Ignore audio errors (autoplay policy)
+    });
+    
     // Animate in
     setTimeout(() => setIsVisible(true), 100);
   }, []);
