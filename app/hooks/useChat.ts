@@ -9,6 +9,17 @@ const MAX_MESSAGES = 100; // Limit message history
 // Use environment variable for PartyKit host, fallback to localhost for development
 const PARTYKIT_HOST = process.env.NEXT_PUBLIC_PARTYKIT_HOST || "localhost:1999";
 
+// Debug logging
+if (typeof window !== "undefined") {
+  console.log("[useChat] PartyKit Host:", PARTYKIT_HOST);
+  if (!process.env.NEXT_PUBLIC_PARTYKIT_HOST) {
+    console.warn(
+      "[useChat] NEXT_PUBLIC_PARTYKIT_HOST not set! Using localhost:1999. " +
+      "Set this environment variable in Vercel for production."
+    );
+  }
+}
+
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [users, setUsers] = useState<string[]>([]);
@@ -26,13 +37,18 @@ export function useChat() {
     socketRef.current = newSocket;
 
     newSocket.addEventListener("open", () => {
-      console.log("Connected to chat server");
+      console.log("[useChat] Connected to chat server at:", PARTYKIT_HOST);
       setConnected(true);
     });
 
     newSocket.addEventListener("close", () => {
-      console.log("Disconnected from chat server");
+      console.log("[useChat] Disconnected from chat server");
       setConnected(false);
+    });
+
+    newSocket.addEventListener("error", (error) => {
+      console.error("[useChat] Connection error:", error);
+      console.error("[useChat] Failed to connect to:", PARTYKIT_HOST);
     });
 
     newSocket.addEventListener("message", (event) => {
