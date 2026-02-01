@@ -26,9 +26,11 @@ function checkRateLimit(ip: string): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  console.log("=== CLIPPY API REQUEST START ===");
   try {
     // Get IP for rate limiting
     const ip = request.headers.get("x-forwarded-for") || "unknown";
+    console.log("IP:", ip);
 
     // Check rate limit
     if (!checkRateLimit(ip)) {
@@ -43,6 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { context, prompt, selectedText } = await request.json();
+    console.log("Request body parsed:", { context, prompt, selectedText });
 
     if (!prompt || typeof prompt !== "string") {
       return NextResponse.json(
@@ -74,7 +77,7 @@ export async function POST(request: NextRequest) {
           ? `Improve and rewrite this text (keep it concise, max 200 words): "${selectedText}"`
           : `Continue writing from where this text left off (add 50-100 words): "${selectedText}"`;
         
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const result = await model.generateContent(writingPrompt);
         const generatedText = result.response?.text() || selectedText;
         
@@ -93,7 +96,7 @@ export async function POST(request: NextRequest) {
         const topic = writeMatch[1].trim();
         const writingPrompt = `Write a brief text about: ${topic}. Keep it under 150 words, natural and engaging.`;
         
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const result = await model.generateContent(writingPrompt);
         const generatedText = result.response?.text() || `Here's something about ${topic}.`;
         
@@ -265,7 +268,7 @@ Now respond to the user's query with your signature snark:`;
 
     // Generate response using Gemini
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-2.0-flash-exp",
+      model: "gemini-2.0-flash",
       generationConfig: {
         maxOutputTokens: 200, // Keep responses concise
         temperature: 0.9, // Slightly random for personality
@@ -284,11 +287,14 @@ Now respond to the user's query with your signature snark:`;
 
     return NextResponse.json({ response });
   } catch (error) {
-    console.error("Clippy API error:", error);
+    console.error("=== CLIPPY API ERROR ===");
+    console.error("Error type:", error?.constructor?.name);
+    console.error("Error object:", error);
     
     // Log more details about the error
     if (error instanceof Error) {
-      console.error("Error details:", error.message, error.stack);
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
       
       // Handle timeout specifically
       if (error.message === 'Gemini API timeout') {
