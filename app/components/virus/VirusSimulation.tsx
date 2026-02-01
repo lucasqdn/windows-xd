@@ -110,14 +110,28 @@ export function VirusSimulation() {
   useEffect(() => {
     if (stage !== "silent") return;
 
+    console.log(`[SILENT] Starting silent phase, duration: ${VIRUS_TIMING.silentInfection}ms`);
+    const startTime = Date.now();
+
     // Play subtle eerie sound
     playEerieSound();
 
-    const timer = setTimeout(() => {
-      setStage("sprites");
-    }, VIRUS_TIMING.silentInfection);
+    // Use requestAnimationFrame for accurate timing
+    let rafId: number;
+    const checkTimer = () => {
+      const elapsed = Date.now() - startTime;
+      if (elapsed >= VIRUS_TIMING.silentInfection) {
+        console.log(`[SILENT] Ending silent phase, actual duration: ${elapsed}ms`);
+        setStage("sprites");
+      } else {
+        rafId = requestAnimationFrame(checkTimer);
+      }
+    };
+    rafId = requestAnimationFrame(checkTimer);
 
-    return () => clearTimeout(timer);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, [stage, playEerieSound]);
 
   // Sprite spawning phase with dynamic intervals
@@ -315,22 +329,29 @@ export function VirusSimulation() {
       playGlitchSound();
     }, 100); // Optimized interval - 100ms for better performance while keeping chaos
 
-    const timer = setTimeout(() => {
-      const glitchEndTime = Date.now();
-      const actualDuration = glitchEndTime - glitchStartTime;
-      console.log(`[GLITCH] Ending glitch phase at ${glitchEndTime}, actual duration: ${actualDuration}ms (expected: ${VIRUS_TIMING.glitchDuration}ms)`);
-      
-      if (glitchIntervalRef.current) {
-        clearInterval(glitchIntervalRef.current);
+    // Use requestAnimationFrame for accurate glitch phase timing
+    let rafId: number;
+    const checkGlitchTimer = () => {
+      const elapsed = Date.now() - glitchStartTime;
+      if (elapsed >= VIRUS_TIMING.glitchDuration) {
+        const actualDuration = Date.now() - glitchStartTime;
+        console.log(`[GLITCH] Ending glitch phase, actual duration: ${actualDuration}ms (expected: ${VIRUS_TIMING.glitchDuration}ms)`);
+        
+        if (glitchIntervalRef.current) {
+          clearInterval(glitchIntervalRef.current);
+        }
+        const desktop = document.querySelector("[data-desktop-root]") as HTMLElement;
+        removeGlitchFromElement(desktop);
+        setGlitchActive(false);
+        setStage("bsod");
+      } else {
+        rafId = requestAnimationFrame(checkGlitchTimer);
       }
-      const desktop = document.querySelector("[data-desktop-root]") as HTMLElement;
-      removeGlitchFromElement(desktop);
-      setGlitchActive(false);
-      setStage("bsod");
-    }, VIRUS_TIMING.glitchDuration);
+    };
+    rafId = requestAnimationFrame(checkGlitchTimer);
 
     return () => {
-      clearTimeout(timer);
+      if (rafId) cancelAnimationFrame(rafId);
       if (glitchIntervalRef.current) {
         clearInterval(glitchIntervalRef.current);
       }
