@@ -120,101 +120,122 @@ export function VirusSimulation() {
     return () => clearTimeout(timer);
   }, [stage, playEerieSound]);
 
-  // Sprite spawning phase with grouped intervals (30s total)
+  // Sprite spawning phase with grouped intervals (18s total)
   useEffect(() => {
     if (stage !== "sprites") return;
 
     const startTime = Date.now();
-    const spawnDuration = VIRUS_TIMING.virusSpawnDuration; // 30 seconds
-    const minInterval = VIRUS_TIMING.virusMinInterval; // 0.125s
+    const spawnDuration = VIRUS_TIMING.virusSpawnDuration; // 18 seconds
     
-    // Grouped spawn intervals:
-    // 1st at 0s, 2nd at 8s, 3rd at 12s, 4th at 14s
-    // Then 5 at 1s intervals, 5 at 0.5s, 5 at 0.25s, rest at 0.125s
-    const spawnSchedule = [
-      { delay: 0, count: 1 },      // 1st virus immediately
-      { delay: 8000, count: 1 },   // 2nd after 8s
-      { delay: 4000, count: 1 },   // 3rd after 4s more (total 12s)
-      { delay: 2000, count: 1 },   // 4th after 2s more (total 14s)
-      { delay: 1000, count: 5 },   // 5 viruses at 1s intervals
-      { delay: 500, count: 5 },    // 5 viruses at 0.5s intervals
-      { delay: 250, count: 5 },    // 5 viruses at 0.25s intervals
-      { delay: minInterval, count: Infinity } // Rest at 0.125s until time limit
-    ];
+    // New spawn schedule per user requirements:
+    // After notification pressed:
+    // - Wait 4s, spawn 1st virus
+    // - Wait 4s, spawn 2nd virus
+    // - Wait 2s, spawn 3rd virus
+    // - Wait 2s, spawn 4th virus
+    // - Then 4 viruses at 1s intervals (4s total)
+    // - Then 4 viruses at 0.25s intervals (1s total)
+    // - Then 4 viruses at 0.125s intervals (0.5s total)
+    // - Rest at 0.05s intervals until 18s
     
-    let scheduleIndex = 0;
-    let groupCount = 0;
     let spawnCount = 0;
+    const spawnQueue: Array<{ delay: number; virusNumber: number }> = [];
     
-    const scheduleNextSpawn = () => {
-      const elapsed = Date.now() - startTime;
-      
-      // Check if we've exceeded 30 seconds
-      if (elapsed >= spawnDuration) {
-        console.log(`Spawned ${spawnCount} viruses in ${elapsed}ms`);
-        setStage("glitch"); // Immediately transition to glitch phase (removed 2s delay)
-        return;
-      }
-      
-      // Determine sprite type (80% butterfly, 20% bonzi)
-      const spriteType: "butterfly" | "bonzibuddy" = Math.random() > 0.2 ? "butterfly" : "bonzibuddy";
-      
-      // Spawn new sprite with varied initial velocities
-      const speedVariation = 1 + Math.random() * 3; // 1-4 speed range
-      const angle = Math.random() * Math.PI * 2;
-      
-      const newSprite: VirusSprite = {
-        id: `sprite-${Date.now()}-${Math.random()}`,
-        type: spriteType,
-        x: Math.random() * (window.innerWidth - 100),
-        y: Math.random() * (window.innerHeight - 100),
-        vx: Math.cos(angle) * speedVariation,
-        vy: Math.sin(angle) * speedVariation,
-        rotation: Math.random() * 360,
-        rotationSpeed: (Math.random() - 0.5) * 5,
-        scale: 0.8 + Math.random() * 0.4,
-      };
-
-      setSprites((prev) => [...prev, newSprite]);
-      spawnCount++;
-      groupCount++;
-
-      // Play spawn sound
-      playSpawnSound();
-      
-      // Get current schedule
-      const currentSchedule = spawnSchedule[scheduleIndex];
-      
-      // Check if we should move to next interval group
-      if (groupCount >= currentSchedule.count && scheduleIndex < spawnSchedule.length - 1) {
-        scheduleIndex++;
-        groupCount = 0;
-      }
-      
-      // Get next delay
-      const nextDelay = spawnSchedule[scheduleIndex].delay;
-      
-      // Make sure next spawn doesn't exceed 30 seconds
-      const nextSpawnTime = elapsed + nextDelay;
-      if (nextSpawnTime > spawnDuration) {
-        // Schedule final spawn at exactly 30 seconds
-        const remainingTime = spawnDuration - elapsed;
-        if (remainingTime > 0) {
-          setTimeout(scheduleNextSpawn, remainingTime);
-        } else {
-          scheduleNextSpawn(); // Call immediately to finish
-        }
-      } else {
-        // Schedule next spawn with current delay
-        setTimeout(scheduleNextSpawn, nextDelay);
-      }
-    };
+    // Build the spawn schedule
+    let cumulativeTime = 0;
     
-    // Start the first spawn immediately
-    scheduleNextSpawn();
+    // 1st virus at 4s
+    cumulativeTime += 4000;
+    spawnQueue.push({ delay: cumulativeTime, virusNumber: 1 });
+    
+    // 2nd virus at 8s (4s after 1st)
+    cumulativeTime += 4000;
+    spawnQueue.push({ delay: cumulativeTime, virusNumber: 2 });
+    
+    // 3rd virus at 10s (2s after 2nd)
+    cumulativeTime += 2000;
+    spawnQueue.push({ delay: cumulativeTime, virusNumber: 3 });
+    
+    // 4th virus at 12s (2s after 3rd)
+    cumulativeTime += 2000;
+    spawnQueue.push({ delay: cumulativeTime, virusNumber: 4 });
+    
+    // 4 viruses at 1s intervals (12s-16s)
+    for (let i = 0; i < 4; i++) {
+      cumulativeTime += 1000;
+      spawnQueue.push({ delay: cumulativeTime, virusNumber: 5 + i });
+    }
+    
+    // 4 viruses at 0.25s intervals (16s-17s)
+    for (let i = 0; i < 4; i++) {
+      cumulativeTime += 250;
+      spawnQueue.push({ delay: cumulativeTime, virusNumber: 9 + i });
+    }
+    
+    // 4 viruses at 0.125s intervals (17s-17.5s)
+    for (let i = 0; i < 4; i++) {
+      cumulativeTime += 125;
+      spawnQueue.push({ delay: cumulativeTime, virusNumber: 13 + i });
+    }
+    
+    // Rest at 0.05s intervals until 18s
+    let virusNumber = 17;
+    while (cumulativeTime < spawnDuration) {
+      cumulativeTime += 50;
+      if (cumulativeTime <= spawnDuration) {
+        spawnQueue.push({ delay: cumulativeTime, virusNumber });
+        virusNumber++;
+      }
+    }
+    
+    console.log(`[VIRUS] Scheduled ${spawnQueue.length} viruses over ${spawnDuration}ms`);
+    
+    // Schedule all spawns
+    const timeouts: NodeJS.Timeout[] = [];
+    
+    spawnQueue.forEach(({ delay, virusNumber }) => {
+      const timeout = setTimeout(() => {
+        // Determine sprite type (80% butterfly, 20% bonzi)
+        const spriteType: "butterfly" | "bonzibuddy" = Math.random() > 0.2 ? "butterfly" : "bonzibuddy";
+        
+        // Spawn new sprite with varied initial velocities
+        const speedVariation = 1 + Math.random() * 3; // 1-4 speed range
+        const angle = Math.random() * Math.PI * 2;
+        
+        const newSprite: VirusSprite = {
+          id: `sprite-${Date.now()}-${Math.random()}`,
+          type: spriteType,
+          x: Math.random() * (window.innerWidth - 100),
+          y: Math.random() * (window.innerHeight - 100),
+          vx: Math.cos(angle) * speedVariation,
+          vy: Math.sin(angle) * speedVariation,
+          rotation: Math.random() * 360,
+          rotationSpeed: (Math.random() - 0.5) * 5,
+          scale: 0.8 + Math.random() * 0.4,
+        };
+
+        setSprites((prev) => [...prev, newSprite]);
+        spawnCount++;
+
+        // Play spawn sound
+        playSpawnSound();
+        
+        console.log(`[VIRUS] Spawned virus #${virusNumber} at ${Date.now() - startTime}ms`);
+      }, delay);
+      
+      timeouts.push(timeout);
+    });
+    
+    // Transition to glitch phase after spawn duration
+    const finalTimeout = setTimeout(() => {
+      console.log(`[VIRUS] Spawned ${spawnCount} viruses total, transitioning to glitch phase`);
+      setStage("glitch");
+    }, spawnDuration);
+    
+    timeouts.push(finalTimeout);
 
     return () => {
-      // Cleanup is handled by the setTimeout chain
+      timeouts.forEach(clearTimeout);
     };
   }, [stage, playSpawnSound]);
 

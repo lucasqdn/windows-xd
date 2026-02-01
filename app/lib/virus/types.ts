@@ -18,9 +18,9 @@ export type NotificationVariant = {
 export const VIRUS_TIMING = {
   notificationDelay: 40000, // 40s after page load
   notificationRepeatDelay: 30000, // 30s if user clicks "Cancel"
-  silentInfection: 10000, // 10s silent phase
-  virusSpawnDuration: 30000, // 30s total spawn phase (was 20s, now 30s)
-  virusMinInterval: 125, // Minimum spawn interval (0.125s)
+  silentInfection: 0, // No silent phase - start immediately
+  virusSpawnDuration: 18000, // 18s total spawn phase
+  virusMinInterval: 50, // Minimum spawn interval (0.05s)
   glitchDuration: 8000, // 8s glitch phase
   bsodDuration: 5000, // 5s blue screen display
   ransomwareCountdown: 600, // 10 minutes in seconds
