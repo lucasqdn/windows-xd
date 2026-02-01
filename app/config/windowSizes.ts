@@ -21,6 +21,7 @@ export type AppId =
   | "doom"
   | "my-computer"
   | "recycle-bin"
+  | "media-player"
   | "default";
 
 /**
@@ -92,6 +93,12 @@ export const WINDOW_SIZES: Record<AppId, WindowSize> = {
   "recycle-bin": {
     width: 800,   // Wide for detailed file view
     height: 600,  // Tall for multiple items
+  },
+
+  // Windows Media Player - classic video player with controls
+  "media-player": {
+    width: 640,   // Classic 640px for 4:3 video
+    height: 560,  // 480px video + ~80px controls
   },
 
   // Default fallback size for any unlisted apps - generous sizing

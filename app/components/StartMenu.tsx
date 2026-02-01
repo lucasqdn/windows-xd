@@ -38,6 +38,7 @@ const programItems: MenuItem[] = [
   { id: "my-computer", label: "My Computer", icon: "/computer_explorer-2.png", isImage: true },
   { id: "recycle-bin", label: "Recycle Bin", icon: "/recycle_bin_empty-2.png", isImage: true },
   { id: "chatroom", label: "Chat Room", icon: "/chatroom.png", isImage: true },
+  { id: "media-player", label: "Windows Media Player", icon: "/media-player-icon.png", isImage: true },
   { id: "clippy", label: "Help (Clippy)", icon: "📎" },
 ];
 
