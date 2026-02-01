@@ -45,7 +45,7 @@ export function SaveDialog({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-[10000]">
-      <div className="win98-raised bg-[#c0c0c0] w-[500px] max-w-[90vw]">
+      <div className="win98-raised w-[500px] max-w-[90vw]" style={{ background: 'var(--window-bg)' }}>
         {/* Title Bar */}
         <div className="win98-titlebar-active px-2 py-1 flex items-center justify-between">
           <div className="flex items-center gap-1">
@@ -88,12 +88,25 @@ export function SaveDialog({
                   key={folder.id}
                   className={`flex items-center gap-2 px-2 py-1 text-xs cursor-pointer ${
                     selectedFolder === folder.id
-                      ? "bg-[#000080] text-white"
-                      : "hover:bg-[#000080] hover:text-white"
+                      ? "text-white"
+                      : "hover:text-white"
                   }`}
+                  style={{
+                    background: selectedFolder === folder.id ? 'var(--menu-hover-bg)' : undefined
+                  }}
                   onClick={() => setSelectedFolder(folder.id)}
                   onDoubleClick={() => {
                     setSelectedFolder(folder.id);
+                  }}
+                  onMouseEnter={(e) => {
+                    if (selectedFolder !== folder.id) {
+                      e.currentTarget.style.background = 'var(--menu-hover-bg)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (selectedFolder !== folder.id) {
+                      e.currentTarget.style.background = '';
+                    }
                   }}
                 >
                   <span>📁</span>

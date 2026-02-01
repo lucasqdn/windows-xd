@@ -238,11 +238,11 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
       <div className="win98-raised flex gap-1 px-1 py-0.5 text-xs">
         {/* File Menu */}
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">File</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[150px]">
+          <button className="menu-bar-button">File</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[150px]">
             <button
               onClick={() => setShowNewFolderDialog(true)}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>📁</span> New Folder
             </button>
@@ -254,7 +254,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                     const file = files.find((f) => f.id === selectedFile);
                     if (file) startRename(file);
                   }}
-                  className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+                  className="menu-dropdown-item"
                 >
                   <span>✏️</span> Rename
                 </button>
@@ -263,7 +263,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                     const file = files.find((f) => f.id === selectedFile);
                     if (file) handleDelete(file.id, file.name);
                   }}
-                  className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+                  className="menu-dropdown-item"
                 >
                   <span>🗑️</span> Delete
                 </button>
@@ -274,11 +274,11 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
 
         {/* Edit Menu */}
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">Edit</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[150px]">
+          <button className="menu-bar-button">Edit</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[150px]">
             <button
               onClick={handleSelectAll}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>☑️</span> Select All
             </button>
@@ -292,7 +292,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                       navigator.clipboard.writeText(file.content || file.name);
                     }
                   }}
-                  className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+                  className="menu-dropdown-item"
                 >
                   <span>📋</span> Copy
                 </button>
@@ -304,7 +304,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                       handleDelete(file.id, file.name);
                     }
                   }}
-                  className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+                  className="menu-dropdown-item"
                 >
                   <span>✂️</span> Cut
                 </button>
@@ -315,24 +315,24 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
 
         {/* View Menu */}
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">View</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[150px]">
+          <button className="menu-bar-button">View</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[150px]">
             <button
               onClick={() => setViewMode("icons")}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>{viewMode === "icons" ? "•" : " "}</span> Large Icons
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>{viewMode === "list" ? "•" : " "}</span> List
             </button>
             <div className="border-t border-gray-500 my-1" />
             <button
               onClick={handleRefresh}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>🔄</span> Refresh
             </button>
@@ -341,8 +341,8 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
 
         {/* Favorites Menu */}
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">Favorites</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[180px]">
+          <button className="menu-bar-button">Favorites</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[180px]">
             <button
               onClick={() => {
                 openWindow({
@@ -355,7 +355,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                   icon: "📁",
                 });
               }}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>📄</span> My Documents
             </button>
@@ -371,7 +371,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                   icon: "📁",
                 });
               }}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>🖼️</span> My Pictures
             </button>
@@ -387,7 +387,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                   icon: "📁",
                 });
               }}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>🎵</span> My Music
             </button>
@@ -396,14 +396,14 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
 
         {/* Tools Menu */}
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">Tools</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[180px]">
+          <button className="menu-bar-button">Tools</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[180px]">
             <button
               onClick={() => {
                 const allFiles = getAllFiles();
                 alert(`Total Files: ${allFiles.length}\nFolders: ${allFiles.filter(f => f.type === 'folder').length}\nFiles: ${allFiles.filter(f => f.type === 'file').length}`);
               }}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>📊</span> Folder Statistics
             </button>
@@ -412,7 +412,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                 const totalSize = files.reduce((sum, f) => sum + f.size, 0);
                 alert(`Current folder size: ${formatFileSize(totalSize)}`);
               }}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>💾</span> Calculate Size
             </button>
@@ -421,7 +421,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
               onClick={() => {
                 alert("Folder Options\n\nView: Configure folder view settings\nFile Types: Manage file associations\nOffline Files: Offline file settings");
               }}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>⚙️</span> Folder Options...
             </button>
@@ -430,18 +430,18 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
 
         {/* Help Menu */}
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">Help</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[150px]">
+          <button className="menu-bar-button">Help</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[150px]">
             <button
               onClick={() => alert("Windows XD File Explorer\n\nNavigate your files and folders with this classic interface!")}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>❓</span> Help Topics
             </button>
             <div className="border-t border-gray-500 my-1" />
             <button
               onClick={() => alert("Windows XD File Explorer\nVersion 1.0\n\n© 2024 Windows XD")}
-              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+              className="menu-dropdown-item"
             >
               <span>ℹ️</span> About
             </button>
@@ -488,7 +488,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
       {/* New Folder Dialog */}
       {showNewFolderDialog && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="win98-raised bg-[#c0c0c0] p-2 min-w-[300px]">
+          <div className="win98-raised style={{ background: 'var(--window-bg)' }} p-2 min-w-[300px]">
             <div className="win98-titlebar-active px-2 py-1 flex items-center justify-between mb-2">
               <span className="text-xs font-bold">New Folder</span>
               <button
@@ -536,7 +536,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
               <div
                 key={file.id}
                 className={`flex flex-col items-center p-2 cursor-pointer ${
-                  selectedFile === file.id ? "bg-[#000080] text-white" : "hover:bg-[#000080] hover:text-white"
+                  selectedFile === file.id ? "style={{ background: 'var(--menu-hover-bg)', color: 'var(--menu-hover-text)' }}" : "hover:style={{ background: 'var(--menu-hover-bg)', color: 'var(--menu-hover-text)' }}"
                 }`}
                 onClick={() => setSelectedFile(file.id)}
                 onDoubleClick={() => handleFileDoubleClick(file)}
@@ -575,7 +575,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
           // List View
           <table className="w-full text-xs">
             <thead>
-              <tr className="bg-[#c0c0c0] border-b border-gray-400">
+              <tr className="style={{ background: 'var(--window-bg)' }} border-b border-gray-400">
                 <th className="text-left px-2 py-1">Name</th>
                 <th className="text-left px-2 py-1">Size</th>
                 <th className="text-left px-2 py-1">Type</th>
@@ -587,7 +587,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                 <tr
                   key={file.id}
                   className={`cursor-pointer border-b border-gray-200 ${
-                    selectedFile === file.id ? "bg-[#000080] text-white" : "hover:bg-[#000080] hover:text-white"
+                    selectedFile === file.id ? "style={{ background: 'var(--menu-hover-bg)', color: 'var(--menu-hover-text)' }}" : "hover:style={{ background: 'var(--menu-hover-bg)', color: 'var(--menu-hover-text)' }}"
                   }`}
                   onClick={() => setSelectedFile(file.id)}
                   onDoubleClick={() => handleFileDoubleClick(file)}

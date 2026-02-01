@@ -102,11 +102,11 @@ export function InternetExplorer({ id }: InternetExplorerProps) {
     <div className="h-full flex flex-col bg-white">
       {/* Menu Bar */}
       <div className="win98-raised flex gap-1 px-1 py-0.5 text-xs border-b border-gray-400">
-        <button className="px-2 hover:bg-[#000080] hover:text-white">File</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">Edit</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">View</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">Favorites</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">Help</button>
+        <button className="menu-bar-button">File</button>
+        <button className="menu-bar-button">Edit</button>
+        <button className="menu-bar-button">View</button>
+        <button className="menu-bar-button">Favorites</button>
+        <button className="menu-bar-button">Help</button>
       </div>
 
       {/* Address Bar */}

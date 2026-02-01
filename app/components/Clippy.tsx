@@ -210,8 +210,8 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
 
   return (
     <div
-      className="fixed bottom-24 right-6 w-72 bg-[#ffffcc] win98-raised shadow-lg z-50"
-      style={{ maxWidth: "calc(100vw - 48px)" }}
+      className="fixed bottom-24 right-6 w-72 win98-raised shadow-lg z-50"
+      style={{ background: 'var(--clippy-yellow)', maxWidth: "calc(100vw - 48px)" }}
     >
       {/* Title Bar */}
       <div className="win98-titlebar-active flex items-center justify-between px-2 py-1">

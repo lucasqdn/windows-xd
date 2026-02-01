@@ -135,13 +135,13 @@ export function MediaPlayer({ id }: MediaPlayerProps) {
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#c0c0c0]">
+    <div className="h-full flex flex-col style={{ background: 'var(--window-bg)' }}">
       {/* Menu Bar */}
       <div className="win98-raised flex gap-1 px-1 py-0.5 text-xs border-b border-white">
-        <button className="px-2 hover:bg-[#000080] hover:text-white">File</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">View</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">Play</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">Help</button>
+        <button className="menu-bar-button">File</button>
+        <button className="menu-bar-button">View</button>
+        <button className="menu-bar-button">Play</button>
+        <button className="menu-bar-button">Help</button>
       </div>
 
       {/* Video Display Area */}

@@ -75,10 +75,10 @@ export default function ChatRoom() {
   };
 
   return (
-    <div className="flex h-full bg-[#c0c0c0]">
+    <div className="flex h-full" style={{ background: 'var(--window-bg)' }}>
       {/* Left sidebar - User list */}
-      <div className="w-[150px] flex flex-col border-r-2 border-[#808080]">
-        <div className="bg-[#000080] text-white px-2 py-1 text-xs font-bold">
+      <div className="w-[150px] flex flex-col border-r-2" style={{ borderColor: 'var(--border-gray)' }}>
+        <div className="px-2 py-1 text-xs font-bold" style={{ background: 'var(--menu-hover-bg)', color: 'var(--menu-hover-text)' }}>
           Online ({users.length})
         </div>
         <div className="flex-1 overflow-y-auto bg-white win98-inset p-2">
@@ -92,7 +92,7 @@ export default function ChatRoom() {
             </div>
           ))}
         </div>
-        <div className="p-2 border-t-2 border-[#808080]">
+        <div className="p-2 border-t-2" style={{ borderColor: 'var(--border-gray)' }}>
           <div className="text-xs text-center">
             {connected ? (
               <span className="text-green-600">● Connected</span>
@@ -139,7 +139,7 @@ export default function ChatRoom() {
         </div>
 
         {/* Input area */}
-        <div className="flex gap-2 p-2 border-t-2 border-[#808080]">
+        <div className="flex gap-2 p-2 border-t-2" style={{ borderColor: 'var(--border-gray)' }}>
           <input
             type="text"
             value={input}

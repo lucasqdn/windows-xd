@@ -628,8 +628,8 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
       {/* Menu Bar */}
       <div className="win98-raised flex gap-1 px-1 py-0.5 text-xs">
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">File</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[150px]">
+          <button className="menu-bar-button">File</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[150px]">
             <button
               onClick={() => setShowSaveDialog(true)}
               className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
@@ -638,13 +638,13 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
             </button>
           </div>
         </div>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">Edit</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">View</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white" onClick={clearCanvas}>
+        <button className="menu-bar-button">Edit</button>
+        <button className="menu-bar-button">View</button>
+        <button className="menu-bar-button" onClick={clearCanvas}>
           Image
         </button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">Colors</button>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">Help</button>
+        <button className="menu-bar-button">Colors</button>
+        <button className="menu-bar-button">Help</button>
         <div className="flex-1 px-2 text-xs flex items-center">
           <span className="text-gray-700">{fileName}{isModified ? " *" : ""}</span>
         </div>
@@ -745,7 +745,7 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
       </div>
 
       {/* Canvas Area */}
-      <div className="flex-1 flex items-center justify-center bg-[#c0c0c0] p-2 overflow-auto">
+      <div className="flex-1 flex items-center justify-center style={{ background: 'var(--window-bg)' }} p-2 overflow-auto">
         <div className="win98-inset bg-white relative">
           <canvas
             ref={canvasRef}
@@ -789,7 +789,7 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
       {/* AI Generate Dialog */}
       {showAIDialog && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="win98-window bg-[#c0c0c0] w-[500px] max-w-[90vw]">
+          <div className="win98-window style={{ background: 'var(--window-bg)' }} w-[500px] max-w-[90vw]">
             {/* Title Bar */}
             <div className="win98-titlebar-active flex items-center justify-between px-1 py-0.5">
               <div className="flex items-center gap-1">

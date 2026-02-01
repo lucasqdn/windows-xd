@@ -31,6 +31,53 @@
   --spacing-sm: 4px;  /* Small spacing (menu items, icon padding) */
   --spacing-md: 8px;  /* Medium spacing (menu icon-text gap) */
   --spacing-lg: 12px; /* Large spacing (button padding) */
+  
+  /* Extended Color System */
+  --menu-hover-bg: #000080;         /* Menu item hover background */
+  --menu-hover-text: #ffffff;       /* Menu item hover text */
+  --border-gray: #808080;           /* Standard gray border */
+  --clippy-yellow: #ffffcc;         /* Clippy background */
+  --selection-bg: rgba(0, 0, 128, 0.3); /* Desktop icon selection */
+  --selection-outline: #000000;     /* Desktop icon selection outline */
+  --canvas-white: #ffffff;          /* Paint canvas background */
+  --graph-green: #00ff00;           /* CPU graph color */
+  --graph-red: #ff0000;             /* Memory graph color */
+  --graph-stroke-green: #006600;    /* CPU graph stroke */
+  --graph-black: #000000;           /* Graph background */
+}
+
+/* Menu Bar Styles for Applications */
+.menu-bar-button {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.menu-bar-button:hover {
+  background: var(--menu-hover-bg);
+  color: var(--menu-hover-text);
+}
+
+.menu-dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: 0.25rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 11px;
+}
+
+.menu-dropdown-item:hover {
+  background: var(--menu-hover-bg);
+  color: var(--menu-hover-text);
 }
 
 /* Digital Display Styles for Minesweeper */
@@ -547,8 +594,8 @@ body {
 }
 
 .desktop-icon.selected {
-  background: rgba(0, 0, 128, 0.3); /* Blue highlight */
-  outline: 1px dotted #000;
+  background: var(--selection-bg);
+  outline: 1px dotted var(--selection-outline);
 }
 
 .desktop-icon.selected .icon-label {
@@ -602,8 +649,8 @@ body {
 }
 
 .start-menu-item:hover {
-  background: var(--win98-blue);
-  color: var(--win98-white);
+  background: var(--menu-hover-bg);
+  color: var(--menu-hover-text);
 }
 
 .start-menu-submenu {
@@ -720,8 +767,8 @@ body {
 }
 
 .context-menu-item:hover:not(.disabled) {
-  background: var(--win98-blue);
-  color: var(--win98-white);
+  background: var(--menu-hover-bg);
+  color: var(--menu-hover-text);
 }
 
 .context-menu-item.disabled {

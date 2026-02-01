@@ -160,12 +160,12 @@ export function TaskManager({ id }: TaskManagerProps) {
   }, [activeTab, history]);
 
   return (
-    <div className="h-full flex flex-col bg-[#c0c0c0]">
+    <div className="h-full flex flex-col style={{ background: 'var(--window-bg)' }}">
       {/* Menu Bar */}
       <div className="win98-raised flex gap-1 px-1 py-0.5 text-xs">
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">File</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[150px]">
+          <button className="menu-bar-button">File</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[150px]">
             <button
               onClick={() => {
                 const newTask = prompt("Type the name of a program to run:");
@@ -187,8 +187,8 @@ export function TaskManager({ id }: TaskManagerProps) {
           </div>
         </div>
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">Options</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[150px]">
+          <button className="menu-bar-button">Options</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[150px]">
             <button className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white">
               Always On Top
             </button>
@@ -202,8 +202,8 @@ export function TaskManager({ id }: TaskManagerProps) {
           </div>
         </div>
         <div className="relative group">
-          <button className="px-2 hover:bg-[#000080] hover:text-white">View</button>
-          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[150px]">
+          <button className="menu-bar-button">View</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised style={{ background: 'var(--window-bg)' }} shadow-lg z-10 min-w-[150px]">
             <button className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white">
               Refresh Now
             </button>
@@ -213,17 +213,17 @@ export function TaskManager({ id }: TaskManagerProps) {
             </button>
           </div>
         </div>
-        <button className="px-2 hover:bg-[#000080] hover:text-white">Help</button>
+        <button className="menu-bar-button">Help</button>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-400 bg-[#c0c0c0] px-1">
+      <div className="flex border-b border-gray-400 style={{ background: 'var(--window-bg)' }} px-1">
         <button
           onClick={() => setActiveTab("performance")}
           className={`px-4 py-1 text-xs border-t border-l border-r ${
             activeTab === "performance"
               ? "border-gray-100 bg-white -mb-px"
-              : "border-gray-600 bg-[#c0c0c0]"
+              : "border-gray-600 style={{ background: 'var(--window-bg)' }}"
           }`}
         >
           Performance
@@ -233,7 +233,7 @@ export function TaskManager({ id }: TaskManagerProps) {
           className={`px-4 py-1 text-xs border-t border-l border-r ${
             activeTab === "applications"
               ? "border-gray-100 bg-white -mb-px"
-              : "border-gray-600 bg-[#c0c0c0]"
+              : "border-gray-600 style={{ background: 'var(--window-bg)' }}"
           }`}
         >
           Applications
@@ -243,7 +243,7 @@ export function TaskManager({ id }: TaskManagerProps) {
           className={`px-4 py-1 text-xs border-t border-l border-r ${
             activeTab === "processes"
               ? "border-gray-100 bg-white -mb-px"
-              : "border-gray-600 bg-[#c0c0c0]"
+              : "border-gray-600 style={{ background: 'var(--window-bg)' }}"
           }`}
         >
           Processes
@@ -317,7 +317,7 @@ export function TaskManager({ id }: TaskManagerProps) {
             <div className="flex-1 win98-inset bg-white overflow-auto mb-2">
               <table className="w-full text-xs">
                 <thead>
-                  <tr className="bg-[#c0c0c0] border-b border-gray-400">
+                  <tr className="style={{ background: 'var(--window-bg)' }} border-b border-gray-400">
                     <th className="text-left px-2 py-1">Task</th>
                     <th className="text-left px-2 py-1">Status</th>
                   </tr>
@@ -376,7 +376,7 @@ export function TaskManager({ id }: TaskManagerProps) {
             <div className="flex-1 win98-inset bg-white overflow-auto mb-2">
               <table className="w-full text-xs">
                 <thead>
-                  <tr className="bg-[#c0c0c0] border-b border-gray-400">
+                  <tr className="style={{ background: 'var(--window-bg)' }} border-b border-gray-400">
                     <th className="text-left px-2 py-1">Image Name</th>
                     <th className="text-left px-2 py-1">PID</th>
                     <th className="text-left px-2 py-1">CPU</th>
