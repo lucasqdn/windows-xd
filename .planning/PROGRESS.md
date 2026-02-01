@@ -2,14 +2,15 @@
 
 > **Purpose**: Track phase completion status. Check this file before starting work.
 
-**Last Updated**: 2026-01-31 17:00 UTC
+**Last Updated**: 2026-01-31 18:55 UTC
 
 ---
 
 ## Current Status
 
 **V1 Complete**: ✅ All core features shipped (Phases 1-6)  
-**V2 Ready**: 🟢 Games, polish, enhancements ready to implement (Phases 7-16)
+**V2 Active**: ✅ Phase 8 (Pinball) complete - Embedded Space Cadet from 98.js.org  
+**V2 Ready**: 🟢 Games, polish, enhancements ready to implement (Phases 7, 9-16)
 
 See `.planning/ROADMAP.md` for full unified roadmap.
 
@@ -26,7 +27,7 @@ See `.planning/ROADMAP.md` for full unified roadmap.
 | **5** | Real-time Chatroom | ✅ COMPLETE | chatroom | 9af91f5 |
 | **6** | LLM-Powered Clippy | ✅ COMPLETE | main | d405dcd |
 | **7** | Minesweeper | 🟢 READY | - | - |
-| **8** | Pinball | 🟢 READY | - | - |
+| **8** | Pinball | ✅ COMPLETE | main | pending |
 | **9** | Virus Notification Prank | 🟢 READY | - | - |
 | **10** | Polish & Animations | 🟢 READY | - | - |
 | **11** | Advanced Paint Tools | 🟢 READY | - | - |
@@ -87,6 +88,18 @@ All V1 phases are complete! 🎉
 - Manual summon
 - Context-aware suggestions
 - **Status**: Fully functional
+
+### Phase 8: 3D Pinball - Space Cadet ✅
+- Embedded authentic Windows 98 Space Cadet Pinball from 98.js.org
+- Seamless iframe integration via proxy API
+- Windows 98-style loading screen with progress indicator
+- Custom pinball icon (downloaded from original game)
+- Optimized window size (620×500) to fit game canvas perfectly
+- Full WebGL game functionality preserved
+- Keyboard controls, sound effects, and physics all working
+- **Implementation**: Replaced custom-built pinball with embedded version
+- **Approach**: Simple iframe component (~60 lines) vs. complex game engine (1000+ lines)
+- **Status**: Fully functional, production-ready
 
 ---
 

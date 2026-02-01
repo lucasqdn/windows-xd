@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useIdleDetection } from "@/app/hooks/useIdleDetection";
 import { useWindowManager } from "@/app/contexts/WindowManagerContext";
 import { collectContext } from "@/app/lib/clippyContext";
+import { getWindowSize } from "@/app/config/windowSizes";
 
 type ClippyProps = {
   manualTrigger?: boolean;
@@ -89,7 +90,7 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
             isMinimized: false,
             isMaximized: false,
             position: { x: 150, y: 100 },
-            size: { width: 800, height: 600 },
+            size: getWindowSize('internet-explorer'),
             icon: "🌐",
           });
         }

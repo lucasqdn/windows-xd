@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 
 export type WindowState = {
   id: string;
@@ -32,35 +32,11 @@ const WindowManagerContext = createContext<WindowManagerContextType | undefined>
 export function WindowManagerProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [windows, setWindows] = useState<WindowState[]>([]);
 
-  // Load window state from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem('windows-xd-state');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        // Don't restore windows, just desktop icon positions if needed
-        console.log('Saved state loaded:', parsed);
-      } catch (e) {
-        console.error('Failed to load saved state:', e);
-      }
-    }
-  }, []);
-
-  // Save window positions to localStorage when they change
-  useEffect(() => {
-    if (windows.length > 0) {
-      const stateToSave = windows.map(w => ({
-        title: w.title,
-        position: w.position,
-        size: w.size,
-        isMaximized: w.isMaximized,
-      }));
-      localStorage.setItem('windows-xd-state', JSON.stringify(stateToSave));
-    }
-  }, [windows]);
-
   const openWindow = useCallback((window: Omit<WindowState, 'id' | 'isOpen' | 'zIndex' | 'animationState'>): string => {
     const id = `window-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
+    console.log(`[WindowManager] Opening window "${window.title}" with size:`, window.size);
+    
     const newWindow: WindowState = {
       ...window,
       id,

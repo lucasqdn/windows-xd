@@ -19,6 +19,9 @@ export function Window({ id, title, children }: WindowProps) {
     return null;
   }
 
+  // Log window dimensions for debugging
+  console.log(`[Window] Rendering "${title}" - width: ${windowState.size.width}, height: ${windowState.size.height}`);
+
   const isActive = windowState.zIndex === Math.max(...windows.map(w => w.zIndex));
   
   // Determine animation class
