@@ -428,6 +428,15 @@ body {
   box-shadow: inset 1px 1px 0 var(--button-shadow);
 }
 
+@keyframes taskbarButtonFlash {
+  0%, 100% { background: var(--button-face); }
+  50% { background: #ffa500; }
+}
+
+.taskbar-button.flashing {
+  animation: taskbarButtonFlash 0.5s ease-in-out infinite;
+}
+
 .system-tray {
   margin-left: auto;
   height: 24px;

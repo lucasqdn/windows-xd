@@ -16,6 +16,7 @@ export type WindowState = {
   zIndex: number;
   icon?: string;
   animationState?: 'opening' | 'minimizing' | 'restoring' | 'none';
+  isFlashing?: boolean;
 };
 
 type WindowManagerContextType = {
@@ -27,6 +28,7 @@ type WindowManagerContextType = {
   focusWindow: (id: string) => void;
   updateWindowPosition: (id: string, position: { x: number; y: number }) => void;
   updateWindowSize: (id: string, size: { width: number; height: number }) => void;
+  flashTaskbarButton: (id: string) => void;
   theme: {
     currentTheme: ThemeName;
     setTheme: (themeName: ThemeName) => void;
@@ -100,6 +102,7 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
         ...w,
         zIndex: w.id === id ? 100 + sorted.length : 100 + i,
         isMinimized: w.id === id ? false : w.isMinimized,
+        isFlashing: w.id === id ? false : w.isFlashing,
         animationState: w.id === id && w.isMinimized ? 'restoring' : w.animationState
       }));
     });
@@ -121,6 +124,12 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
   const updateWindowSize = useCallback((id: string, size: { width: number; height: number }) => {
     setWindows(prev => prev.map(w =>
       w.id === id ? { ...w, size } : w
+    ));
+  }, []);
+
+  const flashTaskbarButton = useCallback((id: string) => {
+    setWindows(prev => prev.map(w =>
+      w.id === id ? { ...w, isFlashing: true } : w
     ));
   }, []);
 
@@ -154,6 +163,7 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
       focusWindow,
       updateWindowPosition,
       updateWindowSize,
+      flashTaskbarButton,
       theme,
       selectedIcons,
       selectIcon,
