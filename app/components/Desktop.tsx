@@ -26,9 +26,6 @@ type DesktopIconData = {
 const desktopIcons: DesktopIconData[] = [
   { id: "my-computer", icon: "/computer_explorer-2.png", label: "My Computer", component: FileExplorer },
   { id: "recycle-bin", icon: "/recycle_bin_empty-2.png", label: "Recycle Bin", component: FileExplorer },
-  { id: "notepad", icon: "/directory_closed-3.png", label: "Notepad", component: Notepad },
-  { id: "paint", icon: "/directory_closed-3.png", label: "Paint", component: Paint },
-  { id: "chatroom", icon: "/directory_closed-3.png", label: "Chat Room", component: ChatRoom },
   { id: "internet-explorer", icon: "/msie2-2.png", label: "Internet Explorer", component: InternetExplorer },
   { id: "notepad", icon: "/notepad-4.png", label: "Notepad", component: Notepad },
   { id: "paint", icon: "/paint_old-0.png", label: "Paint", component: Paint },
