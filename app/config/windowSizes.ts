@@ -21,6 +21,7 @@ export type AppId =
   | "doom"
   | "my-computer"
   | "recycle-bin"
+  | "task-manager"
   | "default";
 
 /**
@@ -92,6 +93,12 @@ export const WINDOW_SIZES: Record<AppId, WindowSize> = {
   "recycle-bin": {
     width: 800,   // Wide for detailed file view
     height: 600,  // Tall for multiple items
+  },
+
+  // Task Manager - system monitoring and task management
+  "task-manager": {
+    width: 500,   // Compact width for task list
+    height: 400,  // Enough for processes and stats
   },
 
   // Default fallback size for any unlisted apps - generous sizing

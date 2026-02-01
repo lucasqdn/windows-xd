@@ -2,9 +2,11 @@
 
 import { useEffect } from "react";
 import { useWindowManager } from "@/app/contexts/WindowManagerContext";
+import { TaskManager } from "@/app/components/apps/TaskManager";
+import { getWindowSize } from "@/app/config/windowSizes";
 
 export function useKeyboardShortcuts() {
-  const { windows, closeWindow, minimizeWindow, focusWindow } = useWindowManager();
+  const { windows, closeWindow, minimizeWindow, focusWindow, openWindow } = useWindowManager();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -51,6 +53,28 @@ export function useKeyboardShortcuts() {
           closeWindow(activeWindow.id);
         }
       }
+
+      // Ctrl + Alt + Delete OR Ctrl + Shift + Esc - Open Task Manager
+      if ((e.ctrlKey && e.altKey && e.key === "Delete") || 
+          (e.ctrlKey && e.shiftKey && e.key === "Escape")) {
+        e.preventDefault();
+        
+        // Check if Task Manager is already open
+        const taskManagerWindow = windows.find(w => w.title === "Task Manager");
+        if (taskManagerWindow) {
+          focusWindow(taskManagerWindow.id);
+        } else {
+          openWindow({
+            title: "Task Manager",
+            component: TaskManager,
+            isMinimized: false,
+            isMaximized: false,
+            position: { x: 200, y: 150 },
+            size: getWindowSize("task-manager"),
+            icon: "/computer_taskmgr-0.png",
+          });
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -58,5 +82,5 @@ export function useKeyboardShortcuts() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [windows, closeWindow, minimizeWindow, focusWindow]);
+  }, [windows, closeWindow, minimizeWindow, focusWindow, openWindow]);
 }

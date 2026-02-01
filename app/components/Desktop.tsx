@@ -17,6 +17,7 @@ import { SpaceCadetPinball } from "./apps/SpaceCadetPinball";
 import Minesweeper from "./apps/Minesweeper";
 import { Solitaire } from "./apps/Solitaire";
 import { Doom } from "./apps/Doom";
+import { TaskManager } from "./apps/TaskManager";
 import {
   ContextMenu,
   useContextMenu,
@@ -56,6 +57,12 @@ const desktopIcons: DesktopIconData[] = [
     icon: "/msie2-2.png",
     label: "Internet Explorer",
     component: InternetExplorer,
+  },
+  {
+    id: "task-manager",
+    icon: "/computer_taskmgr-0.png",
+    label: "Task Manager",
+    component: TaskManager,
   },
   {
     id: "notepad",
