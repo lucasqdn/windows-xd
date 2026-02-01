@@ -658,6 +658,9 @@ body {
   left: 100%;
   top: 0;
   min-width: 180px;
+  max-height: 220px; /* Fixed height to force scrolling with 11 items (Windows 98 style) */
+  overflow-y: scroll; /* Always show scrollbar (Windows 98 behavior) */
+  overflow-x: hidden;
   background: var(--button-face);
   border-top: 2px solid var(--button-highlight);
   border-left: 2px solid var(--button-highlight);
@@ -665,6 +668,88 @@ body {
   border-bottom: 2px solid var(--button-dark-shadow);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   z-index: 10000;
+  color: #000000 !important;
+  pointer-events: auto; /* Ensure scrollbar is interactive */
+}
+
+/* Override text color for submenu items */
+.start-menu-submenu .start-menu-item {
+  color: #000000 !important;
+}
+
+/* Ensure hover state in submenu also has proper colors */
+.start-menu-submenu .start-menu-item:hover {
+  background: var(--menu-hover-bg);
+  color: var(--menu-hover-text) !important;
+}
+
+/* Windows 98 style scrollbar for submenu */
+.start-menu-submenu::-webkit-scrollbar {
+  width: 16px;
+}
+
+.start-menu-submenu::-webkit-scrollbar-track {
+  background: var(--button-face);
+  border-left: 1px solid #808080;
+}
+
+.start-menu-submenu::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+}
+
+.start-menu-submenu::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+.start-menu-submenu::-webkit-scrollbar-thumb:active {
+  background: #808080;
+}
+
+/* Scrollbar up/down arrow buttons */
+.start-menu-submenu::-webkit-scrollbar-button:single-button {
+  background: var(--button-face);
+  border-top: 2px solid var(--button-highlight);
+  border-left: 2px solid var(--button-highlight);
+  border-right: 2px solid var(--button-dark-shadow);
+  border-bottom: 2px solid var(--button-dark-shadow);
+  height: 16px;
+  display: block;
+}
+
+/* Up arrow */
+.start-menu-submenu::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M 8 4 L 4 10 L 12 10 Z" fill="black"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Down arrow */
+.start-menu-submenu::-webkit-scrollbar-button:single-button:vertical:increment {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M 8 12 L 4 6 L 12 6 Z" fill="black"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Arrow button hover effect */
+.start-menu-submenu::-webkit-scrollbar-button:hover {
+  background-color: #dfdfdf;
+}
+
+.start-menu-submenu::-webkit-scrollbar-button:active {
+  border-top: 2px solid var(--button-dark-shadow);
+  border-left: 2px solid var(--button-dark-shadow);
+  border-right: 2px solid var(--button-highlight);
+  border-bottom: 2px solid var(--button-highlight);
+}
+
+/* Firefox scrollbar support */
+.start-menu-submenu {
+  scrollbar-width: auto;
+  scrollbar-color: #c0c0c0 #d4d0c8;
 }
 
 /* Taskbar Styles */
