@@ -5,7 +5,7 @@ A pixel-perfect recreation of Windows 98 on the web with modern features includi
 ## Features
 
 - 🖥️ **Authentic Windows 98 UI**: Pixel-perfect recreation with functional window management
-- 💬 **Real-time Chat**: Multiplayer chatroom powered by WebSocket (Socket.IO)
+- 💬 **Real-time Chat**: Multiplayer chatroom powered by PartyKit WebSocket
 - 🤖 **AI Clippy**: LLM-powered assistant using Google Gemini
 - 🎨 **Draggable Windows**: Fully functional window system with minimize, maximize, close
 - ⚡ **Built with Next.js 16**: Modern React framework with App Router
@@ -64,7 +64,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-> **Note**: This project uses a custom Next.js server with Socket.IO for real-time features.
+### Deploying to Production
+
+For production deployment instructions, see the [deployment documentation](./docs/deployment/VERCEL_SETUP_INSTRUCTIONS.md).
+
+Key deployment guides:
+- **[Vercel Setup](./docs/deployment/VERCEL_SETUP_INSTRUCTIONS.md)** - Complete deployment guide
+- **[API Key Safety](./docs/deployment/API_KEY_SAFETY_EXPLAINED.md)** - Security best practices
+- **[PartyKit Deployment](./docs/deployment/PARTYKIT_DEPLOYMENT_STEPS.md)** - WebSocket server setup
 
 ### Production Build
 
@@ -126,7 +133,10 @@ windows-xd/
 │   ├── types/            # TypeScript type definitions
 │   ├── layout.tsx        # Root layout
 │   └── page.tsx          # Main page
-├── server.ts             # Custom Next.js + Socket.IO server
+├── party/                # PartyKit WebSocket server
+├── docs/                 # Documentation
+│   ├── deployment/       # Deployment guides
+│   └── development/      # Development docs
 ├── .planning/            # Project planning and documentation
 ├── .nvmrc                # Node.js version lock
 ├── setup.sh              # Automated setup script
@@ -138,8 +148,8 @@ windows-xd/
 - **Framework**: Next.js 16.1.6 (App Router)
 - **Language**: TypeScript 5 (strict mode)
 - **Styling**: Tailwind CSS 4
-- **State Management**: Zustand 5
-- **Real-time**: Socket.IO 4.8
+- **State Management**: React Context API
+- **Real-time**: PartyKit (WebSocket)
 - **AI**: Google Gemini API
 - **Window Management**: react-rnd
 
