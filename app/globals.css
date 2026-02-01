@@ -267,6 +267,38 @@ body {
   transition: none; /* Disable transitions during resize for performance */
 }
 
+/* Start Menu Animations */
+@keyframes startMenuSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.start-menu-slide-up {
+  animation: startMenuSlideUp 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: bottom left;
+}
+
+@keyframes submenuSlideOut {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.submenu-slide-out {
+  animation: submenuSlideOut 0.1s ease-out;
+}
+
 /* Desktop Icon Styles */
 .desktop-icon {
   display: flex;
