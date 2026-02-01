@@ -32,12 +32,17 @@ type WindowManagerContextType = {
     setTheme: (themeName: ThemeName) => void;
     availableThemes: Array<{ name: ThemeName; displayName: string }>;
   };
+  selectedIcons: string[];
+  selectIcon: (id: string, multiSelect?: boolean) => void;
+  selectMultipleIcons: (ids: string[]) => void;
+  clearSelection: () => void;
 };
 
 const WindowManagerContext = createContext<WindowManagerContextType | undefined>(undefined);
 
 export function WindowManagerProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [windows, setWindows] = useState<WindowState[]>([]);
+  const [selectedIcons, setSelectedIcons] = useState<string[]>([]);
   const theme = useTheme();
 
   const openWindow = useCallback((window: Omit<WindowState, 'id' | 'isOpen' | 'zIndex' | 'animationState'>): string => {
@@ -119,6 +124,26 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
     ));
   }, []);
 
+  const selectIcon = useCallback((id: string, multiSelect: boolean = false) => {
+    if (multiSelect) {
+      setSelectedIcons(prev => 
+        prev.includes(id) 
+          ? prev.filter(i => i !== id) 
+          : [...prev, id]
+      );
+    } else {
+      setSelectedIcons([id]);
+    }
+  }, []);
+
+  const selectMultipleIcons = useCallback((ids: string[]) => {
+    setSelectedIcons(ids);
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    setSelectedIcons([]);
+  }, []);
+
   return (
     <WindowManagerContext.Provider value={{
       windows,
@@ -129,7 +154,11 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
       focusWindow,
       updateWindowPosition,
       updateWindowSize,
-      theme
+      theme,
+      selectedIcons,
+      selectIcon,
+      selectMultipleIcons,
+      clearSelection,
     }}>
       {children}
     </WindowManagerContext.Provider>
