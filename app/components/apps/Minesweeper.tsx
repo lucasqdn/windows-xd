@@ -113,8 +113,8 @@ export default function Minesweeper() {
         <div className="flex items-center justify-between">
           {/* Mine Counter */}
           <div 
-            className="bg-black text-red-600 font-bold text-2xl px-2 border-2 border-[#808080]" 
-            style={{ fontFamily: 'monospace', letterSpacing: '2px' }}
+            className="digital-display border-2 border-[#808080] text-center flex items-center justify-center" 
+            style={{ width: '55px', height: '28px' }}
           >
             {formatNumber(remainingMines)}
           </div>
@@ -129,8 +129,8 @@ export default function Minesweeper() {
 
           {/* Timer */}
           <div 
-            className="bg-black text-red-600 font-bold text-2xl px-2 border-2 border-[#808080]" 
-            style={{ fontFamily: 'monospace', letterSpacing: '2px' }}
+            className="digital-display border-2 border-[#808080] text-center flex items-center justify-center" 
+            style={{ width: '55px', height: '28px' }}
           >
             {formatNumber(Math.min(elapsedTime, 999))}
           </div>
