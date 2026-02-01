@@ -9,8 +9,35 @@
   --win98-black: #000000;
   --win98-darkgray: #808080;
   --win98-lightgray: #dfdfdf;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-retro: var(--font-retro);
+  --font-pixel: var(--font-pixel);
+}
+
+/* Digital Display Styles for Minesweeper */
+@font-face {
+  font-family: 'DSEG7';
+  src: url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+.digital-display {
+  font-family: 'DSEG7', 'Courier New', monospace;
+  background: #000;
+  color: #ff0000;
+  text-shadow: none;
+  letter-spacing: -1px;
+  font-weight: bold;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: never;
+  font-size: 20px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  padding: 1px 2px;
+  filter: contrast(2);
+  overflow: hidden;
 }
 
 /* Animations */
@@ -37,10 +64,17 @@
   transform: none !important;
 }
 
-/* Pixel/Retro Font Fallback for authentic Windows 98 feel */
+/* Retro Windows 98 System Fonts */
 @font-face {
   font-family: 'MS Sans Serif';
-  src: local('MS Sans Serif'), local('Microsoft Sans Serif');
+  src: local('MS Sans Serif'), local('Microsoft Sans Serif'), local('Tahoma');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'W95FA';
+  src: local('Fixedsys'), local('Terminal'), local('MS Sans Serif');
+  font-display: swap;
 }
 
 * {
@@ -50,11 +84,16 @@
 }
 
 body {
-  font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif;
   font-size: 11px;
+  font-weight: 500;
   color: var(--win98-black);
   overflow: hidden;
   user-select: none;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 /* Windows 98 3D Bevel Effects */
@@ -84,7 +123,7 @@ body {
   box-shadow: inset -1px -1px 0 var(--win98-darkgray), inset 1px 1px 0 var(--win98-lightgray);
   background: var(--win98-gray);
   padding: 4px 12px;
-  font-size: 11px;
+  font-size: 14px;
   cursor: pointer;
   outline: none;
 }
@@ -214,6 +253,7 @@ body {
 .desktop-icon-text {
   margin-top: 4px;
   font-size: 11px;
+  line-height: 1.2;
   text-shadow: 1px 1px 1px var(--win98-black);
   word-wrap: break-word;
 }
@@ -286,7 +326,7 @@ body {
   border-right: 2px solid var(--win98-black);
   border-bottom: 2px solid var(--win98-black);
   background: var(--win98-gray);
-  font-size: 11px;
+  font-size: 14px;
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -312,7 +352,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 /* Context Menu Styles */
@@ -332,7 +372,7 @@ body {
   cursor: pointer;
   display: flex;
   align-items: center;
-  font-size: 11px;
+  font-size: 14px;
   position: relative;
 }
 

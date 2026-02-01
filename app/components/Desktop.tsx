@@ -14,6 +14,7 @@ import { FileExplorer } from "./apps/FileExplorer";
 import ChatRoom from "./apps/ChatRoom";
 import { InternetExplorer } from "./apps/InternetExplorer";
 import { SpaceCadetPinball } from "./apps/SpaceCadetPinball";
+import Minesweeper from "./apps/Minesweeper";
 import { Solitaire } from "./apps/Solitaire";
 import {
   ContextMenu,
@@ -59,6 +60,12 @@ const desktopIcons: DesktopIconData[] = [
     component: Notepad,
   },
   { id: "paint", icon: "/paint_old-0.png", label: "Paint", component: Paint },
+  {
+    id: "minesweeper",
+    icon: "/game_mine_1-0.png",
+    label: "Minesweeper",
+    component: Minesweeper,
+  },
   {
     id: "chatroom",
     icon: "/globe.svg",
