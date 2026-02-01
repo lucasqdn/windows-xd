@@ -18,6 +18,7 @@ import Minesweeper from "./apps/Minesweeper";
 import { Solitaire } from "./apps/Solitaire";
 import { Doom } from "./apps/Doom";
 import { TaskManager } from "./apps/TaskManager";
+import { MediaPlayer } from "./apps/MediaPlayer";
 import {
   ContextMenu,
   useContextMenu,
@@ -100,6 +101,12 @@ const desktopIcons: DesktopIconData[] = [
     icon: "/doom-icon.png",
     label: "DOOM",
     component: Doom,
+  },
+  {
+    id: "media-player",
+    icon: "/media-player-icon.png",
+    label: "Windows Media Player",
+    component: MediaPlayer,
   },
 ];
 

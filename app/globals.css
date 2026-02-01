@@ -828,3 +828,43 @@ body {
 .animate-bonzi-blink {
   animation: bonzi-blink 4s ease-in-out infinite;
 }
+
+/* Windows 98 Slider Styles for Media Player */
+.win98-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: #dfdfdf;
+  border: 1px solid #808080;
+  border-top-color: #000;
+  border-left-color: #000;
+  outline: none;
+  cursor: pointer;
+}
+
+.win98-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 16px;
+  background: #c0c0c0;
+  border: 1px solid #fff;
+  border-top-color: #dfdfdf;
+  border-left-color: #dfdfdf;
+  border-bottom-color: #000;
+  border-right-color: #000;
+  cursor: pointer;
+}
+
+.win98-slider::-moz-range-thumb {
+  width: 12px;
+  height: 16px;
+  background: #c0c0c0;
+  border: 1px solid #fff;
+  border-top-color: #dfdfdf;
+  border-left-color: #dfdfdf;
+  border-bottom-color: #000;
+  border-right-color: #000;
+  cursor: pointer;
+}
+
