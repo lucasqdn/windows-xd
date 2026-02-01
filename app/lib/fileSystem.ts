@@ -106,7 +106,7 @@ function getDefaultFiles(): FileItem[] {
       id: "img-windows98",
       name: "windows-98.png",
       type: "file",
-      imageData: "/icons8-windows-98-48.png",
+      imageData: "/windows-98-1.png",
       mimeType: "image/png",
       size: 2321, // Actual file size
       created: Date.now(),
