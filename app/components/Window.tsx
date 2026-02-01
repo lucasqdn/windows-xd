@@ -204,12 +204,21 @@ export function Window({ id, title, children }: WindowProps) {
       }}
       minWidth={200}
       minHeight={150}
-      bounds="parent"
+      bounds="window"
       dragHandleClassName="window-title-bar"
       style={{ zIndex: windowState.zIndex }}
       onMouseDown={() => focusWindow(id)}
       disableDragging={false}
-      enableResizing={true}
+      enableResizing={{
+        top: true,
+        right: true,
+        bottom: true,
+        left: true,
+        topRight: true,
+        bottomRight: true,
+        bottomLeft: true,
+        topLeft: true,
+      }}
     >
       <div 
         className={windowClasses}

@@ -20,20 +20,15 @@ export default function Minesweeper({ id }: { id: string }) {
         // The Minesweeper component uses -m-2 to cancel Window's p-2 padding
         const windowBorder = 4;
         
-        // Extra buffer to ensure menu bar and all content fits comfortably
-        // There seems to be a scaling issue where the window renders at ~75% of requested size
-        // So we need to compensate by requesting more width
-        // For Expert mode (502px table), we need much more buffer
-        const scalingFactor = 1.33; // Compensate for the ~75% rendering issue
-        const bufferWidth = 120;
-        const bufferHeight = 40;
+        // Title bar height
+        const titleBarHeight = 20;
         
-        const baseWidth = Math.ceil(width) + windowBorder + bufferWidth;
-        const baseHeight = Math.ceil(height) + windowBorder + bufferHeight;
+        // Buffer for comfortable display
+        const bufferWidth = 8;  // Small horizontal buffer
+        const bufferHeight = 8; // Small vertical buffer
         
-        // Apply scaling factor to width to compensate
-        const newWidth = Math.ceil(baseWidth * scalingFactor);
-        const newHeight = baseHeight;
+        const newWidth = Math.ceil(width) + windowBorder + bufferWidth;
+        const newHeight = Math.ceil(height) + windowBorder + bufferHeight + titleBarHeight;
         
         console.log('[Minesweeper] Auto-resize:', {
           contentWidth: width,
@@ -43,26 +38,7 @@ export default function Minesweeper({ id }: { id: string }) {
           windowId: id,
         });
         
-        console.log('[Minesweeper] Calling updateWindowSize with:', { id, width: newWidth, height: newHeight });
         updateWindowSize(id, { width: newWidth, height: newHeight });
-        
-        // Verify the update happened
-        setTimeout(() => {
-          const windowEl = document.querySelector(`[data-window-id="${id}"]`);
-          if (windowEl) {
-            const computedStyle = window.getComputedStyle(windowEl);
-            const parent = windowEl.parentElement;
-            const parentStyle = parent ? window.getComputedStyle(parent) : null;
-            console.log('[Minesweeper] Actual window size after update:', {
-              requestedWidth: newWidth,
-              actualWidth: computedStyle.width,
-              actualHeight: computedStyle.height,
-              parentWidth: parentStyle?.width,
-              offsetWidth: (windowEl as HTMLElement).offsetWidth,
-              clientWidth: (windowEl as HTMLElement).clientWidth,
-            });
-          }
-        }, 100);
       }
     };
 

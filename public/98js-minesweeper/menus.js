@@ -7,6 +7,39 @@ var difficulty_levels = [
 var set_difficulty = function(difficulty){
 	minesweeper_.new_game.apply(minesweeper_, difficulty);
 	
+	// Notify parent window of resize after game board is rebuilt
+	// Wait for DOM to update, then trigger resize notification
+	setTimeout(function() {
+		// Get the menu bar
+		const menuBar = document.querySelector('.os-gui-menu-bar');
+		// Get the game table (the actual playfield)
+		const gameTable = document.querySelector('table');
+		
+		if (gameTable && window.parent) {
+			const tableRect = gameTable.getBoundingClientRect();
+			const menuHeight = menuBar ? menuBar.getBoundingClientRect().height : 0;
+			const menuWidth = menuBar ? menuBar.getBoundingClientRect().width : 0;
+			
+			// Use the maximum width between table and menu
+			const totalWidth = Math.max(tableRect.width, menuWidth);
+			const totalHeight = menuHeight + tableRect.height;
+			
+			window.parent.postMessage({
+				type: 'minesweeper-resize',
+				width: totalWidth,
+				height: totalHeight
+			}, '*');
+			
+			console.log('[Minesweeper] Difficulty changed, sending resize:', {
+				difficulty: difficulty,
+				tableWidth: tableRect.width,
+				menuWidth: menuWidth,
+				totalWidth: totalWidth,
+				totalHeight: totalHeight
+			});
+		}
+	}, 150);
+	
 	if(frameElement && frameElement.$window){
 		// TODO: um why not just use the computed width <punctuation="thinking-emoji"/> </sentence>
 		var tile_size = 16;

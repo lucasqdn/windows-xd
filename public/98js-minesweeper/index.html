@@ -66,7 +66,7 @@
 						
 						// Use the maximum width between table and menu
 						const totalWidth = Math.max(tableRect.width, menuWidth);
-						const totalHeight = menuHeight + tableRect.height;
+						const totalHeight = menuHeight + tableRect.height + 10; // Add small margin
 						
 						window.parent.postMessage({
 							type: 'minesweeper-resize',
@@ -87,6 +87,7 @@
 
 				// Observe DOM changes to detect when game board changes
 				const observer = new MutationObserver(function() {
+					// Delay to ensure DOM is fully updated
 					setTimeout(notifyResize, 100);
 				});
 
@@ -109,6 +110,11 @@
 				// Initial notification (wait for menu to render)
 				setTimeout(notifyResize, 500);
 				setTimeout(notifyResize, 1000); // Second attempt in case menu loads slowly
+				
+				// Also notify on window resize (in case iframe is resized externally)
+				window.addEventListener('resize', function() {
+					setTimeout(notifyResize, 100);
+				});
 			});
 		</script>
 	</head>
