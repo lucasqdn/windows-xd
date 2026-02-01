@@ -211,6 +211,26 @@ body {
   height: 100% !important;
 }
 
+/* Window Content Optimization - ensure proper scrolling and layout */
+.win98-window > div:last-child {
+  /* This targets the content wrapper in Window.tsx */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure app content fills available space properly */
+.win98-window .h-full {
+  height: 100%;
+  min-height: 0; /* Allow flex children to shrink below content size */
+}
+
+.win98-window .flex-1 {
+  flex: 1 1 0%; /* Proper flex-1 behavior */
+  min-height: 0; /* Prevent flex overflow issues */
+  min-width: 0;
+}
+
 /* Window Animations */
 @keyframes windowOpen {
   from {

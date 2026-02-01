@@ -12,6 +12,7 @@
   "dependencies": {
     "@google/genai": "^1.39.0",
     "@google/generative-ai": "^0.24.1",
+    "js-dos": "^8.3.20",
     "next": "16.1.6",
     "openai": "^6.17.0",
     "react": "^19.2.3",

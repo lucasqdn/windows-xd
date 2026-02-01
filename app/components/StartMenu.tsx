@@ -34,6 +34,7 @@ const programItems: MenuItem[] = [
   { id: "minesweeper", label: "Minesweeper", icon: "/game_mine_1-0.png", isImage: true },
   { id: "pinball", label: "3D Pinball", icon: "/pinball-icon.png", isImage: true },
   { id: "solitaire", label: "Solitaire", icon: "/solitaire-32x32.png", isImage: true },
+  { id: "doom", label: "DOOM", icon: "/doom-icon.png", isImage: true },
   { id: "my-computer", label: "My Computer", icon: "/computer_explorer-2.png", isImage: true },
   { id: "recycle-bin", label: "Recycle Bin", icon: "/recycle_bin_empty-2.png", isImage: true },
   { id: "chatroom", label: "Chat Room", icon: "/chatroom.png", isImage: true },

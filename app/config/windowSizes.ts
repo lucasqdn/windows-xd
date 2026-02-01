@@ -18,6 +18,7 @@ export type AppId =
   | "chatroom"
   | "solitaire"
   | "minesweeper"
+  | "doom"
   | "my-computer"
   | "recycle-bin"
   | "default";
@@ -31,62 +32,64 @@ export type AppId =
 export const WINDOW_SIZES: Record<AppId, WindowSize> = {
   // Pinball needs to be TALL to show the vertical pinball table
   // The classic Space Cadet table is vertical (portrait orientation)
+  // Increased height significantly to show full table without scrolling
   pinball: {
-    width: 600,   // Optimal width for pinball table
-    height: 700,  // Tall vertical table
+    width: 1000, // Width for the table + scoreboard
+    height: 480, // Height for vertical table view
   },
 
-  // Internet Explorer needs ample space for web browsing
+  // Internet Explorer needs more space for web browsing
   "internet-explorer": {
-    width: 1024,  // Wide enough for most websites
-    height: 768,  // Standard 4:3 aspect ratio
+    width: 800,
+    height: 600,
   },
 
-  // Notepad is a simple text editor - comfortable size for editing
+  // Notepad is a simple text editor
   notepad: {
-    width: 800,   // Wide enough for ~100 characters
-    height: 600,  // Tall enough for substantial text
+    width: 600,
+    height: 400,
   },
 
-  // Paint needs space for 600x400 canvas + toolbars
+  // Paint needs decent space for canvas
   paint: {
-    width: 800,   // Canvas + toolbars + comfortable margin
-    height: 600,  // Canvas + menu + status bars
+    width: 600,
+    height: 400,
   },
 
   // Chat room needs space for messages + user list sidebar
   chatroom: {
-    width: 800,   // Wide for chat + 150px user list
-    height: 600,  // Tall for message history
+    width: 600,
+    height: 400,
   },
 
-  // Solitaire card game - classic Windows Solitaire size
+  // Solitaire card game
   solitaire: {
-    width: 940,   // Fits all 7 columns comfortably
-    height: 640,  // Tall for card stacks and movements
+    width: 940,
+    height: 560,
   },
 
   // Minesweeper game - starts with beginner size, auto-resizes on difficulty change
+  // Slightly larger to prevent clipping on beginner board
   minesweeper: {
-    width: 250,   // Beginner board + small buffer
-    height: 350,  // Menu + board + status
+    width: 220,
+    height: 320,
   },
 
   // File Explorer (My Computer, Recycle Bin) - room for file listings
   "my-computer": {
-    width: 800,   // Wide for detailed file view
-    height: 600,  // Tall for multiple files and folders
+    width: 600,
+    height: 400,
   },
 
   "recycle-bin": {
-    width: 800,   // Wide for detailed file view
-    height: 600,  // Tall for multiple items
+    width: 600,
+    height: 400,
   },
 
   // Default fallback size for any unlisted apps - generous sizing
   default: {
-    width: 800,   // Comfortable default width
-    height: 600,  // Comfortable default height
+    width: 600,
+    height: 400,
   },
 };
 

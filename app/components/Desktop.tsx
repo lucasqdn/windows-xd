@@ -16,6 +16,7 @@ import { InternetExplorer } from "./apps/InternetExplorer";
 import { SpaceCadetPinball } from "./apps/SpaceCadetPinball";
 import Minesweeper from "./apps/Minesweeper";
 import { Solitaire } from "./apps/Solitaire";
+import { Doom } from "./apps/Doom";
 import {
   ContextMenu,
   useContextMenu,
@@ -86,6 +87,12 @@ const desktopIcons: DesktopIconData[] = [
     icon: "/pinball-icon.png",
     label: "3D Pinball",
     component: SpaceCadetPinball,
+  },
+  {
+    id: "doom",
+    icon: "/doom-icon.png",
+    label: "DOOM",
+    component: Doom,
   },
 ];
 
@@ -309,7 +316,13 @@ function DesktopContent() {
         priority
       />
       {/* Desktop Icons */}
-      <div className="absolute top-2 left-2 flex flex-col gap-2 z-10">
+      <div 
+        className="absolute top-2 left-2 z-10 flex flex-wrap flex-col gap-2"
+        style={{
+          maxHeight: 'calc(100vh - 80px)', // Leave space for taskbar (40px) and padding
+          alignContent: 'flex-start',
+        }}
+      >
         {desktopIcons.map((icon) => (
           <DesktopIcon
             key={icon.id}
