@@ -412,6 +412,7 @@ function DesktopContent() {
         fill
         className="object-cover"
         priority
+        unoptimized
       />
       {/* Desktop Icons */}
       <div 

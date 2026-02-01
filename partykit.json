@@ -1,0 +1,5 @@
+{
+  "name": "windows-xd-chat",
+  "main": "party/chatroom.ts",
+  "compatibilityDate": "2024-01-01"
+}
