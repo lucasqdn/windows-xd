@@ -780,6 +780,4 @@ export function Paint({ id }: PaintProps) {
       )}
     </div>
   );
-});
-
-export const Paint = PaintComponent;
+}
