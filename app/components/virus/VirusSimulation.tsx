@@ -120,12 +120,15 @@ export function VirusSimulation() {
     return () => clearTimeout(timer);
   }, [stage, playEerieSound]);
 
-  // Sprite spawning phase with grouped intervals (18s total)
+  // Sprite spawning phase with dynamic intervals
   useEffect(() => {
     if (stage !== "sprites") return;
 
     const startTime = Date.now();
-    const spawnDuration = VIRUS_TIMING.virusSpawnDuration; // 18 seconds
+    const spawnDuration = VIRUS_TIMING.virusSpawnDuration;
+    const minInterval = VIRUS_TIMING.virusMinInterval;
+    
+    console.log(`[VIRUS] Starting spawn phase - Duration: ${spawnDuration}ms, MinInterval: ${minInterval}ms`);
     
     // New spawn schedule per user requirements:
     // After notification pressed:
@@ -136,7 +139,7 @@ export function VirusSimulation() {
     // - Then 4 viruses at 1s intervals (4s total)
     // - Then 4 viruses at 0.25s intervals (1s total)
     // - Then 4 viruses at 0.125s intervals (0.5s total)
-    // - Rest at 0.05s intervals until 18s
+    // - Rest at minInterval until spawnDuration
     
     let spawnCount = 0;
     const spawnQueue: Array<{ delay: number; virusNumber: number }> = [];
@@ -163,25 +166,31 @@ export function VirusSimulation() {
     // 4 viruses at 1s intervals (12s-16s)
     for (let i = 0; i < 4; i++) {
       cumulativeTime += 1000;
-      spawnQueue.push({ delay: cumulativeTime, virusNumber: 5 + i });
+      if (cumulativeTime <= spawnDuration) {
+        spawnQueue.push({ delay: cumulativeTime, virusNumber: 5 + i });
+      }
     }
     
     // 4 viruses at 0.25s intervals (16s-17s)
     for (let i = 0; i < 4; i++) {
       cumulativeTime += 250;
-      spawnQueue.push({ delay: cumulativeTime, virusNumber: 9 + i });
+      if (cumulativeTime <= spawnDuration) {
+        spawnQueue.push({ delay: cumulativeTime, virusNumber: 9 + i });
+      }
     }
     
     // 4 viruses at 0.125s intervals (17s-17.5s)
     for (let i = 0; i < 4; i++) {
       cumulativeTime += 125;
-      spawnQueue.push({ delay: cumulativeTime, virusNumber: 13 + i });
+      if (cumulativeTime <= spawnDuration) {
+        spawnQueue.push({ delay: cumulativeTime, virusNumber: 13 + i });
+      }
     }
     
-    // Rest at 0.05s intervals until 18s
+    // Rest at minInterval until spawnDuration
     let virusNumber = 17;
     while (cumulativeTime < spawnDuration) {
-      cumulativeTime += 50;
+      cumulativeTime += minInterval;
       if (cumulativeTime <= spawnDuration) {
         spawnQueue.push({ delay: cumulativeTime, virusNumber });
         virusNumber++;
@@ -220,7 +229,8 @@ export function VirusSimulation() {
         // Play spawn sound
         playSpawnSound();
         
-        console.log(`[VIRUS] Spawned virus #${virusNumber} at ${Date.now() - startTime}ms`);
+        const actualTime = Date.now() - startTime;
+        console.log(`[VIRUS] Spawned virus #${virusNumber} at ${actualTime}ms (scheduled: ${delay}ms)`);
       }, delay);
       
       timeouts.push(timeout);
@@ -228,7 +238,8 @@ export function VirusSimulation() {
     
     // Transition to glitch phase after spawn duration
     const finalTimeout = setTimeout(() => {
-      console.log(`[VIRUS] Spawned ${spawnCount} viruses total, transitioning to glitch phase`);
+      const actualDuration = Date.now() - startTime;
+      console.log(`[VIRUS] Spawned ${spawnCount} viruses total in ${actualDuration}ms, transitioning to glitch phase`);
       setStage("glitch");
     }, spawnDuration);
     

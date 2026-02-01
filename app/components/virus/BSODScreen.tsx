@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSoundEffects } from "@/app/hooks/useSoundEffects";
+import { VIRUS_TIMING } from "@/app/lib/virus/types";
 
 type BSODScreenProps = {
   onComplete: () => void;
@@ -12,6 +13,9 @@ export function BSODScreen({ onComplete }: BSODScreenProps) {
   const hasPlayedSound = useRef(false);
 
   useEffect(() => {
+    console.log(`[BSOD] Starting BSOD screen, duration: ${VIRUS_TIMING.bsodDuration}ms`);
+    const bsodStartTime = Date.now();
+    
     // Only play sound once using ref guard
     if (!hasPlayedSound.current) {
       // Stop all sounds immediately
@@ -24,10 +28,12 @@ export function BSODScreen({ onComplete }: BSODScreenProps) {
       hasPlayedSound.current = true;
     }
 
-    // Auto-advance to ransomware after 5 seconds
+    // Auto-advance to ransomware after configured duration
     const timer = setTimeout(() => {
+      const actualDuration = Date.now() - bsodStartTime;
+      console.log(`[BSOD] Ending BSOD screen, actual duration: ${actualDuration}ms (expected: ${VIRUS_TIMING.bsodDuration}ms)`);
       onComplete();
-    }, 5000);
+    }, VIRUS_TIMING.bsodDuration);
 
     return () => clearTimeout(timer);
   }, [onComplete, stopAllSounds, playAudioFile]);

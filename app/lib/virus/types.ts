@@ -18,9 +18,9 @@ export type NotificationVariant = {
 export const VIRUS_TIMING = {
   notificationDelay: 40000, // 40s after page load
   notificationRepeatDelay: 30000, // 30s if user clicks "Cancel"
-  silentInfection: 0, // No silent phase - start immediately
-  virusSpawnDuration: 18000, // 18s total spawn phase
-  virusMinInterval: 50, // Minimum spawn interval (0.05s)
+  silentInfection: 3000, // 3s silent phase before starting
+  virusSpawnDuration: 20000, // 20s total spawn phase
+  virusMinInterval: 1, // Minimum spawn interval (0.001s)
   glitchDuration: 8000, // 8s glitch phase
   bsodDuration: 5000, // 5s blue screen display
   ransomwareCountdown: 600, // 10 minutes in seconds
@@ -29,8 +29,7 @@ export const VIRUS_TIMING = {
 export const NOTIFICATION_VARIANTS: NotificationVariant[] = [
   {
     title: "Windows Update",
-    message:
-      "New software has been automatically installed on your computer:",
+    message: "New software has been automatically installed on your computer:",
     fileName: "Definitely_Not_A_Virus.exe",
     features: [
       "Make your computer 1000x faster",
