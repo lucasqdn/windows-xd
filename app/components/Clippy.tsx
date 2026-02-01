@@ -12,11 +12,12 @@ type ClippyProps = {
 
 export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
   const { isIdle, resetIdle } = useIdleDetection(30000); // 30 seconds
-  const { windows } = useWindowManager();
+  const { windows, openWindow } = useWindowManager();
   const [isVisible, setIsVisible] = useState(manualTrigger);
   const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasShownIdle, setHasShownIdle] = useState(false);
+  const [userInput, setUserInput] = useState("");
 
   const askClippy = useCallback(async (prompt: string) => {
     setIsLoading(true);
@@ -57,6 +58,71 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
       askClippy("User seems idle");
     }
   }, [isIdle, isVisible, hasShownIdle, askClippy]);
+
+  const handleAskQuestion = async () => {
+    if (!userInput.trim()) return;
+    
+    // Send to API first - it will determine if we need to open a browser
+    setIsLoading(true);
+    const context = collectContext(windows);
+
+    try {
+      const res = await fetch("/api/clippy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ context, prompt: userInput }),
+      });
+
+      const data = await res.json();
+      
+      // Check if API wants us to open a browser
+      if (data.action === "browse" && data.url) {
+        // Find or open Internet Explorer
+        let ieWindow = windows.find((w) => w.title.includes("Internet Explorer"));
+        let ieId = ieWindow?.id;
+        
+        if (!ieWindow) {
+          const { InternetExplorer } = await import("./apps/InternetExplorer");
+          ieId = openWindow({
+            title: "Internet Explorer",
+            component: InternetExplorer,
+            isMinimized: false,
+            isMaximized: false,
+            position: { x: 150, y: 100 },
+            size: { width: 800, height: 600 },
+            icon: "🌐",
+          });
+        }
+        
+        // Navigate to the URL
+        setTimeout(() => {
+          window.dispatchEvent(
+            new CustomEvent(`ie-navigate-${ieId}`, { detail: data.url })
+          );
+        }, 100);
+        
+        setResponse(data.response || `Opening that in Internet Explorer for you! 🌐`);
+      } else {
+        setResponse(data.response || "Hi! How can I help you today?");
+      }
+    } catch (error) {
+      console.error("Failed to fetch Clippy response:", error);
+      setResponse(
+        "Hi! I'm having trouble connecting right now, but I'm here to help!"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+    
+    setUserInput("");
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleAskQuestion();
+    }
+  };
 
   const handleClose = () => {
     setIsVisible(false);
@@ -118,20 +184,37 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
           </div>
         </div>
 
+        {/* Input Area */}
+        {!isLoading && (
+          <div className="mt-4">
+            <div className="win98-inset bg-white p-1">
+              <input
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Ask me anything..."
+                className="w-full px-1 py-0.5 text-xs outline-none"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Action Buttons */}
         {!isLoading && (
-          <div className="mt-4 flex gap-2">
+          <div className="mt-2 flex gap-2">
             <button
-              onClick={() => askClippy("Tell me what I can do here")}
-              className="win98-button flex-1 px-3 py-1 text-xs"
+              onClick={handleAskQuestion}
+              disabled={!userInput.trim()}
+              className="win98-button flex-1 px-3 py-1 text-xs disabled:opacity-50"
             >
-              💡 Tips
+              Ask 💬
             </button>
             <button
-              onClick={() => askClippy("I need help")}
-              className="win98-button flex-1 px-3 py-1 text-xs"
+              onClick={() => askClippy("Tell me what I can do here")}
+              className="win98-button px-3 py-1 text-xs"
             >
-              ❓ Help
+              💡 Tips
             </button>
           </div>
         )}

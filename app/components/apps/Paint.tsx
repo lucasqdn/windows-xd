@@ -1,19 +1,32 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useImperativeHandle, forwardRef } from "react";
 
 type PaintProps = {
   id: string;
 };
 
+export type PaintHandle = {
+  getCanvasDataUrl: () => string | null;
+};
+
 type Tool = "pencil" | "brush" | "eraser" | "fill" | "rectangle" | "circle";
 
-export function Paint({ id }: PaintProps) {
+const PaintComponent = forwardRef<PaintHandle, PaintProps>(function PaintComponent({ id }, ref) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentTool, setCurrentTool] = useState<Tool>("pencil");
   const [currentColor, setCurrentColor] = useState("#000000");
   const [lastPos, setLastPos] = useState({ x: 0, y: 0 });
+
+  // Expose getCanvasDataUrl method to parent
+  useImperativeHandle(ref, () => ({
+    getCanvasDataUrl: () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return null;
+      return canvas.toDataURL("image/png");
+    },
+  }));
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -25,6 +38,18 @@ export function Paint({ id }: PaintProps) {
     // Initialize with white background
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Listen for canvas data requests from Clippy
+    const handleCanvasRequest = () => {
+      const dataUrl = canvas.toDataURL("image/png");
+      window.dispatchEvent(new CustomEvent("paint-canvas-data", { detail: dataUrl }));
+    };
+
+    window.addEventListener("request-paint-canvas-data", handleCanvasRequest);
+
+    return () => {
+      window.removeEventListener("request-paint-canvas-data", handleCanvasRequest);
+    };
   }, []);
 
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -166,4 +191,6 @@ export function Paint({ id }: PaintProps) {
       </div>
     </div>
   );
-}
+});
+
+export const Paint = PaintComponent;

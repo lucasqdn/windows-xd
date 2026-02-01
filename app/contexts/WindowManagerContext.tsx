@@ -65,7 +65,7 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
       ...window,
       id,
       isOpen: true,
-      zIndex: windows.length,
+      zIndex: 100 + windows.length,
       animationState: 'opening'
     };
     setWindows(prev => [...prev, newWindow]);
@@ -109,7 +109,7 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
       const sorted = [...prev].sort((a, b) => a.zIndex - b.zIndex);
       return sorted.map((w, i) => ({
         ...w,
-        zIndex: w.id === id ? sorted.length : i,
+        zIndex: w.id === id ? 100 + sorted.length : 100 + i,
         isMinimized: w.id === id ? false : w.isMinimized,
         animationState: w.id === id && w.isMinimized ? 'restoring' : w.animationState
       }));
