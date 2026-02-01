@@ -38,11 +38,19 @@ export async function POST(request: NextRequest) {
       request.headers.get("x-forwarded-for")?.split(',')[0].trim() ||
       request.headers.get("x-real-ip") ||
       "localhost";
-    console.log("IP:", ip);
+    
+    // Get session ID from header (unique per browser session)
+    const sessionId = request.headers.get("x-session-id") || "unknown";
+    
+    // Create composite key: IP + Session ID for rate limiting
+    // This allows multiple users on same network to have separate limits
+    const rateLimitKey = `${ip}:${sessionId}`;
+    
+    console.log("IP:", ip, "Session:", sessionId, "Rate limit key:", rateLimitKey);
 
     // Check rate limit
-    if (!checkRateLimit(ip)) {
-      console.warn(`Rate limit exceeded for IP: ${ip}`);
+    if (!checkRateLimit(rateLimitKey)) {
+      console.warn(`Rate limit exceeded for key: ${rateLimitKey}`);
       return NextResponse.json(
         { 
           error: "Rate limit exceeded",

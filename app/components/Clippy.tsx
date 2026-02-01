@@ -20,6 +20,18 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [hasShownIdle, setHasShownIdle] = useState(false);
   const [userInput, setUserInput] = useState("");
+  const [sessionId] = useState(() => {
+    // Generate a unique session ID per browser session
+    if (typeof window !== 'undefined') {
+      let id = sessionStorage.getItem('clippy-session-id');
+      if (!id) {
+        id = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        sessionStorage.setItem('clippy-session-id', id);
+      }
+      return id;
+    }
+    return 'unknown';
+  });
 
   const askClippy = useCallback(async (prompt: string) => {
     setIsLoading(true);
@@ -31,7 +43,10 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
 
       const res = await fetch("/api/clippy", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Session-ID": sessionId,
+        },
         body: JSON.stringify({ context, prompt }),
         signal: controller.signal,
       });
@@ -119,7 +134,10 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
 
       const res = await fetch("/api/clippy", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Session-ID": sessionId,
+        },
         body: JSON.stringify({ context, prompt: userInput, selectedText }),
         signal: controller.signal,
       });
