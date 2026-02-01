@@ -80,14 +80,16 @@ export function ContextMenu({ x, y, items, onClose }: ContextMenuProps) {
               }
             }}
           >
-            {item.radioSelected !== undefined && (
-              <span className="radio-indicator">
-                {item.radioSelected ? "●" : "○"}
-              </span>
-            )}
-            {item.icon && <span className="mr-2">{item.icon}</span>}
-            <span>{item.label}</span>
-            {item.submenu && <span className="ml-auto">▶</span>}
+            <div className="flex items-center flex-1">
+              {item.radioSelected !== undefined && (
+                <span className="radio-indicator">
+                  {item.radioSelected ? "●" : "○"}
+                </span>
+              )}
+              {item.icon && <span className="menu-icon">{item.icon}</span>}
+              <span className="menu-label">{item.label}</span>
+            </div>
+            {item.submenu && <span className="submenu-arrow">▶</span>}
             
             {item.submenu && submenuOpen === index && (
               <div
@@ -121,13 +123,15 @@ export function ContextMenu({ x, y, items, onClose }: ContextMenuProps) {
                         }
                       }}
                     >
-                      {subitem.radioSelected !== undefined && (
-                        <span className="radio-indicator">
-                          {subitem.radioSelected ? "●" : "○"}
-                        </span>
-                      )}
-                      {subitem.icon && <span className="mr-2">{subitem.icon}</span>}
-                      <span>{subitem.label}</span>
+                      <div className="flex items-center flex-1">
+                        {subitem.radioSelected !== undefined && (
+                          <span className="radio-indicator">
+                            {subitem.radioSelected ? "●" : "○"}
+                          </span>
+                        )}
+                        {subitem.icon && <span className="menu-icon">{subitem.icon}</span>}
+                        <span className="menu-label">{subitem.label}</span>
+                      </div>
                     </div>
                   );
                 })}

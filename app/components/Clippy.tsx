@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { useIdleDetection } from "@/app/hooks/useIdleDetection";
 import { useWindowManager } from "@/app/contexts/WindowManagerContext";
 import { collectContext } from "@/app/lib/clippyContext";
@@ -216,12 +217,13 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
       {/* Title Bar */}
       <div className="win98-titlebar-active flex items-center justify-between px-2 py-1">
         <div className="flex items-center gap-2">
-          <svg width="16" height="16" viewBox="0 0 16 16" className="flex-shrink-0">
-            <path d="M12 4 Q 12 2, 10 2 Q 8 2, 8 4 L 8 10 Q 8 12, 6 12 Q 4 12, 4 10 L 4 5" 
-                  fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-            <circle cx="4" cy="5" r="1" fill="white"/>
-            <circle cx="12" cy="4" r="1" fill="white"/>
-          </svg>
+          <Image
+            src="/clippy.png"
+            alt="Clippy"
+            width={16}
+            height={16}
+            className="flex-shrink-0"
+          />
           <span className="text-xs font-bold">Clippy</span>
         </div>
         <button
@@ -238,14 +240,12 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
         <div className="flex items-start gap-3">
           {/* Animated Clippy Character */}
           <div className="flex-shrink-0 animate-bounce">
-            <svg width="48" height="48" viewBox="0 0 48 48">
-              <path d="M36 12 Q 36 6, 30 6 Q 24 6, 24 12 L 24 30 Q 24 36, 18 36 Q 12 36, 12 30 L 12 15" 
-                    fill="none" stroke="#4169E1" strokeWidth="4" strokeLinecap="round"/>
-              <circle cx="12" cy="15" r="3" fill="#4169E1"/>
-              <circle cx="36" cy="12" r="3" fill="#4169E1"/>
-              <circle cx="21" cy="18" r="2" fill="#000"/>
-              <circle cx="27" cy="18" r="2" fill="#000"/>
-            </svg>
+            <Image
+              src="/clippy.png"
+              alt="Clippy"
+              width={48}
+              height={48}
+            />
           </div>
 
           {/* Message */}
