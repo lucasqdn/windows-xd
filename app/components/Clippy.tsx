@@ -12,6 +12,43 @@ type ClippyProps = {
   onClose?: () => void;
 };
 
+// Generate context-aware messages without calling AI
+function getIdleMessage(windows: any[]): string {
+  if (windows.length === 0) {
+    return "Just sitting there staring at the desktop? Bold strategy. In '98 we had Solitaire for this. Want help opening something?";
+  }
+  
+  const notepadOpen = windows.some(w => w.title === "Notepad");
+  const paintOpen = windows.some(w => w.title === "Paint");
+  const ieOpen = windows.some(w => w.title.includes("Internet Explorer"));
+  const gamesOpen = windows.some(w => 
+    w.title === "Solitaire" || 
+    w.title === "Minesweeper" || 
+    w.title.includes("Pinball")
+  );
+  
+  const messages = [];
+  
+  if (gamesOpen) {
+    messages.push("Taking a break with games? Classic procrastination. I approve.");
+  }
+  if (notepadOpen) {
+    messages.push("Working in Notepad, huh? Need me to write something for you? I'm full of terrible ideas.");
+  }
+  if (paintOpen) {
+    messages.push("Making art in Paint? Picasso would be... confused. Need help with something?");
+  }
+  if (ieOpen) {
+    messages.push("Browsing the web in IE? Living dangerously, I see. What's up?");
+  }
+  
+  if (messages.length === 0) {
+    return "Looks like you're busy. Or pretending to be. Either way, I'm here if you need help. (Unfortunately.)";
+  }
+  
+  return messages[Math.floor(Math.random() * messages.length)];
+}
+
 export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
   const { isIdle, resetIdle } = useIdleDetection(30000); // 30 seconds
   const { windows, openWindow } = useWindowManager();
@@ -97,21 +134,24 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
   }, [windows]);
 
   useEffect(() => {
-    // Show on manual trigger
+    // Show on manual trigger with a canned message (no AI call)
     if (manualTrigger) {
       setIsVisible(true);
-      askClippy("User needs help");
+      setResponse("It looks like you're working on something. Need help? Just ask me a question below. (Or don't. I'm not your boss.)");
     }
-  }, [manualTrigger, askClippy]);
+  }, [manualTrigger]);
 
   useEffect(() => {
-    // Show when user is idle (but only once per session)
+    // Show when user is idle with a canned message (no AI call)
     if (isIdle && !isVisible && !hasShownIdle) {
       setIsVisible(true);
       setHasShownIdle(true);
-      askClippy("User seems idle");
+      
+      // Generate a context-aware message without calling AI
+      const contextMessage = getIdleMessage(windows);
+      setResponse(contextMessage);
     }
-  }, [isIdle, isVisible, hasShownIdle, askClippy]);
+  }, [isIdle, isVisible, hasShownIdle, windows]);
 
   const handleAskQuestion = async () => {
     if (!userInput.trim()) return;
@@ -398,7 +438,7 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
               Ask 💬
             </button>
             <button
-              onClick={() => askClippy("Tell me what I can do here")}
+              onClick={() => setResponse("You can ask me to:\n• Open apps: 'open notepad', 'launch paint'\n• Browse: 'search for cats', 'open youtube'\n• Write text: 'write me a story about 1998'\n• Or just chat with me. I'm bored anyway.")}
               className="win98-button-sm"
             >
               💡 Tips
