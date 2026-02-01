@@ -11,11 +11,11 @@ See: .planning/PROJECT.md (updated 2025-01-31)
 ## Current Position
 
 Phase: 10 of 10 (Polish & Animations)
-Plan: 05 of 07 COMPLETE ✅ | Next: Plan 06 (Wave 2)
-Status: Theme selector UI complete - desktop right-click menu with Appearance submenu
-Last activity: 2026-02-01 — Completed 10-05 (Theme Selector UI) - commits 48860a1, a845249
+Plan: 06 of 07 COMPLETE ✅ | Next: Plan 07 (Wave 2)
+Status: Desktop icon selection complete - single-select, multi-select, and drag-select with visual feedback
+Last activity: 2026-02-01 — Completed 10-06 (Desktop Icon Selection) - commits 9340564, ab4e509, e1ca0d0
 
-Progress: [█████████░] 90%+ (Phase 10 Wave 2 in progress - 5/7 plans complete)
+Progress: [█████████░] 95%+ (Phase 10 Wave 2 in progress - 6/7 plans complete)
 
 ## Performance Metrics
 
@@ -36,6 +36,14 @@ Progress: [█████████░] 90%+ (Phase 10 Wave 2 in progress - 5
 | 6 - LLM-Powered Clippy | ⏳ Ready | - | - | - |
 
 **Recent Activity:**
+- 2026-02-01: Phase 10 Plan 06 complete - Desktop Icon Selection
+  - Icon selection state management in WindowManagerContext (selectedIcons array)
+  - Single-click selection (replaces previous selection)
+  - Ctrl/Cmd+click multi-select toggle behavior
+  - Drag-select rectangle with real-time intersection detection
+  - Blue highlight with navy label background (theme-aware)
+  - Selection clears on empty desktop click
+  - Commits: 9340564 (Context state), ab4e509 (Visual feedback), e1ca0d0 (Drag-select)
 - 2026-02-01: Phase 10 Plan 05 complete - Theme Selector UI
   - Desktop right-click context menu with Appearance submenu
   - Radio button indicators (● / ○) for current theme selection
@@ -84,6 +92,13 @@ Progress: [█████████░] 90%+ (Phase 10 Wave 2 in progress - 5
 
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
+
+**Phase 10-06 (Desktop Icon Selection):**
+- Use WindowManagerContext for selection state (not separate context)
+- Single click selects (clears others), Ctrl+click toggles
+- Selection rectangle uses fixed positioning with z-index 9999
+- Intersection detection via getBoundingClientRect
+- Theme-aware selection colors (CSS variables)
 
 **Phase 10-05 (Theme Selector UI):**
 - Radio button indicators using Unicode characters (● / ○) for simplicity
@@ -135,12 +150,18 @@ Recent decisions affecting current work:
 
 **Phase 10 - Polish & Animations (Wave 2):**
 - ✅ 10-05: Theme Selector UI (COMPLETE)
-- 10-06: Taskbar Enhancements (button flash, real-time clock, system tray)
+- ✅ 10-06: Desktop Icon Selection (COMPLETE)
 - 10-07: Window Title Bar Features (double-click maximize, system menu)
 
 **Earlier Phase Todos (if any remain):**
 
 ### Blockers/Concerns
+
+**Phase 10-06 (COMPLETE ✅):**
+- ✅ Icon selection state integrated into WindowManagerContext
+- ✅ Single-click and Ctrl+click selection working
+- ✅ Drag-select rectangle with intersection detection
+- ✅ Blue highlight with theme-aware styling
 
 **Phase 10-05 (COMPLETE ✅):**
 - ✅ Theme selector UI accessible via desktop right-click
@@ -169,9 +190,9 @@ Recent decisions affecting current work:
 - ✅ All existing animations preserved
 
 **Phase 10 (Remaining plans):**
-- Desktop interactions require click/drag selection logic
-- Taskbar enhancements need real-time clock and button flash
+- ✅ Desktop icon selection complete (single/multi/drag-select)
 - Window title bar features need double-click handler
+- Consider: Selection should clear when clicking on windows (future enhancement)
 
 **Earlier Phase Concerns (RESOLVED ✅):**
 - ✅ Z-index/focus management implemented with sorted reordering (no drift)
@@ -180,24 +201,26 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-01 (Phase 10 Plan 05 implementation)
-Completed: Phase 10 Plan 05 - Theme Selector UI (commits 48860a1, a845249)
-Next steps: Phase 10 Plan 06 (Taskbar Enhancements) or Plan 07 (Window Title Bar Features)
+Last session: 2026-02-01 (Phase 10 Plan 06 implementation)
+Completed: Phase 10 Plan 06 - Desktop Icon Selection (commits 9340564, ab4e509, e1ca0d0)
+Next steps: Phase 10 Plan 07 (Window Title Bar Features) - final Wave 2 plan
 Resume file: None
 
 **For AI Agents:**
-- Phase 10 Plans 01-05 are COMPLETE (Wave 1 + first Wave 2 plan complete)
-- Wave 2 remaining plans: 06, 07
+- Phase 10 Plans 01-06 are COMPLETE (Wave 1 + 2/3 Wave 2 plans complete)
+- Wave 2 remaining plans: 07 (final plan)
 - Window animation patterns established in app/globals.css
 - Sound system patterns established in app/lib/sounds.ts
 - Start menu animation patterns established (slide + fade with transform-origin)
 - Theme system patterns established in app/lib/themes.ts and app/hooks/useTheme.ts
+- Icon selection patterns established in app/contexts/WindowManagerContext.tsx
 - Follow AGENTS.md for code style conventions
 - See 10-01-SUMMARY.md for window animation implementation details
 - See 10-02-SUMMARY.md for sound system implementation details
 - See 10-03-SUMMARY.md for menu animation implementation details
 - See 10-04-SUMMARY.md for theme system implementation details
 - See 10-05-SUMMARY.md for theme selector UI implementation details
+- See 10-06-SUMMARY.md for icon selection implementation details
 - Context menu submenu pattern established for nested menus
 
 ---
