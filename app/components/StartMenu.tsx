@@ -65,25 +65,21 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
         onClick={onClose}
       />
       
-      <div className="start-menu start-menu-slide-up z-[9999]">
-        {/* Windows 98 Logo Banner */}
+      <div className="start-menu start-menu-slide-up z-[9999] flex">
+        {/* Windows XD Logo Banner */}
         <div
-          className="flex items-end px-1 py-2 text-white text-xs font-bold"
+          className="flex items-end px-1 py-2 text-white text-xs font-bold flex-shrink-0"
           style={{
             background: "linear-gradient(to bottom, #000080 0%, #1084d0 100%)",
             writingMode: "vertical-rl",
             transform: "rotate(180deg)",
             width: "24px",
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
           }}
         >
           Windows<span className="font-black tracking-wider">XD</span>
         </div>
         
-        <div className="ml-[28px] flex-1">
+        <div className="flex-1">
           {menuItems.map((item) => (
             <div
               key={item.id}
