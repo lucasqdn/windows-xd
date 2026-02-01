@@ -212,8 +212,8 @@ export function Window({ id, title, children }: WindowProps) {
             </div>
           </div>
           {/* Window Content */}
-          <div className="flex-1 overflow-hidden bg-white">
-            <div className="h-full overflow-auto p-2">
+          <div className="flex-1 overflow-hidden" style={{ background: 'var(--window-bg)' }}>
+            <div className="h-full overflow-auto">
               {children}
             </div>
           </div>
