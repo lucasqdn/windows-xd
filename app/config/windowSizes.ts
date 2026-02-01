@@ -54,8 +54,8 @@ export const WINDOW_SIZES: Record<AppId, WindowSize> = {
 
   // Paint needs space for 600x400 canvas + toolbars
   paint: {
-    width: 800,   // Canvas + toolbars + comfortable margin
-    height: 600,  // Canvas + menu + status bars
+    width: 616,   // 600px canvas + 16px for borders/inset
+    height: 490,  // 400px canvas + ~90px for menu/toolbar/status bars
   },
 
   // Chat room needs space for messages + user list sidebar

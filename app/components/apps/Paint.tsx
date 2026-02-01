@@ -745,11 +745,11 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
       </div>
 
       {/* Canvas Area */}
-      <div className="flex-1 flex items-center justify-center style={{ background: 'var(--window-bg)' }} p-2 overflow-auto">
-        <div className="win98-inset bg-white relative">
+      <div className="flex-1 overflow-auto" style={{ background: 'var(--window-bg)' }}>
+        <div className="win98-inset bg-white relative inline-block">
           <canvas
             ref={canvasRef}
-            className="bg-white"
+            className="bg-white block"
             width={600}
             height={400}
             onMouseDown={startDrawing}
