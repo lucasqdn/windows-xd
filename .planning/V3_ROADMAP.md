@@ -246,29 +246,66 @@ Create a dramatic, purely cosmetic "virus infection" sequence for hackathon demo
 - Complete blackout (3 seconds of black screen)
 - No user interaction during this phase
 
-**VIRUS-06**: Stage 5 - Ransomware UI
-- Red/black themed fullscreen overlay
-- Authentic-looking ransomware message:
+**VIRUS-06**: Stage 5 - Ransomware UI (Windows 98 Style, Maximum Realism)
+- Windows 98 styled dialog with authentic system fonts (MS Sans Serif)
+- Classic Windows 98 window frame with title bar "Critical System Error"
+- Red alert icon (Windows 98 style critical stop icon)
+- Realistic ransomware message with Windows 98 dialog styling:
   ```
-  YOUR FILES HAVE BEEN ENCRYPTED!
-  
-  All your important files have been encrypted with military-grade
-  encryption. Your photos, documents, databases are no longer accessible.
-  
-  There is only one way to recover your files:
-  Pay 0.5 BTC ($45,000) to the following address:
-  [fake Bitcoin address]
-  
-  You have 48 hours before the decryption key is destroyed forever.
-  
-  DO NOT attempt recovery - this will corrupt your files permanently.
-  DO NOT contact authorities - we are monitoring your system.
-  
-  [Contact Us] [FAQ] [Pay Now]
+  ╔═══════════════════════════════════════════════════╗
+  ║  ⚠️  WINDOWS SECURITY ALERT - CRITICAL ERROR     ║
+  ╠═══════════════════════════════════════════════════╣
+  ║                                                   ║
+  ║  YOUR FILES HAVE BEEN ENCRYPTED                   ║
+  ║                                                   ║
+  ║  All data on this computer has been encrypted     ║
+  ║  with military-grade RSA-2048 encryption.         ║
+  ║                                                   ║
+  ║  • Documents, photos, videos - LOCKED             ║
+  ║  • Databases, spreadsheets - LOCKED               ║
+  ║  • System files - LOCKED                          ║
+  ║                                                   ║
+  ║  To recover your files, payment is required:      ║
+  ║                                                   ║
+  ║  Amount: 0.5 BTC (~$45,000 USD)                   ║
+  ║  Send to: 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2       ║
+  ║                                                   ║
+  ║  ⏱️  Time Remaining: 47:59:43                     ║
+  ║                                                   ║
+  ║  After 48 hours, decryption key will be           ║
+  ║  permanently deleted. Your files will be lost     ║
+  ║  FOREVER. No recovery software can help you.      ║
+  ║                                                   ║
+  ║  WARNING: DO NOT attempt the following:           ║
+  ║  ✗ Shutting down computer (files corrupted)       ║
+  ║  ✗ Removing hard drive (data destroyed)           ║
+  ║  ✗ Running antivirus (triggers file deletion)     ║
+  ║  ✗ Contacting authorities (we will know)          ║
+  ║                                                   ║
+  ║  Files encrypted: 24,847 files (43.7 GB)          ║
+  ║  Encryption: RSA-2048 + AES-256                   ║
+  ║  PC ID: 7F4A-89B2-C3D1-5E6A                       ║
+  ║                                                   ║
+  ╠═══════════════════════════════════════════════════╣
+  ║  [  View Encrypted Files  ] [  How To Pay?  ]    ║
+  ║  [  Contact Support (24/7)  ] [    Pay Now    ]  ║
+  ╚═══════════════════════════════════════════════════╝
   ```
-- Fake countdown timer (48:00:00 → 47:59:59...)
-- Skull/lock icon imagery
-- Flashing red borders
+- Windows 98 style buttons (3D raised borders, MS Sans Serif font)
+- Countdown timer ticking down realistically (47:59:59 → 47:59:58...)
+- Classic Windows 98 color scheme (gray #C0C0C0 background, blue title bar)
+- System beep sound on appearance (Windows 98 critical stop sound)
+- Animated red critical icon in title bar (blinking)
+- "Encrypted file" list showing fake file paths in Windows 98 list box style:
+  ```
+  C:\My Documents\Tax_Returns_2024.xls
+  C:\My Documents\Photos\Wedding\IMG001.jpg
+  C:\My Documents\Work\Project_Final.doc
+  C:\Desktop\Passwords.txt
+  ... (237 more files)
+  ```
+- Footer with fake technical details styled as Windows 98 status bar
+- Non-functional buttons (clicking shows "Connecting to payment server..." then fails)
 
 **VIRUS-07**: Recovery/Reset
 - User can reload page to reset (works at any time)
@@ -324,18 +361,42 @@ T=45s+:   Stays until user reloads
 ```
 
 **Assets Needed:**
-- Butterfly sprite (animated GIF or sprite sheet) - will use placeholder
-- Purple gorilla sprite (animated GIF or sprite sheet) - will use placeholder
-- Static/glitch overlay images
-- Skull/lock icons for ransomware screen
+- Butterfly sprite (animated GIF or sprite sheet) - **using 🦋 emoji placeholder**
+- Purple gorilla sprite (animated GIF or sprite sheet) - **using 🦍 emoji with purple CSS filter placeholder**
+- Static/glitch overlay images - **CSS-generated noise**
+- Windows 98 critical stop icon (⚠️ styled)
+- Windows 98 encrypted file icon (🔒 styled)
 - Sound effects:
-  - Ambient glitch sound
-  - Static/interference
-  - Shutdown sound
-  - Ominous tone for ransomware
+  - Ambient glitch sound (Web Audio API generated)
+  - Static/interference (Web Audio API white noise)
+  - Windows 98 shutdown sound (WAV/MP3 or synthesized)
+  - Windows 98 critical stop beep (synthesized)
+  - Ominous low-frequency tone for ransomware
 
 **CSS Effects:**
 ```css
+/* Windows 98 ransomware dialog */
+.ransomware-window {
+  border: 2px solid;
+  border-color: #fff #000 #000 #fff;
+  background: #c0c0c0;
+  font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+.ransomware-titlebar {
+  background: linear-gradient(to right, #000080, #1084d0);
+  color: white;
+  padding: 2px 4px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.ransomware-titlebar .icon {
+  animation: blink 1s infinite;
+}
+
 /* Window shake */
 @keyframes shake {
   0%, 100% { transform: translate(0, 0); }
@@ -355,6 +416,26 @@ T=45s+:   Stays until user reloads
   background-image: url('/assets/virus/static.gif');
   opacity: 0.3;
   mix-blend-mode: overlay;
+}
+
+/* Windows 98 button */
+.win98-button {
+  border: 2px solid;
+  border-color: #fff #000 #000 #fff;
+  background: #c0c0c0;
+  padding: 4px 12px;
+  font-family: 'MS Sans Serif', sans-serif;
+  font-size: 11px;
+}
+
+.win98-button:active {
+  border-color: #000 #fff #fff #000;
+}
+
+/* Critical alert icon blink */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.3; }
 }
 ```
 
@@ -461,10 +542,12 @@ Phase 1 (Desktop) ✅
 - Can use CSS for glitch effects
 
 **Placeholder Strategy:**
-- Use emoji/Unicode initially (🦋 for butterfly, 🦍 for gorilla)
-- Use CSS animations for movement
-- Use Web Audio API to generate sounds programmatically
-- Swap with real assets before hackathon if available
+- ✅ Use emoji/Unicode initially (🦋 for butterfly, 🦍 for gorilla with CSS purple filter)
+- ✅ Use CSS animations for movement (float, wiggle, rotate)
+- ✅ Use Web Audio API to generate sounds programmatically (beeps, white noise, tones)
+- ✅ Use CSS for glitch effects (filters, transforms, overlays)
+- ✅ Windows 98 UI elements created with pure CSS (borders, gradients, shadows)
+- ✅ Swap with real assets before hackathon if available (optional)
 
 ---
 
