@@ -18,7 +18,7 @@ export function BSODScreen({ onComplete }: BSODScreenProps) {
 
   return (
     <div 
-      className="fixed inset-0 z-[9999] bg-[#0000AA] text-white p-8 overflow-auto"
+      className="fixed inset-0 z-[9999] bg-[#0000AA] text-white p-16 overflow-auto"
       style={{ 
         fontFamily: "'Courier New', 'Lucida Console', monospace",
         fontSize: "16px",

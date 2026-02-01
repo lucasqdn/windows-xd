@@ -21,7 +21,7 @@ export const VIRUS_TIMING = {
   silentInfection: 10000, // 10s silent phase
   virusSpawnDuration: 30000, // 30s total spawn phase (was 20s, now 30s)
   virusMinInterval: 125, // Minimum spawn interval (0.125s)
-  glitchDuration: 10000, // 10s glitch phase (was 8s, now +2s more stuttery)
+  glitchDuration: 8000, // 8s glitch phase
   bsodDuration: 5000, // 5s blue screen display
   ransomwareCountdown: 600, // 10 minutes in seconds
 };

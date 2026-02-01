@@ -147,7 +147,7 @@ export function VirusSimulation() {
       // Check if we've exceeded 30 seconds
       if (elapsed >= spawnDuration) {
         console.log(`Spawned ${spawnCount} viruses in ${elapsed}ms`);
-        setTimeout(() => setStage("glitch"), 2000);
+        setStage("glitch"); // Immediately transition to glitch phase (removed 2s delay)
         return;
       }
       
@@ -218,6 +218,8 @@ export function VirusSimulation() {
     if (stage !== "glitch") return;
 
     setGlitchActive(true);
+    const glitchStartTime = Date.now();
+    console.log(`[GLITCH] Starting glitch phase at ${glitchStartTime}, duration: ${VIRUS_TIMING.glitchDuration}ms`);
 
     // Define available apps to randomly open
     const availableApps = [
@@ -274,9 +276,13 @@ export function VirusSimulation() {
 
       // Play glitch sound
       playGlitchSound();
-    }, 80); // Faster interval - reduced from 150ms to 80ms for more chaos
+    }, 100); // Optimized interval - 100ms for better performance while keeping chaos
 
     const timer = setTimeout(() => {
+      const glitchEndTime = Date.now();
+      const actualDuration = glitchEndTime - glitchStartTime;
+      console.log(`[GLITCH] Ending glitch phase at ${glitchEndTime}, actual duration: ${actualDuration}ms (expected: ${VIRUS_TIMING.glitchDuration}ms)`);
+      
       if (glitchIntervalRef.current) {
         clearInterval(glitchIntervalRef.current);
       }
@@ -292,7 +298,7 @@ export function VirusSimulation() {
         clearInterval(glitchIntervalRef.current);
       }
     };
-  }, [stage, playGlitchSound, openWindow]);
+  }, [stage, playGlitchSound]); // Removed openWindow to prevent re-runs when windows open
 
   const handleSpriteUpdate = useCallback(
     (id: string, x: number, y: number, rotation: number) => {

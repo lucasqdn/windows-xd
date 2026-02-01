@@ -59,9 +59,21 @@ export function removeGlitchFromElement(element: HTMLElement | null) {
 }
 
 // Teleport windows to random positions with more chaos (no rotation, just position changes)
+// Cache to avoid repeated queries
+let cachedWindows: NodeListOf<Element> | null = null;
+let cacheTimestamp = 0;
+const CACHE_DURATION = 100; // Cache for 100ms
+
 export function teleportWindows() {
-  const windows = document.querySelectorAll("[data-window-id]");
-  windows.forEach((win) => {
+  const now = Date.now();
+  
+  // Use cached windows if available and fresh
+  if (!cachedWindows || (now - cacheTimestamp) > CACHE_DURATION) {
+    cachedWindows = document.querySelectorAll("[data-window-id]");
+    cacheTimestamp = now;
+  }
+  
+  cachedWindows.forEach((win) => {
     const htmlWindow = win as HTMLElement;
     const newX = Math.random() * (window.innerWidth - 200) - 100; // Can go slightly off-screen
     const newY = Math.random() * (window.innerHeight - 200) - 100;
@@ -83,9 +95,20 @@ export function teleportWindows() {
 }
 
 // Teleport desktop icons to random positions with more chaos (no rotation, just position)
+// Cache to avoid repeated queries
+let cachedIcons: NodeListOf<Element> | null = null;
+let iconCacheTimestamp = 0;
+
 export function teleportDesktopIcons() {
-  const icons = document.querySelectorAll("[data-desktop-icon]");
-  icons.forEach((icon) => {
+  const now = Date.now();
+  
+  // Use cached icons if available and fresh
+  if (!cachedIcons || (now - iconCacheTimestamp) > CACHE_DURATION) {
+    cachedIcons = document.querySelectorAll("[data-desktop-icon]");
+    iconCacheTimestamp = now;
+  }
+  
+  cachedIcons.forEach((icon) => {
     const htmlIcon = icon as HTMLElement;
     const newX = Math.random() * (window.innerWidth - 100);
     const newY = Math.random() * (window.innerHeight - 100);
@@ -95,29 +118,36 @@ export function teleportDesktopIcons() {
     htmlIcon.style.transition = "none";
     htmlIcon.style.transform = `translate(${newX}px, ${newY}px)`;
     
-    // Rapidly teleport again for stuttering effect
+    // Rapidly teleport again for stuttering effect (reduced from 3 to 2 stages)
     setTimeout(() => {
       const newX2 = Math.random() * (window.innerWidth - 100);
       const newY2 = Math.random() * (window.innerHeight - 100);
       htmlIcon.style.transform = `translate(${newX2}px, ${newY2}px)`;
+      
+      // Reset after a moment
+      setTimeout(() => {
+        htmlIcon.style.transform = "";
+      }, 100);
     }, 50);
-    
-    // Reset after a moment
-    setTimeout(() => {
-      htmlIcon.style.transform = "";
-    }, 200);
   });
 }
 
 // Multiply windows effect (create more phantom clones, no rotation)
 export function createPhantomWindows() {
-  const windows = document.querySelectorAll("[data-window-id]");
+  const now = Date.now();
+  
+  // Use cached windows if available and fresh
+  if (!cachedWindows || (now - cacheTimestamp) > CACHE_DURATION) {
+    cachedWindows = document.querySelectorAll("[data-window-id]");
+    cacheTimestamp = now;
+  }
+  
   const phantoms: HTMLElement[] = [];
   
-  windows.forEach((win) => {
+  cachedWindows.forEach((win) => {
     const htmlWindow = win as HTMLElement;
-    // Create 2-4 clones per window for more chaos
-    const cloneCount = Math.floor(Math.random() * 3) + 2;
+    // Create 1-2 clones per window (reduced from 2-4 for better performance)
+    const cloneCount = Math.floor(Math.random() * 2) + 1;
     
     for (let i = 0; i < cloneCount; i++) {
       const clone = htmlWindow.cloneNode(true) as HTMLElement;
