@@ -327,11 +327,17 @@ body {
 }
 
 .desktop-icon.selected {
-  background: rgba(0, 0, 128, 0.5);
-  outline: 1px dotted var(--win98-white);
+  background: rgba(0, 0, 128, 0.3); /* Blue highlight */
+  outline: 1px dotted #000;
 }
 
-.desktop-icon-text {
+.desktop-icon.selected .icon-label {
+  background: var(--title-bar-active-start); /* Navy */
+  color: var(--text-inverse); /* White */
+  padding: 2px 4px;
+}
+
+.icon-label {
   margin-top: 4px;
   font-size: 11px;
   line-height: 1.2;
