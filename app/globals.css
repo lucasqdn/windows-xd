@@ -245,6 +245,20 @@ body {
   color: var(--win98-white);
 }
 
+.start-menu-submenu {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  min-width: 180px;
+  background: var(--win98-gray);
+  border-top: 2px solid var(--win98-white);
+  border-left: 2px solid var(--win98-white);
+  border-right: 2px solid var(--win98-black);
+  border-bottom: 2px solid var(--win98-black);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+}
+
 /* Taskbar Styles */
 .taskbar {
   position: fixed;
