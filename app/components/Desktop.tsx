@@ -16,6 +16,7 @@ import { InternetExplorer } from "./apps/InternetExplorer";
 import { SpaceCadetPinball } from "./apps/SpaceCadetPinball";
 import Minesweeper from "./apps/Minesweeper";
 import { Solitaire } from "./apps/Solitaire";
+import { Doom } from "./apps/Doom";
 import {
   ContextMenu,
   useContextMenu,
@@ -86,6 +87,12 @@ const desktopIcons: DesktopIconData[] = [
     icon: "/pinball-icon.png",
     label: "3D Pinball",
     component: SpaceCadetPinball,
+  },
+  {
+    id: "doom",
+    icon: "/doom-icon.png",
+    label: "DOOM",
+    component: Doom,
   },
 ];
 
