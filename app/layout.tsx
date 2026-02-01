@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${pixelifySans.className} ${tektur.variable}`}>
+      <body className={`${pixelifySans.className} ${tektur.variable}`} suppressHydrationWarning>
         {children}
       </body>
     </html>

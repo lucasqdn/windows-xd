@@ -90,7 +90,7 @@ const desktopIcons: DesktopIconData[] = [
 ];
 
 function DesktopContent() {
-  const { windows, openWindow, selectMultipleIcons, clearSelection } = useWindowManager();
+  const { windows, openWindow, selectMultipleIcons, clearSelection, theme } = useWindowManager();
   const { contextMenu, showContextMenu, hideContextMenu } = useContextMenu();
   const [showClippy, setShowClippy] = useState(false);
   const [showVirusNotification, setShowVirusNotification] = useState(false);
@@ -237,8 +237,6 @@ function DesktopContent() {
   };
 
   const handleDesktopContextMenu = (e: React.MouseEvent) => {
-    const { theme } = useWindowManager();
-    
     const menuItems: ContextMenuItem[] = [
       {
         label: "Arrange Icons",
