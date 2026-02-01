@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 
 /**
  * Windows 98 Paint Application
@@ -511,7 +512,7 @@ export function Paint({ id }: PaintProps) {
       if (!ctx) return;
 
       // Create and load the generated image
-      const img = new Image();
+      const img = document.createElement("img");
       
       img.onload = () => {
         // Calculate scaling to fit canvas while maintaining aspect ratio
@@ -600,62 +601,70 @@ export function Paint({ id }: PaintProps) {
         </button>
         <div className="w-px bg-gray-400 mx-1" />
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 ${currentTool === "pencil" ? "active" : ""}`}
+          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "pencil" ? "active" : ""}`}
           onClick={() => setCurrentTool("pencil")}
+          style={{padding:0}}
           title="Pencil"
         >
-          ✏️
+        <img src="/pen.png" alt="Pencil" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 ${currentTool === "brush" ? "active" : ""}`}
+          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "brush" ? "active" : ""}`}
           onClick={() => setCurrentTool("brush")}
+          style={{padding:0}}
           title="Brush"
         >
-          🖌️
+          <img src="/brush.png" alt="Brush" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 ${currentTool === "eraser" ? "active" : ""}`}
+          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "eraser" ? "active" : ""}`}
           onClick={() => setCurrentTool("eraser")}
+          style={{padding:0}}
           title="Eraser"
         >
-          🧹
+          <img src="/eraser.png" alt="Eraser" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 ${currentTool === "fill" ? "active" : ""}`}
+          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "fill" ? "active" : ""}`}
           onClick={() => setCurrentTool("fill")}
+          style={{padding:0}}
           title="Fill"
         >
-          🪣
+          <img src="/fill.png" alt="Fill" width="16" height="16" className="block" />
         </button>
         <div className="w-px bg-gray-400 mx-1" />
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 ${currentTool === "line" ? "active" : ""}`}
+          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "line" ? "active" : ""}`}
           onClick={() => setCurrentTool("line")}
+          style={{padding:0}}
           title="Line"
         >
-          📏
+          <img src="/line.png" alt="Line" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 ${currentTool === "rectangle" ? "active" : ""}`}
+          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "rectangle" ? "active" : ""}`}
           onClick={() => setCurrentTool("rectangle")}
+          style={{padding:0}}
           title="Rectangle"
         >
-          ▭
+          <img src="/rectangle.png" alt="Rectangle" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 ${currentTool === "circle" ? "active" : ""}`}
+          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "circle" ? "active" : ""}`}
           onClick={() => setCurrentTool("circle")}
+          style={{padding:0}}
           title="Circle"
         >
-          ⭕
+          <img src="/circle.png" alt="Circle" width="16" height="16" className="block" />
         </button>
         <div className="w-px bg-gray-400 mx-1" />
         <button
           className="win98-button w-6 h-6 text-xs p-0"
           onClick={clearCanvas}
+          style={{padding:0}}
           title="Clear"
         >
-          🗑️
+          <img src="/clear.png" alt="Circle" width="16" height="16" className="block" />
         </button>
         <div className="w-px bg-gray-400 mx-1" />
         <input

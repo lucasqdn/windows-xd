@@ -9,9 +9,6 @@
   --win98-black: #000000;
   --win98-darkgray: #808080;
   --win98-lightgray: #dfdfdf;
-}
-
-@theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -99,6 +96,29 @@ body {
   border-bottom: 2px solid var(--win98-white);
   box-shadow: inset 1px 1px 0 var(--win98-darkgray);
   padding: 5px 11px 3px 13px;
+}
+
+.win98-button.active {
+  border-top: 2px solid var(--win98-black);
+  border-left: 2px solid var(--win98-black);
+  border-right: 2px solid var(--win98-white);
+  border-bottom: 2px solid var(--win98-white);
+  box-shadow: inset 1px 1px 0 var(--win98-darkgray);
+}
+
+.win98-button:disabled {
+  color: var(--win98-darkgray);
+  cursor: not-allowed;
+}
+
+.win98-button img {
+  pointer-events: none;
+  user-select: none;
+  display: block !important;
+  width: 16px !important;
+  height: 16px !important;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* Title Bar Styles */
