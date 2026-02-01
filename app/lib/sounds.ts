@@ -313,6 +313,7 @@ export class SoundManager {
   playAudioFile(url: string, volume: number = 1.0): HTMLAudioElement {
     const audio = new Audio(url);
     audio.volume = Math.max(0, Math.min(1, volume)) * this.volume;
+    audio.loop = false; // Ensure audio doesn't loop
     audio.play().catch(error => {
       console.error(`Failed to play audio file "${url}":`, error);
     });
