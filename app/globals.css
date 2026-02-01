@@ -30,6 +30,16 @@
   animation: fade-in 0.5s ease-in;
 }
 
+/* Maximized window styles */
+.maximized-window {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: calc(100vh - 40px) !important;
+  transform: none !important;
+}
+
 /* Pixel/Retro Font Fallback for authentic Windows 98 feel */
 @font-face {
   font-family: 'MS Sans Serif';

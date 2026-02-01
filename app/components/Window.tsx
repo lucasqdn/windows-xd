@@ -40,6 +40,7 @@ export function Window({ id, title, children }: WindowProps) {
   };
 
   const handleMaximize = () => {
+    console.log('Maximize clicked, current state:', windowState.isMaximized);
     maximizeWindow(id);
   };
 
@@ -47,15 +48,71 @@ export function Window({ id, title, children }: WindowProps) {
     closeWindow(id);
   };
 
+  console.log('Window render - ID:', id, 'isMaximized:', windowState.isMaximized);
+
+  // For maximized windows, render differently without Rnd
+  if (windowState.isMaximized) {
+    return (
+      <div
+        className="fixed inset-0"
+        style={{ 
+          zIndex: windowState.zIndex,
+          bottom: '40px',
+        }}
+        onMouseDown={() => focusWindow(id)}
+      >
+        <div className="win98-window w-full h-full flex flex-col">
+          {/* Title Bar */}
+          <div
+            className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-default ${
+              isActive ? "win98-titlebar-active" : "win98-titlebar-inactive"
+            }`}
+          >
+            <div className="flex items-center gap-1 flex-1 overflow-hidden">
+              <span className="text-xs truncate">{title}</span>
+            </div>
+            <div className="flex gap-0.5">
+              <button
+                className="win98-button w-4 h-4 text-[8px] leading-none p-0 flex items-center justify-center"
+                onClick={handleMinimize}
+                aria-label="Minimize"
+              >
+                _
+              </button>
+              <button
+                className="win98-button w-4 h-4 text-[8px] leading-none p-0 flex items-center justify-center"
+                onClick={handleMaximize}
+                aria-label="Restore"
+              >
+                ❐
+              </button>
+              <button
+                className="win98-button w-4 h-4 text-[8px] leading-none p-0 flex items-center justify-center"
+                onClick={handleClose}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+          {/* Window Content */}
+          <div className="flex-1 bg-white w-full">
+            {children}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Rnd
       size={{ 
-        width: windowState.isMaximized ? window.innerWidth : windowState.size.width, 
-        height: windowState.isMaximized ? window.innerHeight - 30 : windowState.size.height 
+        width: windowState.size.width, 
+        height: windowState.size.height 
       }}
       position={{ 
-        x: windowState.isMaximized ? 0 : windowState.position.x, 
-        y: windowState.isMaximized ? 0 : windowState.position.y 
+        x: windowState.position.x, 
+        y: windowState.position.y 
       }}
       onDragStop={(e, d) => {
         updateWindowPosition(id, { x: d.x, y: d.y });
@@ -70,8 +127,8 @@ export function Window({ id, title, children }: WindowProps) {
       dragHandleClassName="window-title-bar"
       style={{ zIndex: windowState.zIndex }}
       onMouseDown={() => focusWindow(id)}
-      disableDragging={windowState.isMaximized}
-      enableResizing={!windowState.isMaximized}
+      disableDragging={false}
+      enableResizing={true}
     >
       <div className={`win98-window h-full flex flex-col ${getAnimationClass()}`}>
         {/* Title Bar */}
@@ -109,8 +166,10 @@ export function Window({ id, title, children }: WindowProps) {
         </div>
         
         {/* Window Content */}
-        <div className="flex-1 overflow-auto bg-white p-2">
-          {children}
+        <div className="flex-1 overflow-hidden bg-white">
+          <div className="h-full overflow-auto p-2">
+            {children}
+          </div>
         </div>
       </div>
     </Rnd>

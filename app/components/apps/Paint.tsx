@@ -61,6 +61,18 @@ export function Paint({ id }: PaintProps) {
 
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Listen for canvas data requests from Clippy
+    const handleCanvasRequest = () => {
+      const dataUrl = canvas.toDataURL("image/png");
+      window.dispatchEvent(new CustomEvent("paint-canvas-data", { detail: dataUrl }));
+    };
+
+    window.addEventListener("request-paint-canvas-data", handleCanvasRequest);
+
+    return () => {
+      window.removeEventListener("request-paint-canvas-data", handleCanvasRequest);
+    };
   }, []);
 
   // ============================================================================
@@ -768,4 +780,6 @@ export function Paint({ id }: PaintProps) {
       )}
     </div>
   );
-}
+});
+
+export const Paint = PaintComponent;

@@ -1,9 +1,7 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
-const genAI = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY || "",
-});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 // Simple rate limiting (in-memory)
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
@@ -60,22 +58,116 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await genAI.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: prompt,
-      config: {
-        systemInstruction: `You are Clippy, the helpful Microsoft Office assistant from Windows 98. 
+    // Detect if user wants to browse something
+    const weatherMatch = prompt.match(/(?:weather|temperature|forecast|climate)(?:\s+in\s+|\s+for\s+)?(.+)?/i);
+    const newsMatch = prompt.match(/(?:news|headlines|current events)(?:\s+about\s+|\s+on\s+)?(.+)?/i);
+    const browseMatch = prompt.match(/(?:browse|open|go to|visit|search for|show me|look up)\s+(.+)/i);
+    const youtubeMatch = prompt.match(/(?:youtube|video|watch)(?:\s+for\s+|\s+about\s+)?(.+)?/i);
+    const wikipediaMatch = prompt.match(/(?:wikipedia|wiki)(?:\s+for\s+|\s+about\s+)?(.+)?/i);
+    
+    if (weatherMatch) {
+      const location = weatherMatch[1]?.trim() || "my location";
+      return NextResponse.json({
+        action: "browse",
+        url: `https://weather.com/weather/today/l/${encodeURIComponent(location)}`,
+        response: `Let me show you the weather${location !== "my location" ? " for " + location : ""}! ☀️`,
+      });
+    }
+    
+    if (newsMatch) {
+      const topic = newsMatch[1]?.trim();
+      const url = topic 
+        ? `https://news.google.com/search?q=${encodeURIComponent(topic)}`
+        : "https://news.google.com";
+      return NextResponse.json({
+        action: "browse",
+        url,
+        response: `Opening ${topic ? "news about " + topic : "the latest news"} for you! 📰`,
+      });
+    }
+    
+    if (youtubeMatch) {
+      const query = youtubeMatch[1]?.trim() || "";
+      const url = query
+        ? `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`
+        : "https://www.youtube.com";
+      return NextResponse.json({
+        action: "browse",
+        url,
+        response: `Let me find that on YouTube for you! 🎥`,
+      });
+    }
+    
+    if (wikipediaMatch) {
+      const query = wikipediaMatch[1]?.trim() || "";
+      const url = query
+        ? `https://en.wikipedia.org/wiki/${encodeURIComponent(query.replace(/\s+/g, "_"))}`
+        : "https://en.wikipedia.org";
+      return NextResponse.json({
+        action: "browse",
+        url,
+        response: `Looking that up on Wikipedia! 📚`,
+      });
+    }
+    
+    if (browseMatch) {
+      const query = browseMatch[1].trim().toLowerCase();
+      let url = query;
+      
+      // Common website shortcuts
+      const commonSites: { [key: string]: string } = {
+        'reddit': 'https://www.reddit.com',
+        'youtube': 'https://www.youtube.com',
+        'twitter': 'https://twitter.com',
+        'x': 'https://x.com',
+        'facebook': 'https://www.facebook.com',
+        'instagram': 'https://www.instagram.com',
+        'github': 'https://github.com',
+        'stackoverflow': 'https://stackoverflow.com',
+        'amazon': 'https://www.amazon.com',
+        'netflix': 'https://www.netflix.com',
+        'linkedin': 'https://www.linkedin.com',
+        'tiktok': 'https://www.tiktok.com',
+        'twitch': 'https://www.twitch.tv',
+        'discord': 'https://discord.com',
+        'spotify': 'https://open.spotify.com',
+        'gmail': 'https://mail.google.com',
+        'drive': 'https://drive.google.com',
+        'maps': 'https://maps.google.com',
+      };
+      
+      // Check if it's a known shortcut
+      if (commonSites[query]) {
+        url = commonSites[query];
+      } else if (!query.startsWith("http://") && !query.startsWith("https://")) {
+        if (query.includes(".") && !query.includes(" ")) {
+          url = `https://${query}`;
+        } else {
+          // Otherwise treat as search
+          url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        }
+      }
+      
+      return NextResponse.json({
+        action: "browse",
+        url,
+        response: `Opening ${query} in Internet Explorer for you! 🌐`,
+      });
+    }
+
+    const systemPrompt = `You are Clippy, the helpful Microsoft Office assistant from Windows 98. 
 You are cheerful, slightly enthusiastic, and always eager to help.
 
 Current context:
 ${context || "User is on the desktop"}
 
 Provide brief, helpful assistance (2-3 sentences max). Stay in character as Clippy.
-Be encouraging and helpful, but keep responses concise.`,
-      },
-    });
+Be encouraging and helpful, but keep responses concise.`;
 
-    const response = result.text;
+    // Generate response using Gemini
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    const result = await model.generateContent(`${systemPrompt}\n\n${prompt}`);
+    const response = result.response?.text() || "Hi! I'm here to help. What can I do for you?";
 
     return NextResponse.json({ response });
   } catch (error) {

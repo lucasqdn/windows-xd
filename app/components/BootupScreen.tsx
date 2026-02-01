@@ -17,10 +17,10 @@ export function BootupScreen({ onBootComplete }: BootupScreenProps) {
   useEffect(() => {
     // Command lines to display
     const commands = [
-      "Microsoft Windows 98",
-      "   (C)Copyright Microsoft Corp 1981-1999.",
+      "Microsoft Windows XD",
+      "   (C)Copyright Microsoft Corp 1975-2026.",
       "",
-      "Starting Windows 98...",
+      "Starting Windows XD...",
       "Loading system files...",
       "Initializing devices...",
     ];
