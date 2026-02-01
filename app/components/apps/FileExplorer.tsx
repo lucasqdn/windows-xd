@@ -48,10 +48,10 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
 
   const handleFileDoubleClick = (file: FileItem) => {
     if (file.type === "folder") {
-      // Open folder in new File Explorer window
+      // Open folder in new File Explorer window, passing the folder ID
       openWindow({
         title: file.name,
-        component: FileExplorer,
+        component: (props) => <FileExplorer {...props} folderId={file.id} />,
         isMinimized: false,
         isMaximized: false,
         position: { x: 150, y: 100 },
