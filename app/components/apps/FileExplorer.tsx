@@ -493,7 +493,7 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
               <span className="text-xs font-bold">New Folder</span>
               <button
                 onClick={() => setShowNewFolderDialog(false)}
-                className="win98-button px-2 py-0 text-xs"
+                className="win98-button-xs"
               >
                 ✕
               </button>
@@ -511,13 +511,13 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={handleCreateFolder}
-                  className="win98-button px-4 py-1 text-xs"
+                  className="win98-button-sm"
                 >
                   Create
                 </button>
                 <button
                   onClick={() => setShowNewFolderDialog(false)}
-                  className="win98-button px-4 py-1 text-xs"
+                  className="win98-button-sm"
                 >
                   Cancel
                 </button>

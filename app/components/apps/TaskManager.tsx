@@ -353,18 +353,18 @@ export function TaskManager({ id }: TaskManagerProps) {
               <button
                 onClick={handleEndTask}
                 disabled={!selectedProcess}
-                className="win98-button px-4 py-1 text-xs disabled:opacity-50"
+                className="win98-button-sm disabled:opacity-50"
               >
                 End Task
               </button>
               <button
                 onClick={handleSwitchTo}
                 disabled={!selectedProcess}
-                className="win98-button px-4 py-1 text-xs disabled:opacity-50"
+                className="win98-button-sm disabled:opacity-50"
               >
                 Switch To
               </button>
-              <button className="win98-button px-4 py-1 text-xs ml-auto">
+              <button className="win98-button-sm ml-auto">
                 New Task...
               </button>
             </div>
@@ -407,7 +407,7 @@ export function TaskManager({ id }: TaskManagerProps) {
               <button
                 onClick={handleEndTask}
                 disabled={!selectedProcess || selectedProcess === "system" || selectedProcess === "explorer"}
-                className="win98-button px-4 py-1 text-xs disabled:opacity-50"
+                className="win98-button-sm disabled:opacity-50"
               >
                 End Process
               </button>

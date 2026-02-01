@@ -119,7 +119,7 @@ export function InternetExplorer({ id }: InternetExplorerProps) {
           onKeyPress={handleKeyPress}
           className="flex-1 win98-inset px-1 py-0.5 text-xs bg-white outline-none"
         />
-        <button onClick={handleGo} className="win98-button px-2 py-0.5 text-xs">
+        <button onClick={handleGo} className="win98-button-sm">
           Go
         </button>
       </div>
@@ -129,7 +129,7 @@ export function InternetExplorer({ id }: InternetExplorerProps) {
         <button
           onClick={handleBack}
           disabled={historyIndex === 0}
-          className="win98-button px-2 py-0.5 text-xs disabled:opacity-50"
+          className="win98-button-sm disabled:opacity-50"
           title="Back"
         >
           ◀️ Back
@@ -137,15 +137,15 @@ export function InternetExplorer({ id }: InternetExplorerProps) {
         <button
           onClick={handleForward}
           disabled={historyIndex === history.length - 1}
-          className="win98-button px-2 py-0.5 text-xs disabled:opacity-50"
+          className="win98-button-sm disabled:opacity-50"
           title="Forward"
         >
           Forward ▶️
         </button>
-        <button onClick={handleRefresh} className="win98-button px-2 py-0.5 text-xs" title="Refresh">
+        <button onClick={handleRefresh} className="win98-button-sm" title="Refresh">
           🔄 Refresh
         </button>
-        <button onClick={handleHome} className="win98-button px-2 py-0.5 text-xs" title="Home">
+        <button onClick={handleHome} className="win98-button-sm" title="Home">
           🏠 Home
         </button>
       </div>

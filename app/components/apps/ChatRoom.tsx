@@ -152,7 +152,7 @@ export default function ChatRoom() {
           />
           <button
             onClick={handleSend}
-            className="win98-button px-4 py-1 text-xs"
+            className="win98-button-sm"
             disabled={!connected || !input.trim()}
           >
             Send

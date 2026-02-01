@@ -53,7 +53,7 @@ export function SaveDialog({
           </div>
           <button
             onClick={onCancel}
-            className="win98-button px-2 py-0 text-xs leading-none"
+            className="win98-button-xs"
           >
             ✕
           </button>
@@ -142,10 +142,10 @@ export function SaveDialog({
 
           {/* Buttons */}
           <div className="flex gap-2 justify-end pt-2">
-            <button onClick={handleSave} className="win98-button px-6 py-1 text-xs font-bold">
+            <button onClick={handleSave} className="win98-button-sm font-bold">
               Save
             </button>
-            <button onClick={onCancel} className="win98-button px-6 py-1 text-xs">
+            <button onClick={onCancel} className="win98-button-sm">
               Cancel
             </button>
           </div>

@@ -164,19 +164,19 @@ export function MediaPlayer({ id }: MediaPlayerProps) {
         {/* Transport Controls */}
         <div className="flex gap-1 justify-center">
           <button
-            className="win98-button px-3 py-1 text-xs"
+            className="win98-button-sm"
             onClick={handlePlayPause}
           >
             {isPlaying ? "⏸ Pause" : "▶ Play"}
           </button>
           <button
-            className="win98-button px-3 py-1 text-xs"
+            className="win98-button-sm"
             onClick={handleStop}
           >
             ⏹ Stop
           </button>
           <button
-            className="win98-button px-3 py-1 text-xs"
+            className="win98-button-sm"
             onClick={handleFullscreen}
           >
             ⛶ Fullscreen

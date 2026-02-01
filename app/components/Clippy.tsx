@@ -221,7 +221,7 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
         </div>
         <button
           onClick={handleClose}
-          className="win98-button px-2 py-0 text-xs leading-none"
+          className="win98-button-xs"
           aria-label="Close Clippy"
         >
           ✕
@@ -282,13 +282,13 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
             <button
               onClick={handleAskQuestion}
               disabled={!userInput.trim()}
-              className="win98-button flex-1 px-3 py-1 text-xs disabled:opacity-50"
+              className="win98-button-sm flex-1 disabled:opacity-50"
             >
               Ask 💬
             </button>
             <button
               onClick={() => askClippy("Tell me what I can do here")}
-              className="win98-button px-3 py-1 text-xs"
+              className="win98-button-sm"
             >
               💡 Tips
             </button>

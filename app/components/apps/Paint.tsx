@@ -660,7 +660,7 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
       {/* Tool Bar */}
       <div className="win98-raised flex gap-0.5 p-1">
         <button
-          className="win98-button w-6 h-6 text-xs p-0"
+          className="win98-button-square"
           onClick={undo}
           disabled={historyIndex < 0}
           title="Undo (Ctrl+Z)"
@@ -668,7 +668,7 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
           ↶
         </button>
         <button
-          className="win98-button w-6 h-6 text-xs p-0"
+          className="win98-button-square"
           onClick={redo}
           disabled={historyIndex >= commandHistory.length - 1}
           title="Redo (Ctrl+Y)"
@@ -677,67 +677,59 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
         </button>
         <div className="w-px bg-gray-400 mx-1" />
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "pencil" ? "active" : ""}`}
+          className={`win98-button-square ${currentTool === "pencil" ? "active" : ""}`}
           onClick={() => setCurrentTool("pencil")}
-          style={{padding:0}}
           title="Pencil"
         >
         <img src="/pen.png" alt="Pencil" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "brush" ? "active" : ""}`}
+          className={`win98-button-square ${currentTool === "brush" ? "active" : ""}`}
           onClick={() => setCurrentTool("brush")}
-          style={{padding:0}}
           title="Brush"
         >
           <img src="/brush.png" alt="Brush" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "eraser" ? "active" : ""}`}
+          className={`win98-button-square ${currentTool === "eraser" ? "active" : ""}`}
           onClick={() => setCurrentTool("eraser")}
-          style={{padding:0}}
           title="Eraser"
         >
           <img src="/eraser.png" alt="Eraser" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "fill" ? "active" : ""}`}
+          className={`win98-button-square ${currentTool === "fill" ? "active" : ""}`}
           onClick={() => setCurrentTool("fill")}
-          style={{padding:0}}
           title="Fill"
         >
           <img src="/fill.png" alt="Fill" width="16" height="16" className="block" />
         </button>
         <div className="w-px bg-gray-400 mx-1" />
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "line" ? "active" : ""}`}
+          className={`win98-button-square ${currentTool === "line" ? "active" : ""}`}
           onClick={() => setCurrentTool("line")}
-          style={{padding:0}}
           title="Line"
         >
           <img src="/line.png" alt="Line" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "rectangle" ? "active" : ""}`}
+          className={`win98-button-square ${currentTool === "rectangle" ? "active" : ""}`}
           onClick={() => setCurrentTool("rectangle")}
-          style={{padding:0}}
           title="Rectangle"
         >
           <img src="/rectangle.png" alt="Rectangle" width="16" height="16" className="block" />
         </button>
         <button
-          className={`win98-button w-6 h-6 text-xs p-0 flex items-center justify-center ${currentTool === "circle" ? "active" : ""}`}
+          className={`win98-button-square ${currentTool === "circle" ? "active" : ""}`}
           onClick={() => setCurrentTool("circle")}
-          style={{padding:0}}
           title="Circle"
         >
           <img src="/circle.png" alt="Circle" width="16" height="16" className="block" />
         </button>
         <div className="w-px bg-gray-400 mx-1" />
         <button
-          className="win98-button w-6 h-6 text-xs p-0"
+          className="win98-button-square"
           onClick={clearCanvas}
-          style={{padding:0}}
           title="Clear"
         >
           <img src="/clear.png" alt="Circle" width="16" height="16" className="block" />
@@ -848,7 +840,7 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
 
               <div className="flex gap-2 justify-end">
                 <button
-                  className="win98-button px-3 py-1 text-xs"
+                  className="win98-button-sm"
                   onClick={() => {
                     setShowAIDialog(false);
                     setAIPrompt("");
@@ -859,7 +851,7 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
                   Cancel
                 </button>
                 <button
-                  className="win98-button px-3 py-1 text-xs font-bold"
+                  className="win98-button-sm font-bold"
                   onClick={generateAIImage}
                   disabled={isGenerating || aiPrompt.trim().length < 3}
                 >

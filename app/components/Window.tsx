@@ -189,21 +189,21 @@ export function Window({ id, title, children }: WindowProps) {
             </div>
             <div className="flex gap-0.5">
               <button
-                className="win98-button w-4 h-4 text-[8px] leading-none p-0 flex items-center justify-center"
+                className="win98-button-xs"
                 onClick={handleMinimize}
                 aria-label="Minimize"
               >
                 _
               </button>
               <button
-                className="win98-button w-4 h-4 text-[8px] leading-none p-0 flex items-center justify-center"
+                className="win98-button-xs"
                 onClick={handleMaximize}
                 aria-label={windowState.isMaximized ? "Restore" : "Maximize"}
               >
                 {windowState.isMaximized ? '❐' : '□'}
               </button>
               <button
-                className="win98-button w-4 h-4 text-[8px] leading-none p-0 flex items-center justify-center"
+                className="win98-button-xs"
                 onClick={handleClose}
                 aria-label="Close"
               >
