@@ -79,7 +79,17 @@ export function Paint({ id, fileId: initialFileId }: PaintProps) {
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           addCommand({ type: "fill", imageData });
         };
-        img.src = `data:${file.mimeType};base64,${file.imageData}`;
+        // Check if imageData is a URL path or base64 data
+        if (file.imageData.startsWith('/') || file.imageData.startsWith('http')) {
+          // It's a URL path, use it directly
+          img.src = file.imageData;
+        } else if (file.imageData.startsWith('data:')) {
+          // It's already a data URL
+          img.src = file.imageData;
+        } else {
+          // It's base64 data, construct data URL
+          img.src = `data:${file.mimeType};base64,${file.imageData}`;
+        }
         setFileName(file.name);
         setFileId(file.id);
         setIsModified(false);

@@ -41,6 +41,9 @@ function saveFiles(files: FileItem[]): void {
 
 // Get default files for fresh installation
 function getDefaultFiles(): FileItem[] {
+  // For large images, we'll store them as references to public files
+  // The imageData will be the URL path instead of full base64 to save localStorage space
+  
   return [
     {
       id: "folder-mydocs",
@@ -75,6 +78,40 @@ function getDefaultFiles(): FileItem[] {
       created: Date.now(),
       modified: Date.now(),
       parentId: "folder-mydocs",
+    },
+    // Sample images in My Pictures folder (as URL references)
+    {
+      id: "img-background",
+      name: "windows-xd backgroud.png",
+      type: "file",
+      imageData: "/windows-xd backgroud.png",
+      mimeType: "image/png",
+      size: 7354587, // Actual file size
+      created: Date.now(),
+      modified: Date.now(),
+      parentId: "folder-pics",
+    },
+    {
+      id: "img-logo",
+      name: "windows-xd logo.png",
+      type: "file",
+      imageData: "/windows-xd logo.png",
+      mimeType: "image/png",
+      size: 6657555, // Actual file size
+      created: Date.now(),
+      modified: Date.now(),
+      parentId: "folder-pics",
+    },
+    {
+      id: "img-windows98",
+      name: "windows-98.png",
+      type: "file",
+      imageData: "/windows-98-1.png",
+      mimeType: "image/png",
+      size: 2321, // Actual file size
+      created: Date.now(),
+      modified: Date.now(),
+      parentId: "folder-pics",
     },
   ];
 }
