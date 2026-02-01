@@ -25,21 +25,19 @@ export function Window({ id, title, children }: WindowProps) {
   const prevMaximizedRef = useRef<boolean>(false);
   const prevStateRef = useRef<'normal' | 'minimized' | 'maximized'>('normal');
   const hasPlayedOpenSound = useRef(false);
-  
-  if (!windowState || (windowState.isMinimized && windowState.animationState !== 'minimizing')) {
-    return null;
-  }
 
   // Play window open sound on mount
   useEffect(() => {
-    if (!hasPlayedOpenSound.current) {
+    if (!hasPlayedOpenSound.current && windowState) {
       playSound('windowOpen');
       hasPlayedOpenSound.current = true;
     }
-  }, [playSound]);
+  }, [playSound, windowState]);
 
   // Play sounds on window state changes
   useEffect(() => {
+    if (!windowState) return;
+    
     const currentState = windowState.isMinimized ? 'minimized' : windowState.isMaximized ? 'maximized' : 'normal';
     const prevState = prevStateRef.current;
 
@@ -54,10 +52,12 @@ export function Window({ id, title, children }: WindowProps) {
       
       prevStateRef.current = currentState;
     }
-  }, [windowState.isMinimized, windowState.isMaximized, playSound]);
+  }, [windowState, playSound]);
 
   // Handle maximize animation
   useEffect(() => {
+    if (!windowState) return;
+    
     if (windowState.isMaximized && !prevMaximizedRef.current) {
       // Window was just maximized
       setAnimationClass('window-maximizing');
@@ -65,7 +65,12 @@ export function Window({ id, title, children }: WindowProps) {
       return () => clearTimeout(timer);
     }
     prevMaximizedRef.current = windowState.isMaximized;
-  }, [windowState.isMaximized]);
+  }, [windowState]);
+  
+  // Early return AFTER all hooks have been called
+  if (!windowState || (windowState.isMinimized && windowState.animationState !== 'minimizing')) {
+    return null;
+  }
 
   // Log window dimensions for debugging
   console.log(`[Window] Rendering "${title}" - width: ${windowState.size.width}, height: ${windowState.size.height}`);
