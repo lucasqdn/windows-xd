@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSoundEffects } from "@/app/hooks/useSoundEffects";
 
 type StartMenuProps = {
   isOpen: boolean;
@@ -39,6 +40,19 @@ const programItems: MenuItem[] = [
 
 export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const { playSound } = useSoundEffects();
+
+  // Play sound when menu opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      playSound('menuOpen');
+    } else {
+      // Only play close sound if menu was previously open
+      if (hoveredItem !== null) {
+        playSound('menuClose');
+      }
+    }
+  }, [isOpen, playSound]); // Note: intentionally not including hoveredItem to avoid extra sound calls
 
   if (!isOpen) {
     return null;

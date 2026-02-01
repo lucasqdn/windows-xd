@@ -2,6 +2,7 @@
 
 import { Rnd } from "react-rnd";
 import { useWindowManager } from "@/app/contexts/WindowManagerContext";
+import { useSoundEffects } from "@/app/hooks/useSoundEffects";
 import type { ReactNode } from "react";
 import { useState, useEffect, useRef } from "react";
 
@@ -13,6 +14,7 @@ type WindowProps = {
 
 export function Window({ id, title, children }: WindowProps) {
   const { windows, focusWindow, closeWindow, minimizeWindow, maximizeWindow, updateWindowPosition, updateWindowSize } = useWindowManager();
+  const { playSound } = useSoundEffects();
   
   const windowState = windows.find(w => w.id === id);
   
@@ -21,10 +23,38 @@ export function Window({ id, title, children }: WindowProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const prevMaximizedRef = useRef<boolean>(false);
+  const prevStateRef = useRef<'normal' | 'minimized' | 'maximized'>('normal');
+  const hasPlayedOpenSound = useRef(false);
   
   if (!windowState || (windowState.isMinimized && windowState.animationState !== 'minimizing')) {
     return null;
   }
+
+  // Play window open sound on mount
+  useEffect(() => {
+    if (!hasPlayedOpenSound.current) {
+      playSound('windowOpen');
+      hasPlayedOpenSound.current = true;
+    }
+  }, [playSound]);
+
+  // Play sounds on window state changes
+  useEffect(() => {
+    const currentState = windowState.isMinimized ? 'minimized' : windowState.isMaximized ? 'maximized' : 'normal';
+    const prevState = prevStateRef.current;
+
+    if (currentState !== prevState) {
+      if (currentState === 'minimized' && prevState !== 'minimized') {
+        playSound('windowMinimize');
+      } else if (currentState === 'maximized' && prevState !== 'maximized') {
+        playSound('windowMaximize');
+      } else if (currentState === 'normal' && prevState === 'minimized') {
+        playSound('windowRestore');
+      }
+      
+      prevStateRef.current = currentState;
+    }
+  }, [windowState.isMinimized, windowState.isMaximized, playSound]);
 
   // Handle maximize animation
   useEffect(() => {
@@ -75,6 +105,7 @@ export function Window({ id, title, children }: WindowProps) {
   };
 
   const handleClose = () => {
+    playSound('windowClose');
     closeWindow(id);
   };
 
