@@ -67,6 +67,12 @@ const desktopIcons: DesktopIconData[] = [
     component: Minesweeper,
   },
   {
+    id: "solitaire",
+    icon: "/solitaire-32x32.png",
+    label: "Solitaire",
+    component: Solitaire,
+  },
+  {
     id: "chatroom",
     icon: "/globe.svg",
     label: "Chat Room",
@@ -119,27 +125,6 @@ function DesktopContent() {
   const handleProgramLaunch = (programId: string) => {
     if (programId === "clippy") {
       setShowClippy(true);
-      return;
-    }
-    
-    // Handle programs not in desktop icons
-    if (programId === "solitaire") {
-      const windowSize = getWindowSize("solitaire");
-      // Center the window on screen (accounting for 40px taskbar)
-      const centerX = (window.innerWidth - windowSize.width) / 2;
-      const centerY = (window.innerHeight - 40 - windowSize.height) / 2;
-      openWindow({
-        title: "Solitaire",
-        component: Solitaire,
-        isMinimized: false,
-        isMaximized: false,
-        position: {
-          x: Math.max(0, centerX),
-          y: Math.max(0, centerY),
-        },
-        size: windowSize,
-        icon: "🃏",
-      });
       return;
     }
     
