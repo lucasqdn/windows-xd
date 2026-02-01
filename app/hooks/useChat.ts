@@ -1,76 +1,112 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { io, Socket } from "socket.io-client";
+import PartySocket from "partysocket";
 import type { Message } from "@/app/types/chat";
 
 const MAX_MESSAGES = 100; // Limit message history
+
+// Use environment variable for PartyKit host, fallback to localhost for development
+const PARTYKIT_HOST = process.env.NEXT_PUBLIC_PARTYKIT_HOST || "localhost:1999";
+
+// Debug logging
+if (typeof window !== "undefined") {
+  console.log("[useChat] PartyKit Host:", PARTYKIT_HOST);
+  if (!process.env.NEXT_PUBLIC_PARTYKIT_HOST) {
+    console.warn(
+      "[useChat] NEXT_PUBLIC_PARTYKIT_HOST not set! Using localhost:1999. " +
+      "Set this environment variable in Vercel for production."
+    );
+  }
+}
 
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [users, setUsers] = useState<string[]>([]);
   const [username, setUsername] = useState<string>("");
   const [connected, setConnected] = useState(false);
-  const socketRef = useRef<Socket | null>(null);
+  const socketRef = useRef<PartySocket | null>(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000");
+    // Connect to PartyKit chatroom
+    const newSocket = new PartySocket({
+      host: PARTYKIT_HOST,
+      room: "global-chat",
+    });
+    
     socketRef.current = newSocket;
 
-    newSocket.on("connect", () => {
-      console.log("Connected to chat server");
+    newSocket.addEventListener("open", () => {
+      console.log("[useChat] Connected to chat server at:", PARTYKIT_HOST);
       setConnected(true);
     });
 
-    newSocket.on("disconnect", () => {
-      console.log("Disconnected from chat server");
+    newSocket.addEventListener("close", () => {
+      console.log("[useChat] Disconnected from chat server");
       setConnected(false);
     });
 
-    newSocket.on("user-joined", ({ username: joinedUser }: { username: string }) => {
-      setMessages((prev) => {
-        const newMessages = [
-          ...prev,
-          {
-            username: "System",
-            text: `${joinedUser} joined the chat`,
-            timestamp: Date.now(),
-            type: "system" as const,
-          },
-        ];
-        // Limit to MAX_MESSAGES
-        return newMessages.slice(-MAX_MESSAGES);
-      });
-      // Set username if this is us joining (only once)
-      setUsername((prevUsername) => prevUsername || joinedUser);
+    newSocket.addEventListener("error", (error) => {
+      console.error("[useChat] Connection error:", error);
+      console.error("[useChat] Failed to connect to:", PARTYKIT_HOST);
     });
 
-    newSocket.on("message", (msg: Message) => {
-      setMessages((prev) => {
-        const newMessages = [...prev, msg];
-        // Limit to MAX_MESSAGES
-        return newMessages.slice(-MAX_MESSAGES);
-      });
-    });
+    newSocket.addEventListener("message", (event) => {
+      try {
+        const data = JSON.parse(event.data);
 
-    newSocket.on("user-left", ({ username: leftUser }: { username: string }) => {
-      setMessages((prev) => {
-        const newMessages = [
-          ...prev,
-          {
-            username: "System",
-            text: `${leftUser} left the chat`,
-            timestamp: Date.now(),
-            type: "system" as const,
-          },
-        ];
-        // Limit to MAX_MESSAGES
-        return newMessages.slice(-MAX_MESSAGES);
-      });
-    });
+        switch (data.type) {
+          case "username-assigned":
+            setUsername(data.username);
+            break;
 
-    newSocket.on("user-list", (userList: string[]) => {
-      setUsers(userList);
+          case "user-joined":
+            setMessages((prev) => {
+              const newMessages = [
+                ...prev,
+                {
+                  username: "System",
+                  text: `${data.username} joined the chat`,
+                  timestamp: Date.now(),
+                  type: "system" as const,
+                },
+              ];
+              return newMessages.slice(-MAX_MESSAGES);
+            });
+            break;
+
+          case "message":
+            setMessages((prev) => {
+              const newMessages = [...prev, data as Message];
+              return newMessages.slice(-MAX_MESSAGES);
+            });
+            break;
+
+          case "user-left":
+            setMessages((prev) => {
+              const newMessages = [
+                ...prev,
+                {
+                  username: "System",
+                  text: `${data.username} left the chat`,
+                  timestamp: Date.now(),
+                  type: "system" as const,
+                },
+              ];
+              return newMessages.slice(-MAX_MESSAGES);
+            });
+            break;
+
+          case "user-list":
+            setUsers(data.users);
+            break;
+
+          default:
+            console.warn("Unknown message type:", data.type);
+        }
+      } catch (error) {
+        console.error("Failed to parse message:", error);
+      }
     });
 
     return () => {
@@ -81,7 +117,7 @@ export function useChat() {
 
   const sendMessage = useCallback((text: string) => {
     if (socketRef.current && connected) {
-      socketRef.current.emit("message", text);
+      socketRef.current.send(text);
     }
   }, [connected]);
 

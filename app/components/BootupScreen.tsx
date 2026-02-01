@@ -87,6 +87,7 @@ export function BootupScreen({ onBootComplete }: BootupScreenProps) {
             fill
             className="object-cover"
             priority
+            unoptimized
           />
         </div>
       )}
@@ -95,11 +96,12 @@ export function BootupScreen({ onBootComplete }: BootupScreenProps) {
       {showBackground && (
         <div className="fixed inset-0 animate-fade-in">
           <Image
-            src="/windows-xd backgroud.png"
+            src="/windows-xd-background.png"
             alt="Windows 98 Background"
             fill
             className="object-cover"
             priority
+            unoptimized
           />
         </div>
       )}
