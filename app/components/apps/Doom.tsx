@@ -86,20 +86,33 @@ export function Doom({ id }: DoomProps) {
         </div>
       )}
 
-      {/* Black bars to completely cover all debug UI - INCREASED COVERAGE */}
+      {/* Complete coverage approach - create a "viewport" in the center */}
       {!showOverlay && (
         <>
-          {/* Cover entire right side (debug console/stats) - MUCH WIDER */}
-          <div className="absolute top-0 right-0 w-[400px] h-full bg-black z-[5] pointer-events-none" />
+          {/* Create a centered viewport effect by covering everything except the center */}
+          {/* Top bar - covers header/article */}
+          <div 
+            className="absolute top-0 left-0 right-0 bg-black z-[5] pointer-events-none"
+            style={{ height: 'clamp(80px, 15%, 200px)' }}
+          />
           
-          {/* Cover entire top (article link and header) - MUCH TALLER */}
-          <div className="absolute top-0 left-0 right-0 h-[150px] bg-black z-[5] pointer-events-none" />
+          {/* Bottom bar - covers stats */}
+          <div 
+            className="absolute bottom-0 left-0 right-0 bg-black z-[5] pointer-events-none"
+            style={{ height: 'clamp(100px, 20%, 250px)' }}
+          />
           
-          {/* Cover entire bottom (extra text and stats) - MUCH TALLER */}
-          <div className="absolute bottom-0 left-0 right-0 h-[200px] bg-black z-[5] pointer-events-none" />
-
-          {/* Left side coverage for safety */}
-          <div className="absolute top-0 left-0 w-[50px] h-full bg-black z-[5] pointer-events-none" />
+          {/* Left bar */}
+          <div 
+            className="absolute top-0 left-0 bottom-0 bg-black z-[5] pointer-events-none"
+            style={{ width: 'clamp(30px, 5%, 80px)' }}
+          />
+          
+          {/* Right bar - covers debug console */}
+          <div 
+            className="absolute top-0 right-0 bottom-0 bg-black z-[5] pointer-events-none"
+            style={{ width: 'clamp(200px, 30%, 500px)' }}
+          />
         </>
       )}
       
