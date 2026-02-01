@@ -316,7 +316,13 @@ function DesktopContent() {
         priority
       />
       {/* Desktop Icons */}
-      <div className="absolute top-2 left-2 flex flex-col gap-2 z-10">
+      <div 
+        className="absolute top-2 left-2 z-10 flex flex-wrap flex-col gap-2"
+        style={{
+          maxHeight: 'calc(100vh - 80px)', // Leave space for taskbar (40px) and padding
+          alignContent: 'flex-start',
+        }}
+      >
         {desktopIcons.map((icon) => (
           <DesktopIcon
             key={icon.id}
