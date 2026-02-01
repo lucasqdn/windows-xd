@@ -585,3 +585,49 @@ body {
     opacity: 0;
   }
 }
+
+/* Butterfly Animations */
+@keyframes butterfly-left-wing {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(-45deg);
+  }
+}
+
+@keyframes butterfly-right-wing {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(45deg);
+  }
+}
+
+/* BonziBuddy Animations */
+@keyframes bonzi-blink {
+  0%,
+  90%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes bonzi-speech {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-bonzi-blink {
+  animation: bonzi-blink 4s ease-in-out infinite;
+}

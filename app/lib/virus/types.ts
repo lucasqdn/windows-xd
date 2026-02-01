@@ -22,7 +22,7 @@ export const VIRUS_TIMING = {
   virusSpawnInterval: 5000, // 5s per virus spawn
   virusSpawnCount: 6, // Total number of viruses to spawn
   glitchDuration: 8000, // 8s glitch phase
-  shutdownDuration: 7000, // 7s shutdown animation
+  shutdownDuration: 3000, // 3s shutdown animation (faster!)
   ransomwareCountdown: 600, // 10 minutes in seconds
 };
 
@@ -92,11 +92,13 @@ export const NOTIFICATION_VARIANTS: NotificationVariant[] = [
 
 export type VirusSprite = {
   id: string;
-  type: "butterfly" | "gorilla";
+  type: "butterfly" | "bonzibuddy";
   x: number;
   y: number;
   vx: number;
   vy: number;
   rotation: number;
   rotationSpeed: number;
+  scale: number;
+  message?: string; // For BonziBuddy speech bubbles
 };

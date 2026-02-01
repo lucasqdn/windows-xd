@@ -34,9 +34,9 @@ export function ShutdownScreen({ onComplete }: ShutdownScreenProps) {
 
       if (currentProgress >= 100) {
         clearInterval(progressInterval);
-        setTimeout(onComplete, 500);
+        setTimeout(onComplete, 200);
       }
-    }, 70); // 7000ms / 100 steps = 70ms per step
+    }, 30); // 3000ms / 100 steps = 30ms per step
 
     return () => clearInterval(progressInterval);
   }, [onComplete]);

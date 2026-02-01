@@ -63,6 +63,7 @@ export function Window({ id, title, children }: WindowProps) {
           bottom: '40px',
         }}
         onMouseDown={() => focusWindow(id)}
+        data-window-id={id}
       >
         <div className="win98-window w-full h-full flex flex-col">
           {/* Title Bar */}
@@ -133,7 +134,10 @@ export function Window({ id, title, children }: WindowProps) {
       disableDragging={false}
       enableResizing={true}
     >
-      <div className={`win98-window h-full flex flex-col ${getAnimationClass()}`}>
+      <div 
+        className={`win98-window h-full flex flex-col ${getAnimationClass()}`}
+        data-window-id={id}
+      >
         {/* Title Bar */}
         <div
           className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-move ${

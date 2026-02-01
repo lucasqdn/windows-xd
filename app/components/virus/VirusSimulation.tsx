@@ -9,7 +9,14 @@ import {
 import { VirusSpriteComponent } from "./VirusSprite";
 import { ShutdownScreen } from "./ShutdownScreen";
 import { RansomwareScreen } from "./RansomwareScreen";
-import { applyGlitchToElement, removeGlitchFromElement } from "@/app/lib/virus/effects";
+import { 
+  applyGlitchToElement, 
+  removeGlitchFromElement,
+  teleportWindows,
+  teleportDesktopIcons,
+  createPhantomWindows,
+  applyScreenTear
+} from "@/app/lib/virus/effects";
 
 export function VirusSimulation() {
   const [stage, setStage] = useState<VirusStage>("silent");
@@ -119,13 +126,14 @@ export function VirusSimulation() {
       // Spawn new sprite
       const newSprite: VirusSprite = {
         id: `sprite-${Date.now()}-${Math.random()}`,
-        type: Math.random() > 0.5 ? "butterfly" : "gorilla",
-        x: Math.random() * (window.innerWidth - 60),
-        y: Math.random() * (window.innerHeight - 60),
+        type: Math.random() > 0.5 ? "butterfly" : "bonzibuddy",
+        x: Math.random() * (window.innerWidth - 100),
+        y: Math.random() * (window.innerHeight - 100),
         vx: (Math.random() - 0.5) * 4,
         vy: (Math.random() - 0.5) * 4,
         rotation: Math.random() * 360,
         rotationSpeed: (Math.random() - 0.5) * 5,
+        scale: 0.8 + Math.random() * 0.4,
       };
 
       setSprites((prev) => [...prev, newSprite]);
@@ -156,9 +164,26 @@ export function VirusSimulation() {
         });
       }
 
+      // Serious glitch effects
+      const glitchType = Math.random();
+      
+      if (glitchType < 0.3) {
+        // Teleport windows
+        teleportWindows();
+      } else if (glitchType < 0.5) {
+        // Teleport desktop icons
+        teleportDesktopIcons();
+      } else if (glitchType < 0.7) {
+        // Create phantom windows
+        createPhantomWindows();
+      } else if (glitchType < 0.85) {
+        // Screen tear
+        applyScreenTear();
+      }
+
       // Play glitch sound
       playGlitchSound();
-    }, 200);
+    }, 150); // Faster glitches
 
     const timer = setTimeout(() => {
       if (glitchIntervalRef.current) {

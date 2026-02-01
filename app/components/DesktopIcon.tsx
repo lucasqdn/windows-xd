@@ -10,7 +10,7 @@ type DesktopIconProps = {
   onDoubleClick: () => void;
 };
 
-export function DesktopIcon({ icon, label, onDoubleClick }: DesktopIconProps) {
+export function DesktopIcon({ id, icon, label, onDoubleClick }: DesktopIconProps) {
   const [selected, setSelected] = useState(false);
   const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -33,6 +33,7 @@ export function DesktopIcon({ icon, label, onDoubleClick }: DesktopIconProps) {
       className={`desktop-icon ${selected ? "selected" : ""}`}
       onClick={handleClick}
       onBlur={() => setSelected(false)}
+      data-desktop-icon={id}
     >
       <div className="w-12 h-12 relative">
         <Image
