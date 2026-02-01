@@ -229,6 +229,17 @@ body {
   }
 }
 
+@keyframes windowMaximize {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
 .window-opening {
   animation: windowOpen 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -239,6 +250,21 @@ body {
 
 .window-restoring {
   animation: windowRestore 0.2s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.window-maximizing {
+  animation: windowMaximize 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.window-dragging {
+  cursor: move;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.1s ease-out;
+}
+
+.window-resizing {
+  transition: none; /* Disable transitions during resize for performance */
 }
 
 /* Desktop Icon Styles */
