@@ -66,7 +66,7 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
         onClick={onClose}
       />
       
-      <div className="start-menu z-[9999]">
+      <div className="start-menu start-menu-slide-up z-[9999]">
         {/* Windows 98 Logo Banner */}
         <div
           className="flex items-end px-1 py-2 text-white text-xs font-bold"
@@ -109,7 +109,7 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
               {/* Programs Submenu */}
               {item.id === "programs" && hoveredItem === "programs" && (
                 <div 
-                  className="start-menu-submenu"
+                  className="start-menu-submenu submenu-slide-out"
                   onMouseEnter={() => setHoveredItem("programs")}
                 >
                   {programItems.map((program) => (
