@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   WindowManagerProvider,
   useWindowManager,
@@ -26,6 +26,9 @@ import { useSoundEffects } from "@/app/hooks/useSoundEffects";
 import { getWindowSize } from "@/app/config/windowSizes";
 import Image from "next/image";
 import { Clippy } from "./Clippy";
+import { VirusNotification } from "./system/VirusNotification";
+import { VirusSimulation } from "./virus/VirusSimulation";
+import { VIRUS_TIMING } from "@/app/lib/virus/types";
 
 type DesktopIconData = {
   id: string;
@@ -90,10 +93,34 @@ function DesktopContent() {
   const { windows, openWindow } = useWindowManager();
   const { contextMenu, showContextMenu, hideContextMenu } = useContextMenu();
   const [showClippy, setShowClippy] = useState(false);
+  const [showVirusNotification, setShowVirusNotification] = useState(false);
+  const [virusActive, setVirusActive] = useState(false);
 
   // Initialize keyboard shortcuts and sound effects
   useKeyboardShortcuts();
   useSoundEffects();
+
+  // Virus notification timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowVirusNotification(true);
+    }, VIRUS_TIMING.notificationDelay);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleVirusRun = () => {
+    setShowVirusNotification(false);
+    setVirusActive(true);
+  };
+
+  const handleVirusCancel = () => {
+    setShowVirusNotification(false);
+    // Show notification again after delay
+    setTimeout(() => {
+      setShowVirusNotification(true);
+    }, VIRUS_TIMING.notificationRepeatDelay);
+  };
 
   const handleIconDoubleClick = (iconData: DesktopIconData) => {
     // Check if window is already open
@@ -185,6 +212,7 @@ function DesktopContent() {
     <div
       className="relative w-screen h-screen overflow-hidden"
       onContextMenu={handleDesktopContextMenu}
+      data-desktop-root
     >
       {/* Desktop Background */}
       <Image
@@ -229,6 +257,14 @@ function DesktopContent() {
 
       {/* Clippy */}
       <Clippy manualTrigger={showClippy} onClose={() => setShowClippy(false)} />
+
+      {/* Virus Notification */}
+      {showVirusNotification && (
+        <VirusNotification onRun={handleVirusRun} onCancel={handleVirusCancel} />
+      )}
+
+      {/* Virus Simulation */}
+      {virusActive && <VirusSimulation />}
     </div>
   );
 }

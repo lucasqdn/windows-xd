@@ -15,15 +15,16 @@
 
 /* Digital Display Styles for Minesweeper */
 @font-face {
-  font-family: 'DSEG7';
-  src: url('https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Bold.woff2') format('woff2');
+  font-family: "DSEG7";
+  src: url("https://cdn.jsdelivr.net/npm/dseg@0.46.0/fonts/DSEG7-Classic/DSEG7Classic-Bold.woff2")
+    format("woff2");
   font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 
 .digital-display {
-  font-family: 'DSEG7', 'Courier New', monospace;
+  font-family: "DSEG7", "Courier New", monospace;
   background: #000;
   color: #ff0000;
   text-shadow: none;
@@ -66,14 +67,14 @@
 
 /* Retro Windows 98 System Fonts */
 @font-face {
-  font-family: 'MS Sans Serif';
-  src: local('MS Sans Serif'), local('Microsoft Sans Serif'), local('Tahoma');
+  font-family: "MS Sans Serif";
+  src: local("MS Sans Serif"), local("Microsoft Sans Serif"), local("Tahoma");
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'W95FA';
-  src: local('Fixedsys'), local('Terminal'), local('MS Sans Serif');
+  font-family: "W95FA";
+  src: local("Fixedsys"), local("Terminal"), local("MS Sans Serif");
   font-display: swap;
 }
 
@@ -102,7 +103,9 @@ body {
   border-left: 2px solid var(--win98-white);
   border-right: 2px solid var(--win98-black);
   border-bottom: 2px solid var(--win98-black);
-  box-shadow: inset -1px -1px 0 var(--win98-darkgray), inset 1px 1px 0 var(--win98-lightgray);
+  box-shadow:
+    inset -1px -1px 0 var(--win98-darkgray),
+    inset 1px 1px 0 var(--win98-lightgray);
   background: var(--win98-gray);
 }
 
@@ -111,7 +114,9 @@ body {
   border-left: 2px solid var(--win98-darkgray);
   border-right: 2px solid var(--win98-white);
   border-bottom: 2px solid var(--win98-white);
-  box-shadow: inset 1px 1px 0 var(--win98-black), inset -1px -1px 0 var(--win98-lightgray);
+  box-shadow:
+    inset 1px 1px 0 var(--win98-black),
+    inset -1px -1px 0 var(--win98-lightgray);
   background: var(--win98-white);
 }
 
@@ -120,7 +125,9 @@ body {
   border-left: 2px solid var(--win98-white);
   border-right: 2px solid var(--win98-black);
   border-bottom: 2px solid var(--win98-black);
-  box-shadow: inset -1px -1px 0 var(--win98-darkgray), inset 1px 1px 0 var(--win98-lightgray);
+  box-shadow:
+    inset -1px -1px 0 var(--win98-darkgray),
+    inset 1px 1px 0 var(--win98-lightgray);
   background: var(--win98-gray);
   padding: 4px 12px;
   font-size: 14px;
@@ -183,7 +190,9 @@ body {
   border-left: 2px solid var(--win98-white);
   border-right: 2px solid var(--win98-black);
   border-bottom: 2px solid var(--win98-black);
-  box-shadow: inset -1px -1px 0 var(--win98-darkgray), inset 1px 1px 0 var(--win98-lightgray);
+  box-shadow:
+    inset -1px -1px 0 var(--win98-darkgray),
+    inset 1px 1px 0 var(--win98-lightgray);
 }
 
 /* Window Animations */
@@ -397,7 +406,9 @@ body {
   font-size: 14px;
   font-weight: bold;
   user-select: none;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -415,7 +426,14 @@ body {
 }
 
 .card-back {
-  background: linear-gradient(135deg, #1a4d8f 0%, #2563b8 25%, #3a7dd8 50%, #2563b8 75%, #1a4d8f 100%);
+  background: linear-gradient(
+    135deg,
+    #1a4d8f 0%,
+    #2563b8 25%,
+    #3a7dd8 50%,
+    #2563b8 75%,
+    #1a4d8f 100%
+  );
   border: 2px solid #0d2847;
   align-items: center;
   justify-content: center;
@@ -427,7 +445,7 @@ body {
 }
 
 .card-back::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 4px;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -528,3 +546,42 @@ body {
   transition: transform 0.15s ease;
 }
 
+/* Virus Simulation Styles */
+@keyframes glitch-scanlines {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(4px);
+  }
+}
+
+.virus-notification-enter {
+  animation: virus-notification-slide-in 0.3s ease-out;
+}
+
+.virus-notification-exit {
+  animation: virus-notification-slide-out 0.3s ease-in;
+}
+
+@keyframes virus-notification-slide-in {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes virus-notification-slide-out {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+}
