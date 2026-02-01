@@ -305,6 +305,18 @@ export function VirusSimulation() {
     };
   }, [stage, playGlitchSound]); // Removed openWindow to prevent re-runs when windows open
 
+  // Stop virus AudioContext when BSOD appears
+  useEffect(() => {
+    if (stage === "bsod") {
+      // Suspend the virus AudioContext to stop eerie sounds
+      if (audioContextRef.current && audioContextRef.current.state === 'running') {
+        audioContextRef.current.suspend().catch((error) => {
+          console.error('Failed to suspend virus AudioContext:', error);
+        });
+      }
+    }
+  }, [stage]);
+
   const handleSpriteUpdate = useCallback(
     (id: string, x: number, y: number, rotation: number) => {
       setSprites((prev) =>
