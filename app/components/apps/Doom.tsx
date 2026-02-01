@@ -86,17 +86,20 @@ export function Doom({ id }: DoomProps) {
         </div>
       )}
 
-      {/* Black bars to cover debug UI on the sides */}
+      {/* Black bars to completely cover all debug UI - INCREASED COVERAGE */}
       {!showOverlay && (
         <>
-          {/* Cover right side (debug stats) */}
-          <div className="absolute top-0 right-0 w-48 h-full bg-black z-[5] pointer-events-none" />
+          {/* Cover entire right side (debug console/stats) - MUCH WIDER */}
+          <div className="absolute top-0 right-0 w-[400px] h-full bg-black z-[5] pointer-events-none" />
           
-          {/* Cover top (article link) */}
-          <div className="absolute top-0 left-0 right-0 h-16 bg-black z-[5] pointer-events-none" />
+          {/* Cover entire top (article link and header) - MUCH TALLER */}
+          <div className="absolute top-0 left-0 right-0 h-[150px] bg-black z-[5] pointer-events-none" />
           
-          {/* Cover bottom (extra text) */}
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-black z-[5] pointer-events-none" />
+          {/* Cover entire bottom (extra text and stats) - MUCH TALLER */}
+          <div className="absolute bottom-0 left-0 right-0 h-[200px] bg-black z-[5] pointer-events-none" />
+
+          {/* Left side coverage for safety */}
+          <div className="absolute top-0 left-0 w-[50px] h-full bg-black z-[5] pointer-events-none" />
         </>
       )}
       
