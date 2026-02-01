@@ -5,23 +5,28 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 // Simple rate limiting (in-memory)
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT = 10; // requests per minute
+const RATE_LIMIT = process.env.NODE_ENV === 'development' ? 50 : 10; // More lenient in dev
 const RATE_WINDOW = 60000; // 1 minute in ms
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const record = requestCounts.get(ip);
 
+  console.log(`[Rate Limit] IP: ${ip}, Current record:`, record);
+
   if (!record || now > record.resetTime) {
     requestCounts.set(ip, { count: 1, resetTime: now + RATE_WINDOW });
+    console.log(`[Rate Limit] New/Reset - Count: 1, Reset in: ${RATE_WINDOW}ms`);
     return true;
   }
 
   if (record.count >= RATE_LIMIT) {
+    console.log(`[Rate Limit] BLOCKED - Count: ${record.count}/${RATE_LIMIT}`);
     return false;
   }
 
   record.count++;
+  console.log(`[Rate Limit] Allowed - Count: ${record.count}/${RATE_LIMIT}`);
   return true;
 }
 
@@ -29,7 +34,10 @@ export async function POST(request: NextRequest) {
   console.log("=== CLIPPY API REQUEST START ===");
   try {
     // Get IP for rate limiting
-    const ip = request.headers.get("x-forwarded-for") || "unknown";
+    const ip = 
+      request.headers.get("x-forwarded-for")?.split(',')[0].trim() ||
+      request.headers.get("x-real-ip") ||
+      "localhost";
     console.log("IP:", ip);
 
     // Check rate limit
