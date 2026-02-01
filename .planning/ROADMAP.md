@@ -14,16 +14,16 @@
 | Phase | Feature | Status | Priority | Estimated Time |
 |-------|---------|--------|----------|----------------|
 | 1-6 | V1 Core Desktop | ✅ COMPLETE | - | DONE |
-| 7 | Minesweeper | 🟢 Ready | High | 4-6 hours |
-| 8 | Pinball | 🟢 Ready | High | 8-12 hours |
-| 9 | Virus Notification | 🟢 Ready | High | 6-10 hours |
+| 7 | Minesweeper | ✅ Complete | High | 4-6 hours |
+| 8 | Pinball | ✅ Complete | High | 8-12 hours |
+| 9 | Virus Notification | ✅ Complete | High | 6-10 hours |
 | 10 | Polish & Animations | 🟢 Ready | Medium | 5-7 days |
 | 11 | Advanced Paint Tools | 🟢 Ready | Medium | 7-10 days |
 | 12 | Enhanced Chatroom | 🟢 Ready | Medium | 5-7 days |
-| 13 | Solitaire | 🟢 Ready | Low | 5-7 days |
+| 13 | Solitaire | ✅ Complete | Low | 5-7 days |
 | 14 | Clippy Enhancements | 🟢 Ready | Low | 7-10 days |
 | 15 | System Features | 🟢 Ready | Low | 5-7 days |
-| 16 | Internet Explorer | 🟢 Ready | Low | 7-10 days |
+| 16 | Internet Explorer | ✅ Complete | Low | 7-10 days |
 
 **Legend**: 🟢 Ready to start | 🔵 In Progress | ✅ Complete
 
@@ -48,23 +48,26 @@ See `PROGRESS.md` for detailed V1 status.
 ### 🎮 Priority 1: Games (Hackathon Focus)
 
 #### Phase 7: Minesweeper 💣
+**Status**: ✅ COMPLETE  
 **Time**: 4-6 hours | **Priority**: High
 
-Classic Windows 98 Minesweeper with authentic styling.
+Classic Windows 98 Minesweeper with authentic styling - **FULLY IMPLEMENTED**.
 
-**Features**:
-- 3 difficulties: Beginner (9×9, 10 mines), Intermediate (16×16, 40 mines), Expert (30×16, 99 mines)
-- Windows 98 UI: smiley face button, mine counter, timer
-- Gameplay: left-click reveal, right-click flag, chord (reveal neighbors)
-- Flood-fill for empty cells
-- First-click guarantee (never mine on first click)
-- High scores in localStorage
+**Implemented Features**:
+- ✅ 3 difficulties: Beginner (9×9, 10 mines), Intermediate (16×16, 40 mines), Expert (16×30, 99 mines)
+- ✅ Windows 98 UI: smiley face button (🙂/😵/😎), mine counter, timer
+- ✅ Gameplay: left-click reveal, right-click flag, chord (reveal neighbors)
+- ✅ Flood-fill algorithm for empty cells
+- ✅ First-click guarantee (never mine on first click)
+- ✅ Complete game logic with win/loss detection
+- ✅ Desktop icon integration
 
-**Files to Create**:
-- `app/components/apps/Minesweeper.tsx`
-- `app/lib/minesweeper.ts` (game logic)
-- `app/hooks/useMinesweeperGame.ts`
-- `app/styles/minesweeper.css`
+**Files Created**:
+- ✅ `app/components/apps/Minesweeper.tsx` (187 lines)
+- ✅ `app/lib/minesweeper.ts` (303 lines - full game engine)
+- ✅ `app/hooks/useMinesweeperGame.ts`
+
+**Missing**: High scores in localStorage (optional enhancement)
 
 ---
 
@@ -134,10 +137,10 @@ After ~40 seconds of browsing the desktop, a Windows 98 notification appears in 
 
 **Infection Sequence** (after clicking "Run"):
 1. **Stage 1** (0-10s): Silent infection, subtle audio
-2. **Stage 2** (10-30s): 🦋 Butterflies and 🦍 purple gorillas spawn (one every 5s)
-3. **Stage 3** (30-38s): Windows glitch (shake, color distortions, static)
-4. **Stage 4** (38-45s): Shutdown simulation ("Windows is shutting down...")
-5. **Stage 5** (45s+): Windows 98 styled ransomware UI with countdown, file list, Bitcoin address
+2. **Stage 2** (10-40s): 🦋 Butterflies and 🦍 purple gorillas spawn (~77 sprites over 30s)
+3. **Stage 3** (40-48s): Windows glitch (shake, color distortions, teleportation, phantoms)
+4. **Stage 4** (48-53s): Blue Screen of Death (authentic Windows 98 BSOD)
+5. **Stage 5** (53s+): Windows 98 styled ransomware UI with countdown, file list, Bitcoin address
 
 **Safety**:
 - ✅ Purely cosmetic browser simulation
@@ -146,23 +149,25 @@ After ~40 seconds of browsing the desktop, a Windows 98 notification appears in 
 - ✅ Clear disclaimer in notification
 
 **Files to Create**:
-- `app/components/system/VirusNotification.tsx` (notification popup)
-- `app/components/virus/VirusSimulation.tsx` (main controller)
-- `app/lib/virus/sequencer.ts` (stage timing)
-- `app/lib/virus/effects.ts` (visual glitch effects)
-- `app/components/virus/VirusSprite.tsx` (butterfly/gorilla sprites)
-- `app/components/virus/RansomwareScreen.tsx` (final Windows 98 ransomware UI)
-- `app/components/virus/ShutdownScreen.tsx` (shutdown animation)
-- `app/styles/virus.css`
+- `app/components/system/VirusNotification.tsx` (notification popup) ✅
+- `app/components/virus/VirusSimulation.tsx` (main controller) ✅
+- `app/lib/virus/effects.ts` (visual glitch effects) ✅
+- `app/components/virus/VirusSprite.tsx` (butterfly/gorilla sprites) ✅
+- `app/components/virus/BSODScreen.tsx` (Blue Screen of Death) ✅
+- `app/components/virus/RansomwareScreen.tsx` (final Windows 98 ransomware UI) ✅
+- `app/lib/virus/types.ts` (types and configuration) ✅
 
 **Timing Config**:
 ```typescript
 const VIRUS_TIMING = {
-  notificationDelay: 40000, // 40s after page load
-  silentInfection: 10000,   // 10s silent
-  virusSpawnInterval: 5000, // 5s per virus
-  glitchDuration: 8000,     // 8s glitch phase
-  shutdownDuration: 7000,   // 7s shutdown
+  notificationDelay: 40000,     // 40s after page load
+  notificationRepeatDelay: 30000, // 30s if user clicks "Cancel"
+  silentInfection: 10000,       // 10s silent phase
+  virusSpawnDuration: 30000,    // 30s total spawn phase
+  virusMinInterval: 125,        // 0.125s minimum spawn interval
+  glitchDuration: 8000,         // 8s glitch phase
+  bsodDuration: 5000,           // 5s blue screen
+  ransomwareCountdown: 600,     // 10 minutes countdown
 };
 ```
 
@@ -235,22 +240,22 @@ Add presence and history features to chat.
 ### 🃏 Priority 3: Additional Games & Features
 
 #### Phase 13: Solitaire
+**Status**: ✅ COMPLETE (Embedded)  
 **Time**: 5-7 days | **Priority**: Low
 
-Classic Klondike Solitaire.
+Classic Klondike Solitaire - **EMBEDDED FROM 98.js.org**.
 
-**Features**:
-- Drag-and-drop cards between piles
-- Double-click auto-move to foundation
-- Deck cycling (draw 1 or draw 3 modes)
-- Win animation (cascading cards)
-- Undo functionality
-- Timer and score tracking
+**Implementation**:
+- ✅ Embedded authentic Windows 98 Solitaire from 98.js.org
+- ✅ Seamless iframe integration (24 lines)
+- ✅ Green background matching classic Solitaire
+- ✅ Desktop icon integration
+- ✅ Window size configured (940×560)
 
-**Files**:
-- `app/components/apps/Solitaire.tsx`
-- `app/lib/solitaire.ts` (game logic)
-- `app/styles/solitaire.css`
+**Files Created**:
+- ✅ `app/components/apps/Solitaire.tsx` (embedded version)
+
+**Approach**: Simple iframe embedding vs. building from scratch (5-7 days saved)
 
 ---
 
@@ -309,35 +314,34 @@ Add system-level features.
 ---
 
 #### Phase 16: Internet Explorer
+**Status**: ✅ COMPLETE  
 **Time**: 7-10 days | **Priority**: Low
 
-Classic Internet Explorer 5 browser window with functional web browsing.
+Classic Internet Explorer 5 browser window with functional web browsing - **FULLY IMPLEMENTED**.
 
-**Features**:
-- Authentic IE5 UI: Address bar, navigation buttons (Back, Forward, Stop, Refresh, Home)
-- Toolbar: File, Edit, View, Favorites, Tools, Help menus
-- Status bar with loading progress and security indicator
+**Implemented Features**:
+- ✅ Authentic IE5 UI: Address bar with "Go" button
+- ✅ Navigation buttons: Back, Forward, Refresh, Home (with disabled states)
+- ✅ Toolbar menus: File, Edit, View, Favorites, Help
+- ✅ Status bar with loading indicator and "Internet Explorer 5.0" branding
+- ✅ History tracking (back/forward navigation)
+- ✅ Iframe-based content rendering via `/api/proxy`
+- ✅ Auto-search detection (Google search for queries)
+- ✅ Auto-protocol addition (https://)
+- ✅ Loading state management
+- ✅ Desktop icon integration
+- ✅ Clippy integration (can navigate to URLs via voice commands)
+- ✅ Keyboard support (Enter to navigate)
+
+**Files Created**:
+- ✅ `app/components/apps/InternetExplorer.tsx` (177 lines)
+- ✅ `/api/proxy` endpoint integration
+
+**Missing Features** (optional enhancements):
 - Favorites/Bookmarks system (localStorage)
-- History tracking (session-based)
-- Iframe-based content rendering
-- Classic IE blue "e" icon
 - "This page cannot be displayed" error page
-- Loading spinner animation
-- Multiple tabs (optional enhancement)
-
-**Restrictions**:
-- Same-origin policy (can only load external sites that allow iframes)
-- Pre-configured "safe" sites list (Wikipedia, Archive.org, etc.)
-- Warning dialog for external navigation
-- No actual browser engine (uses iframe + restrictions)
-
-**Files to Create**:
-- `app/components/apps/InternetExplorer.tsx`
-- `app/lib/browser/navigation.ts`
-- `app/lib/browser/favorites.ts`
-- `app/components/browser/AddressBar.tsx`
-- `app/components/browser/FavoritesMenu.tsx`
-- `app/styles/internet-explorer.css`
+- Multiple tabs
+- Security indicator
 
 ---
 
