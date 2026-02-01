@@ -176,22 +176,58 @@ const VIRUS_TIMING = {
 ### 🎨 Priority 2: Polish & UX
 
 #### Phase 10: Polish & Animations
-**Time**: 5-7 days | **Priority**: Medium
+**Status**: 🔵 Planned (7 plans in 2 waves)  
+**Time**: 2-3 weeks | **Priority**: Medium
 
-Add smooth animations and sound effects.
+Comprehensive Windows 98 UX polish with animations, sound, themes, and desktop interactions.
+
+**Plans**: 7 plans
+
+Plans:
+- [ ] 10-01-PLAN.md — Enhanced window animations (maximize, drag feedback, state transitions)
+- [ ] 10-02-PLAN.md — Sound effects system (Web Audio API, window/system/UI/game sounds)
+- [ ] 10-03-PLAN.md — Start menu animations (slide-up, submenu slide-out)
+- [ ] 10-04-PLAN.md — Theme system foundation (6 themes, CSS custom properties, persistence)
+- [ ] 10-05-PLAN.md — Theme selector UI (desktop right-click context menu)
+- [ ] 10-06-PLAN.md — Desktop icon selection (single, multi-select, drag-select rectangle)
+- [ ] 10-07-PLAN.md — Taskbar enhancements (real-time clock, button flash, double-click maximize)
+
+**Wave Structure**:
+- Wave 1 (parallel): Plans 01-04 (animations, sound, themes foundation)
+- Wave 2 (parallel): Plans 05-07 (theme UI, desktop interactions, taskbar)
 
 **Features**:
-- Smooth minimize/maximize window animations (scale effects)
-- Sound effects: window open, close, minimize, maximize, error, startup
-- Animated Start menu expansion (slide/fade)
-- Theme system: High Contrast, Brick, Rainy Day (3+ themes)
-- Instant theme switching
+- Enhanced window animations: maximize, drag feedback, smooth transitions
+- Sound effects: 13 sounds using Web Audio API (no audio files)
+- Start menu: slide-up animation (150ms), submenu slide-out (100ms)
+- Theme system: 6 authentic Windows 98 color schemes (Standard, High Contrast Black, Brick, Rainy Day, Desert, Eggplant)
+- Theme selector: Right-click desktop → Appearance submenu
+- Desktop icons: single select, multi-select (Ctrl+click), drag-select rectangle
+- Taskbar: real-time clock (updates every second), button flash animation
+- Window: double-click title bar to maximize/restore
 
-**Files**:
-- `app/styles/animations.css`
-- `app/lib/themes.ts`
-- `app/hooks/useTheme.ts`
-- `app/components/ThemeSwitcher.tsx`
+**Technical Approach**:
+- CSS animations (GPU-accelerated, 60fps)
+- Web Audio API for sound synthesis
+- CSS custom properties for instant theme switching
+- LocalStorage for theme persistence
+
+**Files Created**:
+- `app/lib/sounds.ts` - SoundManager with Web Audio synthesis
+- `app/lib/themes.ts` - 6 theme definitions
+- `app/hooks/useTheme.ts` - Theme management hook
+- `app/components/system/ContextMenu.tsx` - Desktop context menu with Appearance submenu
+
+**Files Modified**:
+- `app/globals.css` - Animations, theme CSS variables
+- `app/hooks/useSoundEffects.ts` - Refactored to use SoundManager
+- `app/components/Window.tsx` - Animation classes, sounds, double-click maximize
+- `app/components/StartMenu.tsx` - Animations, sounds
+- `app/components/Taskbar.tsx` - Real-time clock, button flash
+- `app/components/Desktop.tsx` - Context menu, icon selection, drag-select
+- `app/components/DesktopIcon.tsx` - Selection state
+- `app/contexts/WindowManagerContext.tsx` - Theme state, icon selection state
+- `app/components/apps/Minesweeper.tsx` - Sound integration
 
 ---
 
