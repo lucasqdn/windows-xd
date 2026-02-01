@@ -1,43 +1,33 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
+import { soundManager, type SoundType } from "@/app/lib/sounds";
 
-// Sound effect URLs (we'll use data URIs for simple beeps or reference public URLs)
-const SOUNDS = {
-  startup: "https://www.winhistory.de/more/winstart/ogg/win98.ogg",
-  click: null, // Can add click sound later
-  error: null,  // Can add error sound later
-  minimize: null,
-  maximize: null,
-};
-
+/**
+ * Hook for playing sound effects using the Web Audio API SoundManager
+ * Provides playSound, setVolume, and setMuted functions
+ */
 export function useSoundEffects() {
   useEffect(() => {
-    // Play startup sound on mount
-    const playStartupSound = () => {
-      if (SOUNDS.startup) {
-        const audio = new Audio(SOUNDS.startup);
-        audio.volume = 0.3; // Lower volume
-        audio.play().catch((e) => {
-          console.log("Autoplay prevented:", e);
-        });
-      }
-    };
-
-    // Small delay to ensure DOM is ready
-    const timeout = setTimeout(playStartupSound, 500);
+    // Play startup sound on mount (using windowOpen as startup sound)
+    const timeout = setTimeout(() => {
+      soundManager.playSound("windowOpen");
+    }, 500);
 
     return () => clearTimeout(timeout);
   }, []);
 
-  const playSound = (soundType: keyof typeof SOUNDS) => {
-    const soundUrl = SOUNDS[soundType];
-    if (soundUrl) {
-      const audio = new Audio(soundUrl);
-      audio.volume = 0.5;
-      audio.play().catch((e) => console.log("Sound play failed:", e));
-    }
-  };
+  const playSound = useCallback((type: SoundType) => {
+    soundManager.playSound(type);
+  }, []);
 
-  return { playSound };
+  const setVolume = useCallback((volume: number) => {
+    soundManager.setVolume(volume);
+  }, []);
+
+  const setMuted = useCallback((muted: boolean) => {
+    soundManager.setMuted(muted);
+  }, []);
+
+  return { playSound, setVolume, setMuted };
 }
