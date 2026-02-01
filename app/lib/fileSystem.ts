@@ -70,6 +70,14 @@ function getDefaultFiles(): FileItem[] {
       modified: Date.now(),
     },
     {
+      id: "folder-epstein",
+      name: "Epstein Files",
+      type: "folder",
+      size: 0,
+      created: Date.now(),
+      modified: Date.now(),
+    },
+    {
       id: "file-readme",
       name: "readme.txt",
       type: "file",
