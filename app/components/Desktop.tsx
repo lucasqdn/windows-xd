@@ -407,7 +407,7 @@ function DesktopContent() {
     >
       {/* Desktop Background */}
       <Image
-        src="/windows-xd backgroud.png"
+        src="/windows-xd-background.png"
         alt="Desktop Background"
         fill
         className="object-cover"
