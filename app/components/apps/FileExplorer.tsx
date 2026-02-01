@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   getAllFiles,
   getFilesInFolder,
@@ -154,6 +155,16 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
 
   const handleRefresh = () => {
     loadFiles();
+  };
+
+  const getFileIcon = (file: FileItem) => {
+    if (file.type === "folder") {
+      return "/directory_closed-4.png";
+    } else if (file.imageData) {
+      return "/kodak_imaging-0.png";
+    } else {
+      return "/notepad-4.png";
+    }
   };
 
   const handleAddressBarNavigation = (address: string) => {
@@ -534,8 +545,14 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                   setSelectedFile(file.id);
                 }}
               >
-                <div className="text-3xl">
-                  {file.type === "folder" ? "📁" : file.imageData ? "🖼️" : "📝"}
+                <div className="w-8 h-8 relative">
+                  <Image
+                    src={getFileIcon(file)}
+                    alt={file.type === "folder" ? "Folder" : "File"}
+                    width={32}
+                    height={32}
+                    className="pixelated"
+                  />
                 </div>
                 {renamingFile === file.id ? (
                   <input
@@ -576,7 +593,15 @@ export function FileExplorer({ id, folderId }: FileExplorerProps) {
                   onDoubleClick={() => handleFileDoubleClick(file)}
                 >
                   <td className="px-2 py-1 flex items-center gap-2">
-                    <span>{file.type === "folder" ? "📁" : file.imageData ? "🖼️" : "📝"}</span>
+                    <div className="w-4 h-4 relative flex-shrink-0">
+                      <Image
+                        src={getFileIcon(file)}
+                        alt={file.type === "folder" ? "Folder" : "File"}
+                        width={16}
+                        height={16}
+                        className="pixelated"
+                      />
+                    </div>
                     {renamingFile === file.id ? (
                       <input
                         type="text"
