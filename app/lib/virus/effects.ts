@@ -14,8 +14,8 @@ export function createGlitchStyle(effect: GlitchEffect): React.CSSProperties {
   if (effect.shake) {
     const x = (Math.random() - 0.5) * 40; // Doubled from 20 to 40
     const y = (Math.random() - 0.5) * 40;
-    const rotate = (Math.random() - 0.5) * 10; // Added rotation
-    transforms.push(`translate(${x}px, ${y}px) rotate(${rotate}deg)`);
+    // Removed rotation to keep everything straight
+    transforms.push(`translate(${x}px, ${y}px)`);
   }
 
   if (effect.colorShift) {
@@ -82,19 +82,18 @@ export function teleportWindows() {
   });
 }
 
-// Teleport desktop icons to random positions with more chaos
+// Teleport desktop icons to random positions with more chaos (no rotation, just position)
 export function teleportDesktopIcons() {
   const icons = document.querySelectorAll("[data-desktop-icon]");
   icons.forEach((icon) => {
     const htmlIcon = icon as HTMLElement;
     const newX = Math.random() * (window.innerWidth - 100);
     const newY = Math.random() * (window.innerHeight - 100);
-    const rotation = (Math.random() - 0.5) * 60; // Add rotation
-    const scale = 0.5 + Math.random() * 1; // Random scaling
+    // Removed rotation and scaling to keep icons straight
     
     // Apply instant teleport with chaotic transform (no transition for glitchy feel)
     htmlIcon.style.transition = "none";
-    htmlIcon.style.transform = `translate(${newX}px, ${newY}px) rotate(${rotation}deg) scale(${scale})`;
+    htmlIcon.style.transform = `translate(${newX}px, ${newY}px)`;
     
     // Rapidly teleport again for stuttering effect
     setTimeout(() => {
@@ -110,7 +109,7 @@ export function teleportDesktopIcons() {
   });
 }
 
-// Multiply windows effect (create more phantom clones)
+// Multiply windows effect (create more phantom clones, no rotation)
 export function createPhantomWindows() {
   const windows = document.querySelectorAll("[data-window-id]");
   const phantoms: HTMLElement[] = [];
@@ -131,7 +130,7 @@ export function createPhantomWindows() {
       clone.style.left = `${Math.random() * window.innerWidth}px`;
       clone.style.top = `${Math.random() * window.innerHeight}px`;
       clone.style.transition = "none";
-      clone.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg) scale(${0.8 + Math.random() * 0.4})`;
+      // Removed rotation and scaling to keep phantoms straight
       clone.setAttribute("data-phantom", "true");
       
       document.body.appendChild(clone);
