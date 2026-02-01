@@ -15,6 +15,7 @@ export function BSODScreen({ onComplete }: BSODScreenProps) {
   useEffect(() => {
     console.log(`[BSOD] Starting BSOD screen, duration: ${VIRUS_TIMING.bsodDuration}ms`);
     const bsodStartTime = Date.now();
+    let rafId: number;
     
     // Only play sound once using ref guard
     if (!hasPlayedSound.current) {
@@ -28,14 +29,27 @@ export function BSODScreen({ onComplete }: BSODScreenProps) {
       hasPlayedSound.current = true;
     }
 
-    // Auto-advance to ransomware after configured duration
-    const timer = setTimeout(() => {
-      const actualDuration = Date.now() - bsodStartTime;
-      console.log(`[BSOD] Ending BSOD screen, actual duration: ${actualDuration}ms (expected: ${VIRUS_TIMING.bsodDuration}ms)`);
-      onComplete();
-    }, VIRUS_TIMING.bsodDuration);
+    // Use requestAnimationFrame for precise timing that doesn't get throttled
+    const checkTimer = () => {
+      const elapsed = Date.now() - bsodStartTime;
+      
+      if (elapsed >= VIRUS_TIMING.bsodDuration) {
+        console.log(`[BSOD] Ending BSOD screen, actual duration: ${elapsed}ms (expected: ${VIRUS_TIMING.bsodDuration}ms)`);
+        onComplete();
+      } else {
+        // Continue checking
+        rafId = requestAnimationFrame(checkTimer);
+      }
+    };
+    
+    // Start the timer loop
+    rafId = requestAnimationFrame(checkTimer);
 
-    return () => clearTimeout(timer);
+    return () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+    };
   }, [onComplete, stopAllSounds, playAudioFile]);
 
   return (
