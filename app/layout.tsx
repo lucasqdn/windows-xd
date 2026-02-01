@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Windows XD - A Windows 98 Revival",
   description: "Experience the nostalgia of Windows 98 on the web, rebuilt with modern React and Next.js",
+  icons: {
+    icon: "/icons8-windows-98-48.png",
+  },
 };
 
 export default function RootLayout({
