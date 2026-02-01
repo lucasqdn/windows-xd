@@ -12,9 +12,10 @@ export function createGlitchStyle(effect: GlitchEffect): React.CSSProperties {
   const transforms: string[] = [];
 
   if (effect.shake) {
-    const x = (Math.random() - 0.5) * 20;
-    const y = (Math.random() - 0.5) * 20;
-    transforms.push(`translate(${x}px, ${y}px)`);
+    const x = (Math.random() - 0.5) * 40; // Doubled from 20 to 40
+    const y = (Math.random() - 0.5) * 40;
+    const rotate = (Math.random() - 0.5) * 10; // Added rotation
+    transforms.push(`translate(${x}px, ${y}px) rotate(${rotate}deg)`);
   }
 
   if (effect.colorShift) {
@@ -57,92 +58,139 @@ export function removeGlitchFromElement(element: HTMLElement | null) {
   element.style.transform = "";
 }
 
-// Teleport windows to random positions
+// Teleport windows to random positions with more chaos (no rotation, just position changes)
 export function teleportWindows() {
   const windows = document.querySelectorAll("[data-window-id]");
-  windows.forEach((window) => {
-    const htmlWindow = window as HTMLElement;
-    const newX = Math.random() * (window.clientWidth - 400);
-    const newY = Math.random() * (window.clientHeight - 300);
+  windows.forEach((win) => {
+    const htmlWindow = win as HTMLElement;
+    const newX = Math.random() * (window.innerWidth - 200) - 100; // Can go slightly off-screen
+    const newY = Math.random() * (window.innerHeight - 200) - 100;
     
-    // Apply teleport effect with animation
-    htmlWindow.style.transition = "transform 0.05s ease-out";
+    // Apply instant teleport with chaotic transform (no transition for glitchy feel)
+    // Removed rotation to keep windows straight
+    htmlWindow.style.transition = "none";
     htmlWindow.style.transform = `translate(${newX}px, ${newY}px)`;
     
-    // Reset after a moment
-    setTimeout(() => {
-      htmlWindow.style.transition = "";
-    }, 100);
+    // Sometimes reset quickly for stuttering effect
+    if (Math.random() < 0.3) {
+      setTimeout(() => {
+        const resetX = Math.random() * (window.innerWidth - 400);
+        const resetY = Math.random() * (window.innerHeight - 300);
+        htmlWindow.style.transform = `translate(${resetX}px, ${resetY}px)`;
+      }, 50);
+    }
   });
 }
 
-// Teleport desktop icons to random positions
+// Teleport desktop icons to random positions with more chaos
 export function teleportDesktopIcons() {
   const icons = document.querySelectorAll("[data-desktop-icon]");
   icons.forEach((icon) => {
     const htmlIcon = icon as HTMLElement;
     const newX = Math.random() * (window.innerWidth - 100);
     const newY = Math.random() * (window.innerHeight - 100);
+    const rotation = (Math.random() - 0.5) * 60; // Add rotation
+    const scale = 0.5 + Math.random() * 1; // Random scaling
     
-    // Apply teleport effect
-    htmlIcon.style.transition = "all 0.1s ease-out";
-    htmlIcon.style.transform = `translate(${newX}px, ${newY}px)`;
+    // Apply instant teleport with chaotic transform (no transition for glitchy feel)
+    htmlIcon.style.transition = "none";
+    htmlIcon.style.transform = `translate(${newX}px, ${newY}px) rotate(${rotation}deg) scale(${scale})`;
+    
+    // Rapidly teleport again for stuttering effect
+    setTimeout(() => {
+      const newX2 = Math.random() * (window.innerWidth - 100);
+      const newY2 = Math.random() * (window.innerHeight - 100);
+      htmlIcon.style.transform = `translate(${newX2}px, ${newY2}px)`;
+    }, 50);
     
     // Reset after a moment
     setTimeout(() => {
-      htmlIcon.style.transition = "";
       htmlIcon.style.transform = "";
-    }, 300);
+    }, 200);
   });
 }
 
-// Multiply windows effect (create phantom clones)
+// Multiply windows effect (create more phantom clones)
 export function createPhantomWindows() {
   const windows = document.querySelectorAll("[data-window-id]");
   const phantoms: HTMLElement[] = [];
   
   windows.forEach((win) => {
     const htmlWindow = win as HTMLElement;
-    const clone = htmlWindow.cloneNode(true) as HTMLElement;
+    // Create 2-4 clones per window for more chaos
+    const cloneCount = Math.floor(Math.random() * 3) + 2;
     
-    // Style phantom
-    clone.style.position = "fixed";
-    clone.style.opacity = "0.5";
-    clone.style.pointerEvents = "none";
-    clone.style.zIndex = "9990";
-    clone.style.left = `${Math.random() * window.innerWidth}px`;
-    clone.style.top = `${Math.random() * window.innerHeight}px`;
-    clone.setAttribute("data-phantom", "true");
-    
-    document.body.appendChild(clone);
-    phantoms.push(clone);
-    
-    // Fade out and remove
-    setTimeout(() => {
-      clone.style.transition = "opacity 0.5s";
-      clone.style.opacity = "0";
-      setTimeout(() => clone.remove(), 500);
-    }, 1000);
+    for (let i = 0; i < cloneCount; i++) {
+      const clone = htmlWindow.cloneNode(true) as HTMLElement;
+      
+      // Style phantom - instant appearance with more variation
+      clone.style.position = "fixed";
+      clone.style.opacity = `${0.3 + Math.random() * 0.4}`; // 0.3-0.7 opacity
+      clone.style.pointerEvents = "none";
+      clone.style.zIndex = "9990";
+      clone.style.left = `${Math.random() * window.innerWidth}px`;
+      clone.style.top = `${Math.random() * window.innerHeight}px`;
+      clone.style.transition = "none";
+      clone.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg) scale(${0.8 + Math.random() * 0.4})`;
+      clone.setAttribute("data-phantom", "true");
+      
+      document.body.appendChild(clone);
+      phantoms.push(clone);
+      
+      // Instant disappear after short time
+      setTimeout(() => {
+        clone.remove();
+      }, 200 + Math.random() * 200); // 200-400ms
+    }
   });
   
   return phantoms;
 }
 
-// Screen tearing effect
+// Screen tearing effect - much more intense
 export function applyScreenTear() {
   const desktop = document.querySelector("[data-desktop-root]") as HTMLElement;
   if (!desktop) return;
   
-  const tearOffset = Math.random() * 50 - 25;
-  desktop.style.clipPath = `polygon(
-    0 0,
-    100% 0,
-    100% ${50 + tearOffset}%,
-    0 ${50 - tearOffset}%
-  )`;
+  const tearType = Math.random();
+  
+  // Instant application with varied tear patterns
+  desktop.style.transition = "none";
+  
+  if (tearType < 0.33) {
+    // Horizontal tear
+    const tearOffset = Math.random() * 150 - 75; // Much larger tear
+    desktop.style.clipPath = `polygon(
+      0 0,
+      100% 0,
+      100% ${50 + tearOffset}%,
+      0 ${50 - tearOffset}%
+    )`;
+  } else if (tearType < 0.66) {
+    // Vertical tear
+    const tearOffset = Math.random() * 150 - 75;
+    desktop.style.clipPath = `polygon(
+      0 0,
+      ${50 + tearOffset}% 0,
+      ${50 - tearOffset}% 100%,
+      0 100%
+    )`;
+  } else {
+    // Diagonal tear
+    const offset1 = Math.random() * 100;
+    const offset2 = Math.random() * 100;
+    desktop.style.clipPath = `polygon(
+      0 0,
+      ${offset1}% 0,
+      100% ${offset2}%,
+      100% 100%,
+      ${100 - offset1}% 100%,
+      0 ${100 - offset2}%
+    )`;
+  }
   
   setTimeout(() => {
     desktop.style.clipPath = "";
-  }, 100);
+  }, 30); // Even faster reset for more jarring effect
 }
 

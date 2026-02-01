@@ -5,7 +5,7 @@ export type VirusStage =
   | "silent"
   | "sprites"
   | "glitch"
-  | "shutdown"
+  | "bsod"
   | "ransomware";
 
 export type NotificationVariant = {
@@ -19,10 +19,10 @@ export const VIRUS_TIMING = {
   notificationDelay: 40000, // 40s after page load
   notificationRepeatDelay: 30000, // 30s if user clicks "Cancel"
   silentInfection: 10000, // 10s silent phase
-  virusSpawnInterval: 5000, // 5s per virus spawn
-  virusSpawnCount: 6, // Total number of viruses to spawn
-  glitchDuration: 8000, // 8s glitch phase
-  shutdownDuration: 3000, // 3s shutdown animation (faster!)
+  virusSpawnDuration: 30000, // 30s total spawn phase (was 20s, now 30s)
+  virusMinInterval: 125, // Minimum spawn interval (0.125s)
+  glitchDuration: 10000, // 10s glitch phase (was 8s, now +2s more stuttery)
+  bsodDuration: 5000, // 5s blue screen display
   ransomwareCountdown: 600, // 10 minutes in seconds
 };
 
