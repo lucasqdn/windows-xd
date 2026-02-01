@@ -23,6 +23,7 @@
 | 13 | Solitaire | 🟢 Ready | Low | 5-7 days |
 | 14 | Clippy Enhancements | 🟢 Ready | Low | 7-10 days |
 | 15 | System Features | 🟢 Ready | Low | 5-7 days |
+| 16 | Internet Explorer | 🟢 Ready | Low | 7-10 days |
 
 **Legend**: 🟢 Ready to start | 🔵 In Progress | ✅ Complete
 
@@ -307,6 +308,39 @@ Add system-level features.
 
 ---
 
+#### Phase 16: Internet Explorer
+**Time**: 7-10 days | **Priority**: Low
+
+Classic Internet Explorer 5 browser window with functional web browsing.
+
+**Features**:
+- Authentic IE5 UI: Address bar, navigation buttons (Back, Forward, Stop, Refresh, Home)
+- Toolbar: File, Edit, View, Favorites, Tools, Help menus
+- Status bar with loading progress and security indicator
+- Favorites/Bookmarks system (localStorage)
+- History tracking (session-based)
+- Iframe-based content rendering
+- Classic IE blue "e" icon
+- "This page cannot be displayed" error page
+- Loading spinner animation
+- Multiple tabs (optional enhancement)
+
+**Restrictions**:
+- Same-origin policy (can only load external sites that allow iframes)
+- Pre-configured "safe" sites list (Wikipedia, Archive.org, etc.)
+- Warning dialog for external navigation
+- No actual browser engine (uses iframe + restrictions)
+
+**Files to Create**:
+- `app/components/apps/InternetExplorer.tsx`
+- `app/lib/browser/navigation.ts`
+- `app/lib/browser/favorites.ts`
+- `app/components/browser/AddressBar.tsx`
+- `app/components/browser/FavoritesMenu.tsx`
+- `app/styles/internet-explorer.css`
+
+---
+
 ## Deferred Features (Future V3)
 
 These are intentionally out of scope:
@@ -316,7 +350,6 @@ These are intentionally out of scope:
 - Multiple chatrooms
 - Private messaging
 - Mobile responsive design
-- Internet Explorer browser window
 - Winamp music player
 - Screen savers
 

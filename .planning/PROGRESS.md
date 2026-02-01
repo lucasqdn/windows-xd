@@ -9,7 +9,7 @@
 ## Current Status
 
 **V1 Complete**: ✅ All core features shipped (Phases 1-6)  
-**V2 Ready**: 🟢 Games, polish, enhancements ready to implement (Phases 7-15)
+**V2 Ready**: 🟢 Games, polish, enhancements ready to implement (Phases 7-16)
 
 See `.planning/ROADMAP.md` for full unified roadmap.
 
@@ -34,6 +34,7 @@ See `.planning/ROADMAP.md` for full unified roadmap.
 | **13** | Solitaire | 🟢 READY | - | - |
 | **14** | Clippy Enhancements | 🟢 READY | - | - |
 | **15** | System Features | 🟢 READY | - | - |
+| **16** | Internet Explorer | 🟢 READY | - | - |
 
 **Legend**:
 - ✅ COMPLETE - Done and committed
@@ -117,12 +118,13 @@ All V1 phases are complete! 🎉
 5. **Phase 11 - Advanced Paint** (7-10 days)
 6. **Phase 12 - Enhanced Chat** (5-7 days)
 
-### 🃏 Priority 3: Additional Content (Phases 13-15)
+### 🃏 Priority 3: Additional Content (Phases 13-16)
 **Goal**: Feature completeness
 
 7. **Phase 13 - Solitaire** (5-7 days)
 8. **Phase 14 - Clippy Enhancements** (7-10 days)
 9. **Phase 15 - System Features** (5-7 days)
+10. **Phase 16 - Internet Explorer** (7-10 days)
 
 ---
 

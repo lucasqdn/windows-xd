@@ -76,6 +76,17 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **CLIP-03**: User can manually summon Clippy anytime
 - [ ] **CLIP-04**: Clippy integrates with Gemini API for responses
 
+### Internet Explorer
+
+- [ ] **IE-01**: User can open Internet Explorer from desktop icon or Start menu
+- [ ] **IE-02**: Browser displays authentic IE5 UI (address bar, navigation buttons, toolbar menus)
+- [ ] **IE-03**: User can navigate to whitelisted websites via address bar
+- [ ] **IE-04**: User can use Back, Forward, Refresh, Stop, and Home buttons
+- [ ] **IE-05**: User can add/manage favorites (bookmarks) in localStorage
+- [ ] **IE-06**: Browser displays navigation history for current session
+- [ ] **IE-07**: Status bar shows loading progress and security indicators
+- [ ] **IE-08**: Browser displays "This page cannot be displayed" for blocked/unsafe URLs
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -205,10 +216,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLIP-02 | Phase 6 | Pending |
 | CLIP-03 | Phase 6 | Pending |
 | CLIP-04 | Phase 6 | Pending |
+| IE-01 | Phase 16 | Pending |
+| IE-02 | Phase 16 | Pending |
+| IE-03 | Phase 16 | Pending |
+| IE-04 | Phase 16 | Pending |
+| IE-05 | Phase 16 | Pending |
+| IE-06 | Phase 16 | Pending |
+| IE-07 | Phase 16 | Pending |
+| IE-08 | Phase 16 | Pending |
 
 **Coverage:**
-- v1 requirements: 42 total
-- Mapped to phases: 42 (100% coverage ✓)
+- v1 requirements: 50 total
+- Mapped to phases: 50 (100% coverage ✓)
 - Unmapped: 0
 
 ---
