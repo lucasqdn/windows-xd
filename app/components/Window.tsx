@@ -109,6 +109,15 @@ export function Window({ id, title, children }: WindowProps) {
     closeWindow(id);
   };
 
+  const handleTitleBarDoubleClick = () => {
+    if (windowState.isMaximized) {
+      maximizeWindow(id); // Toggle off (restore)
+    } else if (!windowState.isMinimized) {
+      maximizeWindow(id); // Toggle on (maximize)
+    }
+    // If minimized, do nothing (can't double-click minimized window)
+  };
+
   console.log('Window render - ID:', id, 'isMaximized:', windowState.isMaximized);
 
   // For maximized windows, render differently without Rnd
@@ -126,9 +135,10 @@ export function Window({ id, title, children }: WindowProps) {
         <div className="win98-window w-full h-full flex flex-col">
           {/* Title Bar */}
           <div
-            className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-default ${
+            className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-default select-none ${
               isActive ? "win98-titlebar-active" : "win98-titlebar-inactive"
             }`}
+            onDoubleClick={handleTitleBarDoubleClick}
           >
             <div className="flex items-center gap-1 flex-1 overflow-hidden">
               <span className="text-xs truncate">{title}</span>
@@ -202,9 +212,10 @@ export function Window({ id, title, children }: WindowProps) {
       >
         {/* Title Bar */}
         <div
-          className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-move ${
+          className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-move select-none ${
             isActive ? "win98-titlebar-active" : "win98-titlebar-inactive"
           }`}
+          onDoubleClick={handleTitleBarDoubleClick}
         >
           <div className="flex items-center gap-1 flex-1 overflow-hidden">
             <span className="text-xs truncate">{title}</span>
