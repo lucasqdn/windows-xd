@@ -9,7 +9,7 @@
 ## Current Status
 
 **V1 Complete**: ✅ All core features shipped (Phases 1-6)  
-**V2 Active**: ✅ Phase 8 (Pinball) complete - Embedded Space Cadet from 98.js.org  
+**V2 Active**: ✅ Phases 7, 8, 9, 13, 16 complete - Games and IE fully functional!  
 **V2 Ready**: 🟢 Games, polish, enhancements ready to implement (Phases 7, 9-16)
 
 See `.planning/ROADMAP.md` for full unified roadmap.
@@ -26,17 +26,16 @@ See `.planning/ROADMAP.md` for full unified roadmap.
 | **4**  | File Explorer                 | ✅ COMPLETE | main     | b70666a |
 | **5**  | Real-time Chatroom            | ✅ COMPLETE | chatroom | 9af91f5 |
 | **6**  | LLM-Powered Clippy            | ✅ COMPLETE | main     | d405dcd |
-| **7**  | Minesweeper                   | 🟢 READY    | -        | -       |
+| **7**  | Minesweeper                   | ✅ COMPLETE | main     | pending |
 | **8**  | Pinball                       | ✅ COMPLETE | main     | pending |
-| **9**  | Virus Notification Prank      | 🟢 READY    | -        | -       |
+| **9**  | Virus Notification Prank      | ✅ COMPLETE | main     | pending |
 | **10** | Polish & Animations           | 🟢 READY    | -        | -       |
 | **11** | Advanced Paint Tools          | 🟢 READY    | -        | -       |
 | **12** | Enhanced Chatroom             | 🟢 READY    | -        | -       |
-| **13** | Solitaire                     | 🟢 READY    | -        | -       |
+| **13** | Solitaire                     | ✅ COMPLETE | main     | pending |
 | **14** | Clippy Enhancements           | 🟢 READY    | -        | -       |
 | **15** | System Features               | 🟢 READY    | -        | -       |
-| **16** | Internet Explorer             | 🟢 READY    | -        | -       |
-| **16** | Internet Explorer             | 🟢 READY    | -        | -       |
+| **16** | Internet Explorer             | ✅ COMPLETE | main     | pending |
 
 **Legend**:
 
@@ -97,6 +96,19 @@ All V1 phases are complete! 🎉
 - Context-aware suggestions
 - **Status**: Fully functional
 
+### Phase 7: Minesweeper ✅
+
+- Classic Windows 98 Minesweeper with full game engine (303 lines)
+- 3 difficulty levels: Beginner (9×9), Intermediate (16×16), Expert (16×30)
+- Windows 98 authentic UI with digital displays and smiley button
+- Complete gameplay: left-click reveal, right-click flag, chord mechanics
+- Flood-fill algorithm for empty cell reveals
+- First-click guarantee (mines placed after first click)
+- Game state management (idle, playing, won, lost)
+- Timer and mine counter
+- Desktop icon and Start menu integration
+- **Status**: Fully functional, production-ready
+
 ### Phase 8: 3D Pinball - Space Cadet ✅
 
 - Embedded authentic Windows 98 Space Cadet Pinball from 98.js.org
@@ -110,29 +122,71 @@ All V1 phases are complete! 🎉
 - **Approach**: Simple iframe component (~60 lines) vs. complex game engine (1000+ lines)
 - **Status**: Fully functional, production-ready
 
+### Phase 9: Virus Notification Prank ✅
+
+- Notification system with 6 hilarious variants appears after 40s
+- User can "Run" (starts infection) or "Cancel" (reappears after 30s)
+- **Stage 1**: 10-second silent infection with eerie sound
+- **Stage 2**: 30-second virus spawn phase with ~77 sprites (80% butterflies, 20% BonziBuddy)
+  - Grouped spawn intervals accelerating from 8s → 0.125s
+  - Enhanced butterfly movement with 4 varied patterns
+  - Proper sprite orientation facing movement direction
+- **Stage 3**: 8-second glitch phase with performance optimizations
+  - Desktop shake, window/icon teleportation, phantom windows
+  - Screen tears, color effects, random app opening
+  - DOM query caching, 100ms interval, reduced clones (1-2 per window)
+- **Stage 4**: 5-second authentic Windows 98 Blue Screen of Death
+  - Blue background (#0000AA), monospace Courier New text
+  - Fatal exception 0E message, stack dump, 64px padding
+- **Stage 5**: Ransomware screen with 10-minute countdown
+  - Bitcoin payment address, fake encrypted files list
+  - Red/black theme with lock icon
+- **Safety**: 100% cosmetic browser simulation, clear disclaimers
+- **Status**: Fully functional, production-ready
+
+### Phase 13: Solitaire ✅
+
+- Embedded authentic Windows 98 Solitaire from 98.js.org
+- Seamless iframe integration (24 lines vs. 5-7 days custom build)
+- Classic green background matching original game
+- Desktop icon integration
+- Window size configured (940×560)
+- Full card game functionality preserved
+- **Approach**: Embedded solution for rapid deployment
+- **Status**: Fully functional, production-ready
+
+### Phase 16: Internet Explorer ✅
+
+- Authentic IE5 browser window with full navigation
+- Address bar with URL input and "Go" button
+- Navigation controls: Back, Forward, Refresh, Home (with disabled states)
+- Menu bar: File, Edit, View, Favorites, Help
+- Status bar with loading indicator and IE 5.0 branding
+- History tracking with back/forward navigation
+- Smart URL handling: auto-https, search detection (Google integration)
+- Iframe content rendering via `/api/proxy` endpoint
+- Loading state management
+- Keyboard support (Enter to navigate)
+- Clippy integration for voice-controlled navigation
+- Desktop icon integration
+- **Status**: Fully functional, production-ready
+
 ---
 
 ## V2 Implementation Priority
 
 ### 🎯 Priority 1: Hackathon Features (Phases 7-9)
 
-**Goal**: Demo-ready in 5-7 days
+**Goal**: Demo-ready in 5-7 days ✅ ACHIEVED!
 
-1. **Phase 7 - Minesweeper** (4-6 hours)
-   - Classic Windows 98 Minesweeper
-   - 3 difficulty levels
-   - High score tracking
+1. ✅ **Phase 7 - Minesweeper** - COMPLETE
+   - Classic Windows 98 Minesweeper with full game engine
 
-2. **Phase 9 - Virus Notification** (6-10 hours)
-   - **NEW**: Notification appears 40s after page load
-   - Hilarious messages ("You've won a FREE iPad!")
-   - User clicks "Run" → dramatic infection sequence
-   - 100% safe, cosmetic only
+2. ✅ **Phase 8 - Pinball** - COMPLETE
+   - Embedded Space Cadet from 98.js.org
 
-3. **Phase 8 - Pinball** (8-12 hours)
-   - Space Cadet style physics game
-   - Flippers, bumpers, scoring
-   - 60 FPS canvas rendering
+3. ✅ **Phase 9 - Virus Notification** - COMPLETE
+   - Notification-based infection prank with 5-stage sequence
 
 ### 🎨 Priority 2: Polish (Phases 10-12)
 
@@ -144,15 +198,12 @@ All V1 phases are complete! 🎉
 
 ### 🃏 Priority 3: Additional Content (Phases 13-16)
 
-### 🃏 Priority 3: Additional Content (Phases 13-16)
+**Goal**: Feature completeness - MOSTLY COMPLETE!
 
-**Goal**: Feature completeness
-
-7. **Phase 13 - Solitaire** (5-7 days)
-8. **Phase 14 - Clippy Enhancements** (7-10 days)
-9. **Phase 15 - System Features** (5-7 days)
-10. **Phase 16 - Internet Explorer** (7-10 days)
-11. **Phase 16 - Internet Explorer** (7-10 days)
+1. ✅ **Phase 13 - Solitaire** - COMPLETE (embedded)
+2. 🟢 **Phase 14 - Clippy Enhancements** - READY (5-7 days)
+3. 🟢 **Phase 15 - System Features** - READY (5-7 days)
+4. ✅ **Phase 16 - Internet Explorer** - COMPLETE
 
 ---
 

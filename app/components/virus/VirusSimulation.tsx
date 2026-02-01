@@ -61,45 +61,50 @@ export function VirusSimulation() {
 
   const playSpawnSound = useCallback(() => {
     try {
-      const ctx = getAudioContext();
-      const oscillator = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(ctx.destination);
-
-      oscillator.frequency.value = 800;
-      oscillator.type = "square";
-      gainNode.gain.setValueAtTime(0.05, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-
-      oscillator.start(ctx.currentTime);
-      oscillator.stop(ctx.currentTime + 0.1);
+      const audio = new Audio('/sounds/error_sound.mp3');
+      audio.volume = 0.3;
+      audio.play().catch(() => {
+        // Ignore audio errors
+      });
     } catch {
       // Ignore audio errors
     }
-  }, [getAudioContext]);
+  }, []);
 
   const playGlitchSound = useCallback(() => {
     try {
-      const ctx = getAudioContext();
-      const oscillator = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(ctx.destination);
-
-      oscillator.frequency.value = Math.random() * 1000 + 100;
-      oscillator.type = "sawtooth";
-      gainNode.gain.setValueAtTime(0.03, ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
-
-      oscillator.start(ctx.currentTime);
-      oscillator.stop(ctx.currentTime + 0.05);
+      // Randomly decide: pause (40%), play once (40%), or ring multiple times (20%)
+      const behavior = Math.random();
+      
+      if (behavior < 0.4) {
+        // 40% chance: pause (no sound)
+        return;
+      } else if (behavior < 0.8) {
+        // 40% chance: play once
+        const audio = new Audio('/sounds/error_sound.mp3');
+        audio.volume = 0.2;
+        audio.play().catch(() => {
+          // Ignore audio errors
+        });
+      } else {
+        // 20% chance: ring multiple times (2-4 times)
+        const ringCount = Math.floor(Math.random() * 3) + 2; // 2-4 rings
+        const ringInterval = 300; // 300ms between rings
+        
+        for (let i = 0; i < ringCount; i++) {
+          setTimeout(() => {
+            const audio = new Audio('/sounds/error_sound.mp3');
+            audio.volume = 0.2;
+            audio.play().catch(() => {
+              // Ignore audio errors
+            });
+          }, i * ringInterval);
+        }
+      }
     } catch {
       // Ignore audio errors
     }
-  }, [getAudioContext]);
+  }, []);
 
   // Silent infection phase
   useEffect(() => {

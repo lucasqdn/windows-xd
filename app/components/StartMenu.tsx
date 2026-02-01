@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSoundEffects } from "@/app/hooks/useSoundEffects";
 import Image from "next/image";
 
 type StartMenuProps = {
@@ -41,6 +42,19 @@ const programItems: MenuItem[] = [
 
 export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const { playSound } = useSoundEffects();
+
+  // Play sound when menu opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      playSound('menuOpen');
+    } else {
+      // Only play close sound if menu was previously open
+      if (hoveredItem !== null) {
+        playSound('menuClose');
+      }
+    }
+  }, [isOpen, playSound]); // Note: intentionally not including hoveredItem to avoid extra sound calls
 
   if (!isOpen) {
     return null;
@@ -54,7 +68,7 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
         onClick={onClose}
       />
       
-      <div className="start-menu z-[9999]">
+      <div className="start-menu start-menu-slide-up z-[9999]">
         {/* Windows 98 Logo Banner */}
         <div
           className="flex items-end px-1 py-2 text-white text-xs font-bold"
@@ -102,7 +116,7 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
               {/* Programs Submenu */}
               {item.id === "programs" && hoveredItem === "programs" && (
                 <div 
-                  className="start-menu-submenu"
+                  className="start-menu-submenu submenu-slide-out"
                   onMouseEnter={() => setHoveredItem("programs")}
                 >
                   {programItems.map((program) => (

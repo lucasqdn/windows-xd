@@ -59,7 +59,7 @@ export function Taskbar({ onProgramLaunch }: TaskbarProps) {
           {windows.filter(w => w.isOpen).map((window) => (
             <button
               key={window.id}
-              className={`taskbar-button ${!window.isMinimized && window.zIndex === Math.max(...windows.map(w => w.zIndex)) ? "active" : ""}`}
+              className={`taskbar-button ${!window.isMinimized && window.zIndex === Math.max(...windows.map(w => w.zIndex)) ? "active" : ""} ${window.isFlashing ? "flashing" : ""}`}
               onClick={() => handleTaskbarButtonClick(window.id)}
             >
               {window.icon && <span className="mr-1">{window.icon}</span>}

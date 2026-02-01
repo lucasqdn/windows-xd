@@ -1,11 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useMinesweeperGame } from '@/app/hooks/useMinesweeperGame';
-import { Difficulty, Cell } from '@/app/lib/minesweeper';
+import { useSoundEffects } from '@/app/hooks/useSoundEffects';
+import { Difficulty, Cell, GameState } from '@/app/lib/minesweeper';
 
 export default function Minesweeper() {
   const [difficulty, setDifficulty] = useState<Difficulty>('beginner');
+  const { playSound } = useSoundEffects();
+  const prevGameStateRef = useRef<GameState>('idle');
   const {
     board,
     gameState,
@@ -16,6 +19,14 @@ export default function Minesweeper() {
     handleCellChord,
     handleReset,
   } = useMinesweeperGame(difficulty);
+
+  // Play explosion sound when mine is revealed
+  useEffect(() => {
+    if (gameState === 'lost' && prevGameStateRef.current !== 'lost') {
+      playSound('mineExplode');
+    }
+    prevGameStateRef.current = gameState;
+  }, [gameState, playSound]);
 
   const handleDifficultyChange = (newDifficulty: Difficulty) => {
     setDifficulty(newDifficulty);

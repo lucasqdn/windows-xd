@@ -1,6 +1,8 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { useTheme } from '@/app/hooks/useTheme';
+import type { ThemeName } from '@/app/lib/themes';
 
 export type WindowState = {
   id: string;
@@ -14,6 +16,7 @@ export type WindowState = {
   zIndex: number;
   icon?: string;
   animationState?: 'opening' | 'minimizing' | 'restoring' | 'none';
+  isFlashing?: boolean;
 };
 
 type WindowManagerContextType = {
@@ -25,12 +28,24 @@ type WindowManagerContextType = {
   focusWindow: (id: string) => void;
   updateWindowPosition: (id: string, position: { x: number; y: number }) => void;
   updateWindowSize: (id: string, size: { width: number; height: number }) => void;
+  flashTaskbarButton: (id: string) => void;
+  theme: {
+    currentTheme: ThemeName;
+    setTheme: (themeName: ThemeName) => void;
+    availableThemes: Array<{ name: ThemeName; displayName: string }>;
+  };
+  selectedIcons: string[];
+  selectIcon: (id: string, multiSelect?: boolean) => void;
+  selectMultipleIcons: (ids: string[]) => void;
+  clearSelection: () => void;
 };
 
 const WindowManagerContext = createContext<WindowManagerContextType | undefined>(undefined);
 
 export function WindowManagerProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [windows, setWindows] = useState<WindowState[]>([]);
+  const [selectedIcons, setSelectedIcons] = useState<string[]>([]);
+  const theme = useTheme();
 
   const openWindow = useCallback((window: Omit<WindowState, 'id' | 'isOpen' | 'zIndex' | 'animationState'>): string => {
     const id = `window-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -87,6 +102,7 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
         ...w,
         zIndex: w.id === id ? 100 + sorted.length : 100 + i,
         isMinimized: w.id === id ? false : w.isMinimized,
+        isFlashing: w.id === id ? false : w.isFlashing,
         animationState: w.id === id && w.isMinimized ? 'restoring' : w.animationState
       }));
     });
@@ -111,6 +127,32 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
     ));
   }, []);
 
+  const flashTaskbarButton = useCallback((id: string) => {
+    setWindows(prev => prev.map(w =>
+      w.id === id ? { ...w, isFlashing: true } : w
+    ));
+  }, []);
+
+  const selectIcon = useCallback((id: string, multiSelect: boolean = false) => {
+    if (multiSelect) {
+      setSelectedIcons(prev => 
+        prev.includes(id) 
+          ? prev.filter(i => i !== id) 
+          : [...prev, id]
+      );
+    } else {
+      setSelectedIcons([id]);
+    }
+  }, []);
+
+  const selectMultipleIcons = useCallback((ids: string[]) => {
+    setSelectedIcons(ids);
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    setSelectedIcons([]);
+  }, []);
+
   return (
     <WindowManagerContext.Provider value={{
       windows,
@@ -120,7 +162,13 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
       maximizeWindow,
       focusWindow,
       updateWindowPosition,
-      updateWindowSize
+      updateWindowSize,
+      flashTaskbarButton,
+      theme,
+      selectedIcons,
+      selectIcon,
+      selectMultipleIcons,
+      clearSelection,
     }}>
       {children}
     </WindowManagerContext.Provider>

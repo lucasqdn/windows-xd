@@ -2,7 +2,9 @@
 
 import { Rnd } from "react-rnd";
 import { useWindowManager } from "@/app/contexts/WindowManagerContext";
+import { useSoundEffects } from "@/app/hooks/useSoundEffects";
 import type { ReactNode } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type WindowProps = {
   id: string;
@@ -12,9 +14,60 @@ type WindowProps = {
 
 export function Window({ id, title, children }: WindowProps) {
   const { windows, focusWindow, closeWindow, minimizeWindow, maximizeWindow, updateWindowPosition, updateWindowSize } = useWindowManager();
+  const { playSound } = useSoundEffects();
   
   const windowState = windows.find(w => w.id === id);
   
+  // Track animation and interaction states
+  const [animationClass, setAnimationClass] = useState<string>('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
+  const prevMaximizedRef = useRef<boolean>(false);
+  const prevStateRef = useRef<'normal' | 'minimized' | 'maximized'>('normal');
+  const hasPlayedOpenSound = useRef(false);
+
+  // Play window open sound on mount
+  useEffect(() => {
+    if (!hasPlayedOpenSound.current && windowState) {
+      playSound('windowOpen');
+      hasPlayedOpenSound.current = true;
+    }
+  }, [playSound, windowState]);
+
+  // Play sounds on window state changes
+  useEffect(() => {
+    if (!windowState) return;
+    
+    const currentState = windowState.isMinimized ? 'minimized' : windowState.isMaximized ? 'maximized' : 'normal';
+    const prevState = prevStateRef.current;
+
+    if (currentState !== prevState) {
+      if (currentState === 'minimized' && prevState !== 'minimized') {
+        playSound('windowMinimize');
+      } else if (currentState === 'maximized' && prevState !== 'maximized') {
+        playSound('windowMaximize');
+      } else if (currentState === 'normal' && prevState === 'minimized') {
+        playSound('windowRestore');
+      }
+      
+      prevStateRef.current = currentState;
+    }
+  }, [windowState, playSound]);
+
+  // Handle maximize animation
+  useEffect(() => {
+    if (!windowState) return;
+    
+    if (windowState.isMaximized && !prevMaximizedRef.current) {
+      // Window was just maximized
+      setAnimationClass('window-maximizing');
+      const timer = setTimeout(() => setAnimationClass(''), 200);
+      return () => clearTimeout(timer);
+    }
+    prevMaximizedRef.current = windowState.isMaximized;
+  }, [windowState]);
+  
+  // Early return AFTER all hooks have been called
   if (!windowState || (windowState.isMinimized && windowState.animationState !== 'minimizing')) {
     return null;
   }
@@ -24,8 +77,8 @@ export function Window({ id, title, children }: WindowProps) {
 
   const isActive = windowState.zIndex === Math.max(...windows.map(w => w.zIndex));
   
-  // Determine animation class
-  const getAnimationClass = () => {
+  // Determine base animation class from window state
+  const getBaseAnimationClass = () => {
     switch (windowState.animationState) {
       case 'opening':
         return 'window-opening';
@@ -38,6 +91,15 @@ export function Window({ id, title, children }: WindowProps) {
     }
   };
 
+  // Combine all window classes
+  const windowClasses = [
+    'win98-window h-full flex flex-col',
+    getBaseAnimationClass(),
+    animationClass,
+    isDragging && 'window-dragging',
+    isResizing && 'window-resizing',
+  ].filter(Boolean).join(' ');
+
   const handleMinimize = () => {
     minimizeWindow(id);
   };
@@ -48,7 +110,17 @@ export function Window({ id, title, children }: WindowProps) {
   };
 
   const handleClose = () => {
+    playSound('windowClose');
     closeWindow(id);
+  };
+
+  const handleTitleBarDoubleClick = () => {
+    if (windowState.isMaximized) {
+      maximizeWindow(id); // Toggle off (restore)
+    } else if (!windowState.isMinimized) {
+      maximizeWindow(id); // Toggle on (maximize)
+    }
+    // If minimized, do nothing (can't double-click minimized window)
   };
 
   console.log('Window render - ID:', id, 'isMaximized:', windowState.isMaximized);
@@ -68,9 +140,10 @@ export function Window({ id, title, children }: WindowProps) {
         <div className="win98-window w-full h-full flex flex-col">
           {/* Title Bar */}
           <div
-            className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-default ${
+            className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-default select-none ${
               isActive ? "win98-titlebar-active" : "win98-titlebar-inactive"
             }`}
+            onDoubleClick={handleTitleBarDoubleClick}
           >
             <div className="flex items-center gap-1 flex-1 overflow-hidden">
               <span className="text-xs truncate">{title}</span>
@@ -118,10 +191,14 @@ export function Window({ id, title, children }: WindowProps) {
         x: windowState.position.x, 
         y: windowState.position.y 
       }}
+      onDragStart={() => setIsDragging(true)}
       onDragStop={(e, d) => {
+        setIsDragging(false);
         updateWindowPosition(id, { x: d.x, y: d.y });
       }}
+      onResizeStart={() => setIsResizing(true)}
       onResizeStop={(e, direction, ref, delta, position) => {
+        setIsResizing(false);
         updateWindowSize(id, { width: parseInt(ref.style.width), height: parseInt(ref.style.height) });
         updateWindowPosition(id, { x: position.x, y: position.y });
       }}
@@ -135,14 +212,15 @@ export function Window({ id, title, children }: WindowProps) {
       enableResizing={true}
     >
       <div 
-        className={`win98-window h-full flex flex-col ${getAnimationClass()}`}
+        className={windowClasses}
         data-window-id={id}
       >
         {/* Title Bar */}
         <div
-          className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-move ${
+          className={`window-title-bar flex items-center justify-between px-1 py-0.5 cursor-move select-none ${
             isActive ? "win98-titlebar-active" : "win98-titlebar-inactive"
           }`}
+          onDoubleClick={handleTitleBarDoubleClick}
         >
           <div className="flex items-center gap-1 flex-1 overflow-hidden">
             <span className="text-xs truncate">{title}</span>

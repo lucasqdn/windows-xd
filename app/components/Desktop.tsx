@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   WindowManagerProvider,
   useWindowManager,
@@ -90,11 +90,14 @@ const desktopIcons: DesktopIconData[] = [
 ];
 
 function DesktopContent() {
-  const { windows, openWindow } = useWindowManager();
+  const { windows, openWindow, selectMultipleIcons, clearSelection, theme } = useWindowManager();
   const { contextMenu, showContextMenu, hideContextMenu } = useContextMenu();
   const [showClippy, setShowClippy] = useState(false);
   const [showVirusNotification, setShowVirusNotification] = useState(false);
   const [virusActive, setVirusActive] = useState(false);
+  const [isDragSelecting, setIsDragSelecting] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragCurrent, setDragCurrent] = useState({ x: 0, y: 0 });
 
   // Initialize keyboard shortcuts and sound effects
   useKeyboardShortcuts();
@@ -121,6 +124,78 @@ function DesktopContent() {
       setShowVirusNotification(true);
     }, VIRUS_TIMING.notificationRepeatDelay);
   };
+
+  // Drag-select rectangle logic
+  const updateSelectionInRectangle = useCallback(() => {
+    const rect = {
+      left: Math.min(dragStart.x, dragCurrent.x),
+      top: Math.min(dragStart.y, dragCurrent.y),
+      right: Math.max(dragStart.x, dragCurrent.x),
+      bottom: Math.max(dragStart.y, dragCurrent.y),
+    };
+    
+    const iconsInRect = desktopIcons.filter(icon => {
+      const iconEl = document.getElementById(`desktop-icon-${icon.id}`);
+      if (!iconEl) return false;
+      
+      const iconBounds = iconEl.getBoundingClientRect();
+      return !(
+        iconBounds.right < rect.left ||
+        iconBounds.left > rect.right ||
+        iconBounds.bottom < rect.top ||
+        iconBounds.top > rect.bottom
+      );
+    });
+    
+    selectMultipleIcons(iconsInRect.map(i => i.id));
+  }, [dragStart, dragCurrent, selectMultipleIcons]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Only start drag-select if clicking desktop itself (not icon)
+    if (e.target === e.currentTarget && e.button === 0) {
+      setIsDragSelecting(true);
+      setDragStart({ x: e.clientX, y: e.clientY });
+      setDragCurrent({ x: e.clientX, y: e.clientY });
+      
+      // Clear existing selection if not holding Ctrl
+      if (!e.ctrlKey && !e.metaKey) {
+        clearSelection();
+      }
+    }
+  };
+
+  const handleDesktopClick = (e: React.MouseEvent) => {
+    // Clear selection when clicking empty desktop
+    if (e.target === e.currentTarget) {
+      clearSelection();
+    }
+  };
+
+  useEffect(() => {
+    if (!isDragSelecting) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      setDragCurrent({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseUp = () => {
+      setIsDragSelecting(false);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragSelecting]);
+
+  useEffect(() => {
+    if (isDragSelecting) {
+      updateSelectionInRectangle();
+    }
+  }, [isDragSelecting, dragCurrent, updateSelectionInRectangle]);
 
   const handleIconDoubleClick = (iconData: DesktopIconData) => {
     // Check if window is already open
@@ -187,6 +262,15 @@ function DesktopContent() {
       },
       { divider: true },
       {
+        label: "Appearance",
+        submenu: theme.availableThemes.map((t) => ({
+          label: t.displayName,
+          radioSelected: theme.currentTheme === t.name,
+          onClick: () => theme.setTheme(t.name),
+        })),
+      },
+      { divider: true },
+      {
         label: "New",
         icon: "📄",
         submenu: [
@@ -212,6 +296,8 @@ function DesktopContent() {
     <div
       className="relative w-screen h-screen overflow-hidden"
       onContextMenu={handleDesktopContextMenu}
+      onMouseDown={handleMouseDown}
+      onClick={handleDesktopClick}
       data-desktop-root
     >
       {/* Desktop Background */}
@@ -265,6 +351,24 @@ function DesktopContent() {
 
       {/* Virus Simulation */}
       {virusActive && <VirusSimulation />}
+
+      {/* Drag-select rectangle */}
+      {isDragSelecting && (
+        <div
+          className="selection-rectangle"
+          style={{
+            position: 'fixed',
+            left: Math.min(dragStart.x, dragCurrent.x),
+            top: Math.min(dragStart.y, dragCurrent.y),
+            width: Math.abs(dragCurrent.x - dragStart.x),
+            height: Math.abs(dragCurrent.y - dragStart.y),
+            border: '1px solid var(--title-bar-active-start)',
+            background: 'rgba(0, 0, 128, 0.1)',
+            pointerEvents: 'none',
+            zIndex: 9999,
+          }}
+        />
+      )}
     </div>
   );
 }
