@@ -1,6 +1,8 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { useTheme } from '@/app/hooks/useTheme';
+import type { ThemeName } from '@/app/lib/themes';
 
 export type WindowState = {
   id: string;
@@ -25,12 +27,18 @@ type WindowManagerContextType = {
   focusWindow: (id: string) => void;
   updateWindowPosition: (id: string, position: { x: number; y: number }) => void;
   updateWindowSize: (id: string, size: { width: number; height: number }) => void;
+  theme: {
+    currentTheme: ThemeName;
+    setTheme: (themeName: ThemeName) => void;
+    availableThemes: Array<{ name: ThemeName; displayName: string }>;
+  };
 };
 
 const WindowManagerContext = createContext<WindowManagerContextType | undefined>(undefined);
 
 export function WindowManagerProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [windows, setWindows] = useState<WindowState[]>([]);
+  const theme = useTheme();
 
   const openWindow = useCallback((window: Omit<WindowState, 'id' | 'isOpen' | 'zIndex' | 'animationState'>): string => {
     const id = `window-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -120,7 +128,8 @@ export function WindowManagerProvider({ children }: Readonly<{ children: ReactNo
       maximizeWindow,
       focusWindow,
       updateWindowPosition,
-      updateWindowSize
+      updateWindowSize,
+      theme
     }}>
       {children}
     </WindowManagerContext.Provider>
