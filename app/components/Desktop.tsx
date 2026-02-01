@@ -14,6 +14,7 @@ import { FileExplorer } from "./apps/FileExplorer";
 import ChatRoom from "./apps/ChatRoom";
 import { InternetExplorer } from "./apps/InternetExplorer";
 import { SpaceCadetPinball } from "./apps/SpaceCadetPinball";
+import { Solitaire } from "./apps/Solitaire";
 import {
   ContextMenu,
   useContextMenu,
@@ -113,6 +114,28 @@ function DesktopContent() {
       setShowClippy(true);
       return;
     }
+    
+    // Handle programs not in desktop icons
+    if (programId === "solitaire") {
+      const windowSize = getWindowSize("solitaire");
+      // Center the window on screen (accounting for 40px taskbar)
+      const centerX = (window.innerWidth - windowSize.width) / 2;
+      const centerY = (window.innerHeight - 40 - windowSize.height) / 2;
+      openWindow({
+        title: "Solitaire",
+        component: Solitaire,
+        isMinimized: false,
+        isMaximized: false,
+        position: {
+          x: Math.max(0, centerX),
+          y: Math.max(0, centerY),
+        },
+        size: windowSize,
+        icon: "🃏",
+      });
+      return;
+    }
+    
     const iconData = desktopIcons.find((icon) => icon.id === programId);
     if (iconData) {
       handleIconDoubleClick(iconData);

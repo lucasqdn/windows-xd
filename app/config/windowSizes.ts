@@ -16,6 +16,7 @@ export type AppId =
   | "notepad"
   | "paint"
   | "chatroom"
+  | "solitaire"
   | "my-computer"
   | "recycle-bin"
   | "default";
@@ -55,6 +56,12 @@ export const WINDOW_SIZES: Record<AppId, WindowSize> = {
   chatroom: {
     width: 600,
     height: 400,
+  },
+
+  // Solitaire card game
+  solitaire: {
+    width: 940,
+    height: 560,
   },
 
   // File Explorer (My Computer, Recycle Bin)
