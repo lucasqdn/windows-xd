@@ -17,6 +17,7 @@ export type AppId =
   | "paint"
   | "chatroom"
   | "solitaire"
+  | "minesweeper"
   | "my-computer"
   | "recycle-bin"
   | "default";
@@ -62,6 +63,12 @@ export const WINDOW_SIZES: Record<AppId, WindowSize> = {
   solitaire: {
     width: 940,
     height: 560,
+  },
+
+  // Minesweeper game - starts with beginner size, auto-resizes on difficulty change
+  minesweeper: {
+    width: 220,
+    height: 320,
   },
 
   // File Explorer (My Computer, Recycle Bin)

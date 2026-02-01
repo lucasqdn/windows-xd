@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!-- from https://98.js.org/programs/minesweeper/ (jonziebell.com/minesweeper) -->
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Minesweeper</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<link href="os-gui/layout.css" rel="stylesheet" type="text/css">
+		<link href="os-gui/windows-98.css" rel="stylesheet" type="text/css">
+		<script src="os-gui/MenuBar.js"></script>
+		<script src="lib/rocket.12.06.js"></script>
+		<script src="lib/seedrandom.js"></script>
+		<script src="lib/konami.js"></script>
+		<script src="menus.js"></script>
+		<script src="minesweeper.js"></script>
+		<script src="tile.js"></script>
+		<script src="face.js"></script>
+		<script src="grid.js"></script>
+		<script src="ssd.js"></script>
+		<script src="fun.js"></script>
+		<style>
+			html, body {
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+				overflow: visible;
+				min-width: fit-content;
+			}
+			body {
+				background-color: #bdbdbd;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			/* Menu bar should be at the top */
+			.os-gui-menu-bar {
+				width: 100%;
+				order: -1; /* Ensure menu is always first */
+			}
+			#play_area {
+				margin: 0;
+				padding: 0;
+				background-color: #bdbdbd;
+				flex: 0 0 auto;
+			}
+			* {
+				image-rendering: crisp-edges;
+				image-rendering: pixelated;
+			}
+		</style>
+		<script>
+			// Notify parent window when game size changes
+			window.addEventListener('load', function() {
+				// Function to get current game dimensions
+				function notifyResize() {
+					// Get the menu bar
+					const menuBar = document.querySelector('.os-gui-menu-bar');
+					// Get the game table (the actual playfield)
+					const gameTable = document.querySelector('table');
+					
+					if (gameTable) {
+						const tableRect = gameTable.getBoundingClientRect();
+						const menuHeight = menuBar ? menuBar.getBoundingClientRect().height : 0;
+						const menuWidth = menuBar ? menuBar.getBoundingClientRect().width : 0;
+						
+						// Use the maximum width between table and menu
+						const totalWidth = Math.max(tableRect.width, menuWidth);
+						const totalHeight = menuHeight + tableRect.height;
+						
+						window.parent.postMessage({
+							type: 'minesweeper-resize',
+							width: totalWidth,
+							height: totalHeight
+						}, '*');
+						
+						console.log('[Minesweeper iframe] Sending resize:', {
+							tableWidth: tableRect.width,
+							menuWidth: menuWidth,
+							totalWidth: totalWidth,
+							totalHeight: totalHeight,
+							menuHeight: menuHeight,
+							tableHeight: tableRect.height
+						});
+					}
+				}
+
+				// Observe DOM changes to detect when game board changes
+				const observer = new MutationObserver(function() {
+					setTimeout(notifyResize, 100);
+				});
+
+				// Observe the play area for game changes
+				const playArea = document.getElementById('play_area');
+				if (playArea) {
+					observer.observe(playArea, {
+						childList: true,
+						subtree: true,
+						attributes: true
+					});
+				}
+
+				// Also observe body for menu bar changes
+				observer.observe(document.body, {
+					childList: true,
+					subtree: false
+				});
+
+				// Initial notification (wait for menu to render)
+				setTimeout(notifyResize, 500);
+				setTimeout(notifyResize, 1000); // Second attempt in case menu loads slowly
+			});
+		</script>
+	</head>
+	<body>
+		<div id="play_area"></div>
+	</body>
+</html>
