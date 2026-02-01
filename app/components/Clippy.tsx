@@ -32,11 +32,11 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
       });
 
       const data = await res.json();
-      setResponse(data.response || "Hi! How can I help you today?");
+      setResponse(data.response || "Well? What do you want? I haven't got all day.");
     } catch (error) {
       console.error("Failed to fetch Clippy response:", error);
       setResponse(
-        "Hi! I'm having trouble connecting right now, but I'm here to help!"
+        "Connection failed. Must be that 56k modem acting up again. Try refreshing, genius."
       );
     } finally {
       setIsLoading(false);
@@ -63,6 +63,14 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
   const handleAskQuestion = async () => {
     if (!userInput.trim()) return;
     
+    // Get selected text from active text area if any
+    const activeElement = document.activeElement as HTMLTextAreaElement | HTMLInputElement;
+    const selectedText = activeElement && 
+      (activeElement.tagName === 'TEXTAREA' || activeElement.tagName === 'INPUT') &&
+      activeElement.selectionStart !== activeElement.selectionEnd
+        ? activeElement.value.substring(activeElement.selectionStart ?? 0, activeElement.selectionEnd ?? 0)
+        : '';
+    
     // Send to API first - it will determine if we need to open a browser
     setIsLoading(true);
     const context = collectContext(windows);
@@ -71,13 +79,80 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
       const res = await fetch("/api/clippy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ context, prompt: userInput }),
+        body: JSON.stringify({ context, prompt: userInput, selectedText }),
       });
 
       const data = await res.json();
       
+      // Check if API wants us to open an app
+      if (data.action === "openApp" && data.appId) {
+        const appId = data.appId;
+        const appMap: { [key: string]: () => Promise<any> } = {
+          'internet-explorer': () => import("./apps/InternetExplorer"),
+          'notepad': () => import("./apps/Notepad"),
+          'paint': () => import("./apps/Paint"),
+          'solitaire': () => import("./apps/Solitaire"),
+          'minesweeper': () => import("./apps/Minesweeper"),
+          'pinball': () => import("./apps/SpaceCadetPinball"),
+          'chatroom': () => import("./apps/ChatRoom"),
+          'my-computer': () => import("./apps/FileExplorer"),
+        };
+        
+        if (appMap[appId]) {
+          const module = await appMap[appId]();
+          const Component = module[Object.keys(module)[0]];
+          openWindow({
+            title: data.app,
+            component: Component,
+            isMinimized: false,
+            isMaximized: false,
+            position: { x: 100 + Math.random() * 100, y: 80 + Math.random() * 80 },
+            size: getWindowSize(appId as any),
+            icon: data.icon,
+          });
+        }
+        
+        setResponse(data.response);
+      }
+      // Check if API wants us to insert text
+      else if (data.action === "insertText" && data.text) {
+        // Find active Notepad window
+        const notepadWindow = windows.find((w) => w.title === "Notepad");
+        
+        if (notepadWindow) {
+          // Dispatch event to insert text into Notepad
+          window.dispatchEvent(
+            new CustomEvent(`notepad-insert-${notepadWindow.id}`, {
+              detail: { text: data.text, replaceSelection: data.replaceSelection },
+            })
+          );
+        } else {
+          // If no Notepad is open, open one and insert text
+          const { Notepad } = await import("./apps/Notepad");
+          const notepadId = openWindow({
+            title: "Notepad",
+            component: Notepad,
+            isMinimized: false,
+            isMaximized: false,
+            position: { x: 150, y: 100 },
+            size: getWindowSize('notepad'),
+            icon: "📝",
+          });
+          
+          // Wait a bit for the window to render, then insert text
+          setTimeout(() => {
+            window.dispatchEvent(
+              new CustomEvent(`notepad-insert-${notepadId}`, {
+                detail: { text: data.text, replaceSelection: false },
+              })
+            );
+          }, 100);
+        }
+        
+        setResponse(data.response);
+      }
       // Check if API wants us to open a browser
-      if (data.action === "browse" && data.url) {
+      else if (data.action === "browse" && data.url) {
         // Find or open Internet Explorer
         let ieWindow = windows.find((w) => w.title.includes("Internet Explorer"));
         let ieId = ieWindow?.id;
@@ -102,14 +177,14 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
           );
         }, 100);
         
-        setResponse(data.response || `Opening that in Internet Explorer for you! 🌐`);
+        setResponse(data.response || `Fine, I'll open that in IE. Don't blame me when it crashes. 🌐`);
       } else {
-        setResponse(data.response || "Hi! How can I help you today?");
+        setResponse(data.response || "Well? What do you want? I haven't got all day.");
       }
     } catch (error) {
       console.error("Failed to fetch Clippy response:", error);
       setResponse(
-        "Hi! I'm having trouble connecting right now, but I'm here to help!"
+        "Connection failed. Must be that 56k modem acting up again. Try refreshing, genius."
       );
     } finally {
       setIsLoading(false);
@@ -179,7 +254,7 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
             ) : (
               <p className="text-sm leading-relaxed">
                 {response ||
-                  "Hi! It looks like you might need help. What can I do for you?"}
+                  "It looks like you're just clicking around aimlessly. Need help or just wasting my time?"}
               </p>
             )}
           </div>

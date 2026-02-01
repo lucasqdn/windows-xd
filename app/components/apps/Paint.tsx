@@ -2,6 +2,8 @@
 
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
+import { SaveDialog } from "@/app/components/SaveDialog";
+import { saveFile, getFile } from "@/app/lib/fileSystem";
 
 /**
  * Windows 98 Paint Application
@@ -18,6 +20,7 @@ import Image from "next/image";
 
 type PaintProps = {
   id: string;
+  fileId?: string;
 };
 
 type Tool = "pencil" | "brush" | "eraser" | "line" | "fill" | "rectangle" | "circle";
@@ -29,7 +32,7 @@ type DrawCommand =
   | { type: "circle"; center: { x: number; y: number }; radiusX: number; radiusY: number; color: string; lineWidth: number }
   | { type: "fill"; imageData: ImageData };
 
-export function Paint({ id }: PaintProps) {
+export function Paint({ id, fileId: initialFileId }: PaintProps) {
   // Canvas refs
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -46,19 +49,43 @@ export function Paint({ id }: PaintProps) {
   const [commandHistory, setCommandHistory] = useState<DrawCommand[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   
+  // File state
+  const [fileName, setFileName] = useState("Untitled");
+  const [fileId, setFileId] = useState<string | null>(initialFileId || null);
+  const [isModified, setIsModified] = useState(false);
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+  
   // AI generation state
   const [showAIDialog, setShowAIDialog] = useState(false);
   const [aiPrompt, setAIPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
 
-  // Initialize canvas with white background
+  // Initialize canvas with white background or load saved image
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    // Load file if fileId is provided
+    if (initialFileId) {
+      const file = getFile(initialFileId);
+      if (file && file.imageData && file.mimeType) {
+        const img = new window.Image();
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0);
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          addCommand({ type: "fill", imageData });
+        };
+        img.src = `data:${file.mimeType};base64,${file.imageData}`;
+        setFileName(file.name);
+        setFileId(file.id);
+        setIsModified(false);
+        return;
+      }
+    }
 
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -74,7 +101,7 @@ export function Paint({ id }: PaintProps) {
     return () => {
       window.removeEventListener("request-paint-canvas-data", handleCanvasRequest);
     };
-  }, []);
+  }, [initialFileId]);
 
   // ============================================================================
   // Helper Functions
@@ -221,6 +248,7 @@ export function Paint({ id }: PaintProps) {
     newHistory.push(command);
     setCommandHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
+    setIsModified(true);
   };
 
   // Redraw canvas from command history
@@ -477,6 +505,32 @@ export function Paint({ id }: PaintProps) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
 
+  // Handle save
+  const handleSave = (saveName: string, folderId?: string) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const dataUrl = canvas.toDataURL("image/png");
+    const base64Data = dataUrl.split(",")[1];
+    
+    const savedFile = saveFile(
+      fileId,
+      saveName,
+      "",
+      folderId,
+      base64Data,
+      "image/png"
+    );
+    
+    setFileId(savedFile.id);
+    setFileName(savedFile.name);
+    setIsModified(false);
+    setShowSaveDialog(false);
+    
+    // Dispatch event to refresh File Explorer
+    window.dispatchEvent(new CustomEvent("file-system-changed"));
+  };
+
   // ============================================================================
   // AI Image Generation
   // ============================================================================
@@ -563,7 +617,17 @@ export function Paint({ id }: PaintProps) {
     <div className="h-full flex flex-col bg-white">
       {/* Menu Bar */}
       <div className="win98-raised flex gap-1 px-1 py-0.5 text-xs">
-        <button className="px-2 hover:bg-[#000080] hover:text-white">File</button>
+        <div className="relative group">
+          <button className="px-2 hover:bg-[#000080] hover:text-white">File</button>
+          <div className="hidden group-hover:block absolute top-full left-0 win98-raised bg-[#c0c0c0] shadow-lg z-10 min-w-[150px]">
+            <button
+              onClick={() => setShowSaveDialog(true)}
+              className="w-full text-left px-3 py-1 hover:bg-[#000080] hover:text-white flex items-center gap-2"
+            >
+              <span>💾</span> Save As...
+            </button>
+          </div>
+        </div>
         <button className="px-2 hover:bg-[#000080] hover:text-white">Edit</button>
         <button className="px-2 hover:bg-[#000080] hover:text-white">View</button>
         <button className="px-2 hover:bg-[#000080] hover:text-white" onClick={clearCanvas}>
@@ -571,7 +635,9 @@ export function Paint({ id }: PaintProps) {
         </button>
         <button className="px-2 hover:bg-[#000080] hover:text-white">Colors</button>
         <button className="px-2 hover:bg-[#000080] hover:text-white">Help</button>
-        <div className="flex-1" />
+        <div className="flex-1 px-2 text-xs flex items-center">
+          <span className="text-gray-700">{fileName}{isModified ? " *" : ""}</span>
+        </div>
         <button 
           className="px-2 hover:bg-[#000080] hover:text-white font-bold"
           onClick={() => setShowAIDialog(true)}
@@ -703,6 +769,20 @@ export function Paint({ id }: PaintProps) {
         <span>For Help, click Help Topics on the Help Menu.</span>
         <span>Tool: {currentTool}</span>
       </div>
+
+      {/* Save Dialog */}
+      {showSaveDialog && (
+        <SaveDialog
+          defaultName={fileName}
+          defaultExtension=".png"
+          fileTypes={[
+            { label: "PNG Image (*.png)", extension: ".png" },
+            { label: "Bitmap Image (*.bmp)", extension: ".bmp" },
+          ]}
+          onSave={handleSave}
+          onCancel={() => setShowSaveDialog(false)}
+        />
+      )}
 
       {/* AI Generate Dialog */}
       {showAIDialog && (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 type StartMenuProps = {
   isOpen: boolean;
@@ -12,6 +13,7 @@ type MenuItem = {
   id: string;
   label: string;
   icon: string;
+  isImage?: boolean;
   hasSubmenu?: boolean;
 };
 
@@ -26,14 +28,14 @@ const menuItems: MenuItem[] = [
 ];
 
 const programItems: MenuItem[] = [
-  { id: "notepad", label: "Notepad", icon: "📝" },
-  { id: "paint", label: "Paint", icon: "🎨" },
-  { id: "minesweeper", label: "Minesweeper", icon: "💣" },
-  { id: "pinball", label: "3D Pinball", icon: "🎱" },
-  { id: "solitaire", label: "Solitaire", icon: "🃏" },
-  { id: "my-computer", label: "My Computer", icon: "💻" },
-  { id: "recycle-bin", label: "Recycle Bin", icon: "🗑️" },
-  { id: "chatroom", label: "Chat Room", icon: "💬" },
+  { id: "notepad", label: "Notepad", icon: "/notepad-4.png", isImage: true },
+  { id: "paint", label: "Paint", icon: "/paint_old-0.png", isImage: true },
+  { id: "minesweeper", label: "Minesweeper", icon: "/game_mine_1-0.png", isImage: true },
+  { id: "pinball", label: "3D Pinball", icon: "/pinball-icon.png", isImage: true },
+  { id: "solitaire", label: "Solitaire", icon: "/solitaire-32x32.png", isImage: true },
+  { id: "my-computer", label: "My Computer", icon: "/computer_explorer-2.png", isImage: true },
+  { id: "recycle-bin", label: "Recycle Bin", icon: "/recycle_bin_empty-2.png", isImage: true },
+  { id: "chatroom", label: "Chat Room", icon: "/chatroom.png", isImage: true },
   { id: "clippy", label: "Help (Clippy)", icon: "📎" },
 ];
 
@@ -82,6 +84,11 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
                   // Submenu handled by hover
                   return;
                 }
+                if (item.id === "help") {
+                  onProgramClick("clippy");
+                  onClose();
+                  return;
+                }
                 if (item.id === "shutdown") {
                   alert("This is a demo. No actual shutdown will occur.");
                   onClose();
@@ -108,7 +115,17 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
                         onClose();
                       }}
                     >
-                      <span>{program.icon}</span>
+                      {program.isImage ? (
+                        <Image
+                          src={program.icon}
+                          alt={program.label}
+                          width={16}
+                          height={16}
+                          className="flex-shrink-0"
+                        />
+                      ) : (
+                        <span>{program.icon}</span>
+                      )}
                       <span>{program.label}</span>
                     </div>
                   ))}

@@ -77,7 +77,7 @@ const desktopIcons: DesktopIconData[] = [
   },
   {
     id: "chatroom",
-    icon: "/globe.svg",
+    icon: "/chatroom.png",
     label: "Chat Room",
     component: ChatRoom,
   },
