@@ -100,16 +100,19 @@ export function Window({ id, title, children }: WindowProps) {
     isResizing && 'window-resizing',
   ].filter(Boolean).join(' ');
 
-  const handleMinimize = () => {
+  const handleMinimize = (e: React.MouseEvent) => {
+    e.stopPropagation();
     minimizeWindow(id);
   };
 
-  const handleMaximize = () => {
+  const handleMaximize = (e: React.MouseEvent) => {
+    e.stopPropagation();
     console.log('Maximize clicked, current state:', windowState.isMaximized);
     maximizeWindow(id);
   };
 
-  const handleClose = () => {
+  const handleClose = (e: React.MouseEvent) => {
+    e.stopPropagation();
     playSound('windowClose');
     closeWindow(id);
   };

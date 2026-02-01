@@ -97,7 +97,7 @@ const desktopIcons: DesktopIconData[] = [
 ];
 
 function DesktopContent() {
-  const { windows, openWindow, selectMultipleIcons, clearSelection, theme } = useWindowManager();
+  const { windows, openWindow, focusWindow, selectMultipleIcons, clearSelection, theme } = useWindowManager();
   const { contextMenu, showContextMenu, hideContextMenu } = useContextMenu();
   const [showClippy, setShowClippy] = useState(false);
   const [showVirusNotification, setShowVirusNotification] = useState(false);
@@ -208,7 +208,8 @@ function DesktopContent() {
     // Check if window is already open
     const existingWindow = windows.find((w) => w.title === iconData.label);
     if (existingWindow) {
-      // If window exists, just focus it instead of opening a new one
+      // If window exists, focus and restore it instead of opening a new one
+      focusWindow(existingWindow.id);
       return;
     }
 
