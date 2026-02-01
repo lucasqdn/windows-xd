@@ -11,11 +11,11 @@ See: .planning/PROJECT.md (updated 2025-01-31)
 ## Current Position
 
 Phase: 10 of 10 (Polish & Animations)
-Plan: 04 of 07 COMPLETE ✅ | Next: Plan 05 (Wave 2)
-Status: Theme system foundation complete with 6 Windows 98 color schemes
-Last activity: 2026-02-01 — Completed 10-04 (Theme System Foundation) - commits 708c991, 65de2cb, 62df5b1, cd0300a
+Plan: 05 of 07 COMPLETE ✅ | Next: Plan 06 (Wave 2)
+Status: Theme selector UI complete - desktop right-click menu with Appearance submenu
+Last activity: 2026-02-01 — Completed 10-05 (Theme Selector UI) - commits 48860a1, a845249
 
-Progress: [█████████░] 90%+ (Phase 10 Wave 1 complete - 4/7 plans complete)
+Progress: [█████████░] 90%+ (Phase 10 Wave 2 in progress - 5/7 plans complete)
 
 ## Performance Metrics
 
@@ -36,6 +36,13 @@ Progress: [█████████░] 90%+ (Phase 10 Wave 1 complete - 4/7 
 | 6 - LLM-Powered Clippy | ⏳ Ready | - | - | - |
 
 **Recent Activity:**
+- 2026-02-01: Phase 10 Plan 05 complete - Theme Selector UI
+  - Desktop right-click context menu with Appearance submenu
+  - Radio button indicators (● / ○) for current theme selection
+  - All 6 themes accessible from context menu (Windows Standard, High Contrast Black, Brick, Rainy Day, Desert, Eggplant)
+  - Instant theme switching (<100ms) on selection
+  - Submenu rendering with proper hover states and positioning
+  - Commits: 48860a1 (ContextMenu enhancements), a845249 (Desktop integration)
 - 2026-02-01: Phase 10 Plan 04 complete - Theme System Foundation
   - 6 authentic Windows 98 color schemes (Standard, High Contrast Black, Brick, Rainy Day, Desert, Eggplant)
   - CSS custom properties for 11 theme colors (title bars, buttons, desktop, text)
@@ -77,6 +84,13 @@ Progress: [█████████░] 90%+ (Phase 10 Wave 1 complete - 4/7 
 
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
+
+**Phase 10-05 (Theme Selector UI):**
+- Radio button indicators using Unicode characters (● / ○) for simplicity
+- Appearance submenu positioned between Paste and New in context menu
+- Submenu hover triggers immediate display (no delay)
+- Theme switching closes context menu automatically
+- Nested submenu rendering within parent menu items
 
 **Phase 10-04 (Theme System Foundation):**
 - CSS custom properties for instant theme switching (no page reload)
@@ -120,13 +134,19 @@ Recent decisions affecting current work:
 - ✅ 10-04: Theme System Foundation (COMPLETE)
 
 **Phase 10 - Polish & Animations (Wave 2):**
-- 10-05: Desktop Interactions (icon selection, multi-select, grid snapping)
+- ✅ 10-05: Theme Selector UI (COMPLETE)
 - 10-06: Taskbar Enhancements (button flash, real-time clock, system tray)
 - 10-07: Window Title Bar Features (double-click maximize, system menu)
 
 **Earlier Phase Todos (if any remain):**
 
 ### Blockers/Concerns
+
+**Phase 10-05 (COMPLETE ✅):**
+- ✅ Theme selector UI accessible via desktop right-click
+- ✅ Appearance submenu with all 6 themes
+- ✅ Radio button indicators showing current theme
+- ✅ Instant theme switching working correctly
 
 **Phase 10-04 (COMPLETE ✅):**
 - ✅ Theme system implemented with CSS custom properties
@@ -160,14 +180,14 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-02-01 (Phase 10 Plan 04 implementation)
-Completed: Phase 10 Plan 04 - Theme System Foundation (commits 708c991, 65de2cb, 62df5b1, cd0300a)
-Next steps: Phase 10 Plan 05 (Desktop Interactions) or Wave 2 plans ready to execute
+Last session: 2026-02-01 (Phase 10 Plan 05 implementation)
+Completed: Phase 10 Plan 05 - Theme Selector UI (commits 48860a1, a845249)
+Next steps: Phase 10 Plan 06 (Taskbar Enhancements) or Plan 07 (Window Title Bar Features)
 Resume file: None
 
 **For AI Agents:**
-- Phase 10 Plans 01-04 are COMPLETE (Wave 1 complete)
-- Wave 2 plans ready to execute (05, 06, 07)
+- Phase 10 Plans 01-05 are COMPLETE (Wave 1 + first Wave 2 plan complete)
+- Wave 2 remaining plans: 06, 07
 - Window animation patterns established in app/globals.css
 - Sound system patterns established in app/lib/sounds.ts
 - Start menu animation patterns established (slide + fade with transform-origin)
@@ -177,6 +197,8 @@ Resume file: None
 - See 10-02-SUMMARY.md for sound system implementation details
 - See 10-03-SUMMARY.md for menu animation implementation details
 - See 10-04-SUMMARY.md for theme system implementation details
+- See 10-05-SUMMARY.md for theme selector UI implementation details
+- Context menu submenu pattern established for nested menus
 
 ---
-*Last updated: 2026-02-01 (Phase 10 Plan 03 complete)*
+*Last updated: 2026-02-01 (Phase 10 Plan 05 complete)*
