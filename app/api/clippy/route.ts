@@ -32,8 +32,12 @@ export async function POST(request: NextRequest) {
 
     // Check rate limit
     if (!checkRateLimit(ip)) {
+      console.warn(`Rate limit exceeded for IP: ${ip}`);
       return NextResponse.json(
-        { error: "Rate limit exceeded. Please try again later." },
+        { 
+          error: "Rate limit exceeded",
+          response: "Whoa there, speed racer! You're asking me questions faster than a 56k modem can handle. Take a breather and try again in a minute."
+        },
         { status: 429 }
       );
     }
@@ -260,8 +264,22 @@ Examples of your style:
 Now respond to the user's query with your signature snark:`;
 
     // Generate response using Gemini
-    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
-    const result = await model.generateContent(`${systemPrompt}\n\n${prompt}`);
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-2.0-flash-exp",
+      generationConfig: {
+        maxOutputTokens: 200, // Keep responses concise
+        temperature: 0.9, // Slightly random for personality
+      },
+    });
+    
+    // Add timeout to Gemini API call
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Gemini API timeout')), 25000); // 25 second timeout
+    });
+    
+    const generatePromise = model.generateContent(`${systemPrompt}\n\n${prompt}`);
+    
+    const result = await Promise.race([generatePromise, timeoutPromise]) as any;
     const response = result.response?.text() || "Well, well, well... looks like someone needs my help. What is it THIS time?";
 
     return NextResponse.json({ response });
@@ -271,6 +289,28 @@ Now respond to the user's query with your signature snark:`;
     // Log more details about the error
     if (error instanceof Error) {
       console.error("Error details:", error.message, error.stack);
+      
+      // Handle timeout specifically
+      if (error.message === 'Gemini API timeout') {
+        return NextResponse.json(
+          {
+            error: "Timeout",
+            response: "Timeout! The AI is taking longer than a Windows 98 boot sequence. Even IE was faster than this.",
+          },
+          { status: 504 }
+        );
+      }
+      
+      // Handle rate limit from Gemini API
+      if (error.message.includes('429') || error.message.includes('quota')) {
+        return NextResponse.json(
+          {
+            error: "API quota exceeded",
+            response: "My brain (Gemini API) ran out of credits. Classic 2026 problem. Back in '98, everything was unlimited!",
+          },
+          { status: 503 }
+        );
+      }
     }
     
     return NextResponse.json(

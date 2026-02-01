@@ -26,13 +26,32 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
     const context = collectContext(windows);
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const res = await fetch("/api/clippy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ context, prompt }),
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
+
       if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        
+        if (res.status === 429) {
+          setResponse("Whoa there, speed racer! You're asking me questions faster than a 56k modem can handle. Take a breather and try again in a minute.");
+          return;
+        }
+        
+        if (res.status === 400) {
+          setResponse("Invalid request. Did you forget how to ask questions? Even in '98 we knew better.");
+          return;
+        }
+        
+        console.error("Clippy API error:", res.status, res.statusText, errorData);
         throw new Error(`API returned ${res.status}: ${res.statusText}`);
       }
 
@@ -45,10 +64,18 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
         setResponse(data.response || "Well? What do you want? I haven't got all day.");
       }
     } catch (error) {
-      console.error("Failed to fetch Clippy response:", error);
-      setResponse(
-        "Connection failed. Must be that 56k modem acting up again. Try refreshing, genius."
-      );
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          console.error("Clippy request timeout after 30 seconds");
+          setResponse("Timeout! Even in '98, things were faster than this. The server's probably stuck on AOL dial-up.");
+        } else {
+          console.error("Failed to fetch Clippy response:", error.message, error);
+          setResponse("Connection failed. Must be that 56k modem acting up again. Try refreshing, genius.");
+        }
+      } else {
+        console.error("Unknown error:", error);
+        setResponse("Something went terribly wrong. Classic Windows moment. 🤷");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -87,13 +114,37 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
     const context = collectContext(windows);
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const res = await fetch("/api/clippy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ context, prompt: userInput, selectedText }),
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
+
       if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        
+        if (res.status === 429) {
+          setResponse("Whoa there, speed racer! You're asking me questions faster than a 56k modem can handle. Take a breather and try again in a minute.");
+          return;
+        }
+        
+        if (res.status === 400) {
+          setResponse("Invalid request. Did you forget how to ask questions? Even in '98 we knew better.");
+          return;
+        }
+        
+        if (res.status === 504) {
+          setResponse("Timeout! The AI is taking longer than a Windows 98 boot sequence. Even IE was faster than this.");
+          return;
+        }
+        
+        console.error("Clippy API error:", res.status, res.statusText, errorData);
         throw new Error(`API returned ${res.status}: ${res.statusText}`);
       }
 
@@ -101,7 +152,7 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
       
       if (data.error) {
         console.error("Clippy API error:", data.error);
-        setResponse("Ugh, I crashed. Just like Internet Explorer. Have you tried turning me off and on again?");
+        setResponse(data.response || "Ugh, I crashed. Just like Internet Explorer. Have you tried turning me off and on again?");
         return;
       }
       
@@ -203,10 +254,18 @@ export function Clippy({ manualTrigger = false, onClose }: ClippyProps) {
         setResponse(data.response || "Well? What do you want? I haven't got all day.");
       }
     } catch (error) {
-      console.error("Failed to fetch Clippy response:", error);
-      setResponse(
-        "Connection failed. Must be that 56k modem acting up again. Try refreshing, genius."
-      );
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          console.error("Clippy request timeout after 30 seconds");
+          setResponse("Timeout! Even in '98, things were faster than this. The server's probably stuck on AOL dial-up.");
+        } else {
+          console.error("Failed to fetch Clippy response:", error.message, error);
+          setResponse("Connection failed. Must be that 56k modem acting up again. Try refreshing, genius.");
+        }
+      } else {
+        console.error("Unknown error:", error);
+        setResponse("Something went terribly wrong. Classic Windows moment. 🤷");
+      }
     } finally {
       setIsLoading(false);
     }
