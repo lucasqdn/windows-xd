@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  /* Legacy color names (kept for compatibility) */
   --win98-gray: #c0c0c0;
   --win98-desktop: #008080;
   --win98-blue: #000080;
@@ -11,6 +12,19 @@
   --win98-lightgray: #dfdfdf;
   --font-retro: var(--font-retro);
   --font-pixel: var(--font-pixel);
+  
+  /* Theme System - Windows Standard (default) */
+  --title-bar-active-start: #000080;
+  --title-bar-active-end: #1084d0;
+  --title-bar-inactive: #808080;
+  --window-bg: #c0c0c0;
+  --button-face: #c0c0c0;
+  --button-highlight: #ffffff;
+  --button-shadow: #808080;
+  --button-dark-shadow: #000000;
+  --desktop-bg: #008080;
+  --text-primary: #000000;
+  --text-inverse: #ffffff;
 }
 
 /* Digital Display Styles for Minesweeper */
@@ -87,7 +101,7 @@
 body {
   font-size: 11px;
   font-weight: 500;
-  color: var(--win98-black);
+  color: var(--text-primary);
   overflow: hidden;
   user-select: none;
   -webkit-font-smoothing: none;
@@ -99,36 +113,36 @@ body {
 
 /* Windows 98 3D Bevel Effects */
 .win98-raised {
-  border-top: 2px solid var(--win98-white);
-  border-left: 2px solid var(--win98-white);
-  border-right: 2px solid var(--win98-black);
-  border-bottom: 2px solid var(--win98-black);
+  border-top: 2px solid var(--button-highlight);
+  border-left: 2px solid var(--button-highlight);
+  border-right: 2px solid var(--button-dark-shadow);
+  border-bottom: 2px solid var(--button-dark-shadow);
   box-shadow:
-    inset -1px -1px 0 var(--win98-darkgray),
-    inset 1px 1px 0 var(--win98-lightgray);
-  background: var(--win98-gray);
+    inset -1px -1px 0 var(--button-shadow),
+    inset 1px 1px 0 var(--button-highlight);
+  background: var(--button-face);
 }
 
 .win98-inset {
-  border-top: 2px solid var(--win98-darkgray);
-  border-left: 2px solid var(--win98-darkgray);
-  border-right: 2px solid var(--win98-white);
-  border-bottom: 2px solid var(--win98-white);
+  border-top: 2px solid var(--button-shadow);
+  border-left: 2px solid var(--button-shadow);
+  border-right: 2px solid var(--button-highlight);
+  border-bottom: 2px solid var(--button-highlight);
   box-shadow:
-    inset 1px 1px 0 var(--win98-black),
+    inset 1px 1px 0 var(--button-dark-shadow),
     inset -1px -1px 0 var(--win98-lightgray);
   background: var(--win98-white);
 }
 
 .win98-button {
-  border-top: 2px solid var(--win98-white);
-  border-left: 2px solid var(--win98-white);
-  border-right: 2px solid var(--win98-black);
-  border-bottom: 2px solid var(--win98-black);
+  border-top: 2px solid var(--button-highlight);
+  border-left: 2px solid var(--button-highlight);
+  border-right: 2px solid var(--button-dark-shadow);
+  border-bottom: 2px solid var(--button-dark-shadow);
   box-shadow:
-    inset -1px -1px 0 var(--win98-darkgray),
-    inset 1px 1px 0 var(--win98-lightgray);
-  background: var(--win98-gray);
+    inset -1px -1px 0 var(--button-shadow),
+    inset 1px 1px 0 var(--button-highlight);
+  background: var(--button-face);
   padding: 4px 12px;
   font-size: 14px;
   cursor: pointer;
@@ -136,20 +150,20 @@ body {
 }
 
 .win98-button:active {
-  border-top: 2px solid var(--win98-black);
-  border-left: 2px solid var(--win98-black);
-  border-right: 2px solid var(--win98-white);
-  border-bottom: 2px solid var(--win98-white);
-  box-shadow: inset 1px 1px 0 var(--win98-darkgray);
+  border-top: 2px solid var(--button-dark-shadow);
+  border-left: 2px solid var(--button-dark-shadow);
+  border-right: 2px solid var(--button-highlight);
+  border-bottom: 2px solid var(--button-highlight);
+  box-shadow: inset 1px 1px 0 var(--button-shadow);
   padding: 5px 11px 3px 13px;
 }
 
 .win98-button.active {
-  border-top: 2px solid var(--win98-black);
-  border-left: 2px solid var(--win98-black);
-  border-right: 2px solid var(--win98-white);
-  border-bottom: 2px solid var(--win98-white);
-  box-shadow: inset 1px 1px 0 var(--win98-darkgray);
+  border-top: 2px solid var(--button-dark-shadow);
+  border-left: 2px solid var(--button-dark-shadow);
+  border-right: 2px solid var(--button-highlight);
+  border-bottom: 2px solid var(--button-highlight);
+  box-shadow: inset 1px 1px 0 var(--button-shadow);
 }
 
 .win98-button:disabled {
@@ -169,13 +183,13 @@ body {
 
 /* Title Bar Styles */
 .win98-titlebar-active {
-  background: linear-gradient(to right, var(--win98-blue) 0%, #1084d0 100%);
-  color: var(--win98-white);
+  background: linear-gradient(to right, var(--title-bar-active-start) 0%, var(--title-bar-active-end) 100%);
+  color: var(--text-inverse);
   font-weight: bold;
 }
 
 .win98-titlebar-inactive {
-  background: linear-gradient(to right, var(--win98-darkgray) 0%, #b5b5b5 100%);
+  background: var(--title-bar-inactive);
   color: var(--win98-lightgray);
   font-weight: bold;
 }
@@ -185,14 +199,14 @@ body {
   position: absolute;
   display: flex;
   flex-direction: column;
-  background: var(--win98-gray);
-  border-top: 2px solid var(--win98-white);
-  border-left: 2px solid var(--win98-white);
-  border-right: 2px solid var(--win98-black);
-  border-bottom: 2px solid var(--win98-black);
+  background: var(--window-bg);
+  border-top: 2px solid var(--button-highlight);
+  border-left: 2px solid var(--button-highlight);
+  border-right: 2px solid var(--button-dark-shadow);
+  border-bottom: 2px solid var(--button-dark-shadow);
   box-shadow:
-    inset -1px -1px 0 var(--win98-darkgray),
-    inset 1px 1px 0 var(--win98-lightgray);
+    inset -1px -1px 0 var(--button-shadow),
+    inset 1px 1px 0 var(--button-highlight);
 }
 
 /* Window Animations */
@@ -331,11 +345,11 @@ body {
   bottom: 30px;
   left: 0;
   width: 200px;
-  background: var(--win98-gray);
-  border-top: 2px solid var(--win98-white);
-  border-left: 2px solid var(--win98-white);
-  border-right: 2px solid var(--win98-black);
-  border-bottom: 2px solid var(--win98-black);
+  background: var(--button-face);
+  border-top: 2px solid var(--button-highlight);
+  border-left: 2px solid var(--button-highlight);
+  border-right: 2px solid var(--button-dark-shadow);
+  border-bottom: 2px solid var(--button-dark-shadow);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -357,11 +371,11 @@ body {
   left: 100%;
   top: 0;
   min-width: 180px;
-  background: var(--win98-gray);
-  border-top: 2px solid var(--win98-white);
-  border-left: 2px solid var(--win98-white);
-  border-right: 2px solid var(--win98-black);
-  border-bottom: 2px solid var(--win98-black);
+  background: var(--button-face);
+  border-top: 2px solid var(--button-highlight);
+  border-left: 2px solid var(--button-highlight);
+  border-right: 2px solid var(--button-dark-shadow);
+  border-bottom: 2px solid var(--button-dark-shadow);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   z-index: 10000;
 }
@@ -373,8 +387,8 @@ body {
   left: 0;
   right: 0;
   height: 30px;
-  background: var(--win98-gray);
-  border-top: 2px solid var(--win98-white);
+  background: var(--button-face);
+  border-top: 2px solid var(--button-highlight);
   display: flex;
   align-items: center;
   padding: 2px;
@@ -388,11 +402,11 @@ body {
   min-width: 54px;
   max-width: 160px;
   padding: 0 6px;
-  border-top: 2px solid var(--win98-white);
-  border-left: 2px solid var(--win98-white);
-  border-right: 2px solid var(--win98-black);
-  border-bottom: 2px solid var(--win98-black);
-  background: var(--win98-gray);
+  border-top: 2px solid var(--button-highlight);
+  border-left: 2px solid var(--button-highlight);
+  border-right: 2px solid var(--button-dark-shadow);
+  border-bottom: 2px solid var(--button-dark-shadow);
+  background: var(--button-face);
   font-size: 14px;
   cursor: pointer;
   overflow: hidden;
@@ -401,21 +415,21 @@ body {
 }
 
 .taskbar-button.active {
-  border-top: 2px solid var(--win98-black);
-  border-left: 2px solid var(--win98-black);
-  border-right: 2px solid var(--win98-white);
-  border-bottom: 2px solid var(--win98-white);
-  box-shadow: inset 1px 1px 0 var(--win98-darkgray);
+  border-top: 2px solid var(--button-dark-shadow);
+  border-left: 2px solid var(--button-dark-shadow);
+  border-right: 2px solid var(--button-highlight);
+  border-bottom: 2px solid var(--button-highlight);
+  box-shadow: inset 1px 1px 0 var(--button-shadow);
 }
 
 .system-tray {
   margin-left: auto;
   height: 24px;
   padding: 0 4px;
-  border-top: 1px solid var(--win98-darkgray);
-  border-left: 1px solid var(--win98-darkgray);
-  border-right: 1px solid var(--win98-white);
-  border-bottom: 1px solid var(--win98-white);
+  border-top: 1px solid var(--button-shadow);
+  border-left: 1px solid var(--button-shadow);
+  border-right: 1px solid var(--button-highlight);
+  border-bottom: 1px solid var(--button-highlight);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -425,11 +439,11 @@ body {
 /* Context Menu Styles */
 .context-menu {
   min-width: 150px;
-  background: var(--win98-gray);
-  border-top: 2px solid var(--win98-white);
-  border-left: 2px solid var(--win98-white);
-  border-right: 2px solid var(--win98-black);
-  border-bottom: 2px solid var(--win98-black);
+  background: var(--button-face);
+  border-top: 2px solid var(--button-highlight);
+  border-left: 2px solid var(--button-highlight);
+  border-right: 2px solid var(--button-dark-shadow);
+  border-bottom: 2px solid var(--button-dark-shadow);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   padding: 2px;
 }
