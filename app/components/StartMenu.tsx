@@ -29,26 +29,15 @@ const menuItems: MenuItem[] = [
 ];
 
 const programItems: MenuItem[] = [
-<<<<<<< HEAD
   { id: "notepad", label: "Notepad", icon: "/notepad-4.png", isImage: true },
   { id: "paint", label: "Paint", icon: "/paint_old-0.png", isImage: true },
   { id: "minesweeper", label: "Minesweeper", icon: "/game_mine_1-0.png", isImage: true },
   { id: "pinball", label: "3D Pinball", icon: "/pinball-icon.png", isImage: true },
   { id: "solitaire", label: "Solitaire", icon: "/solitaire-32x32.png", isImage: true },
+  { id: "doom", label: "DOOM", icon: "/doom-icon.png", isImage: true },
   { id: "my-computer", label: "My Computer", icon: "/computer_explorer-2.png", isImage: true },
   { id: "recycle-bin", label: "Recycle Bin", icon: "/recycle_bin_empty-2.png", isImage: true },
   { id: "chatroom", label: "Chat Room", icon: "/chatroom.png", isImage: true },
-=======
-  { id: "notepad", label: "Notepad", icon: "📝" },
-  { id: "paint", label: "Paint", icon: "🎨" },
-  { id: "minesweeper", label: "Minesweeper", icon: "💣" },
-  { id: "pinball", label: "3D Pinball", icon: "🎱" },
-  { id: "solitaire", label: "Solitaire", icon: "🃏" },
-  { id: "doom", label: "DOOM", icon: "🔫" },
-  { id: "my-computer", label: "My Computer", icon: "💻" },
-  { id: "recycle-bin", label: "Recycle Bin", icon: "🗑️" },
-  { id: "chatroom", label: "Chat Room", icon: "💬" },
->>>>>>> 1651e71 (feat: add DOOM as a playable app)
   { id: "clippy", label: "Help (Clippy)", icon: "📎" },
 ];
 
