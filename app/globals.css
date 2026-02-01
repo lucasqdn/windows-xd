@@ -467,6 +467,22 @@ body {
   cursor: not-allowed;
 }
 
+.context-submenu {
+  margin-top: -4px;
+  margin-left: -2px;
+}
+
+.radio-indicator {
+  margin-right: 8px;
+  font-size: 10px;
+  width: 12px;
+  display: inline-block;
+}
+
+.context-menu-item.has-submenu {
+  padding-right: 30px;
+}
+
 /* Solitaire Styles */
 .card {
   width: 71px;
