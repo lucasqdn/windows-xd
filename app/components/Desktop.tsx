@@ -98,7 +98,7 @@ const desktopIcons: DesktopIconData[] = [
   },
   {
     id: "doom",
-    icon: "/doom-icon.png",
+    icon: "/doom.png",
     label: "DOOM",
     component: Doom,
   },

@@ -84,7 +84,7 @@ export const AVAILABLE_APPS: AppConfig[] = [
   {
     id: "doom",
     label: "DOOM",
-    icon: "/doom-icon.png",
+    icon: "/doom.png",
     showInStartMenu: true,
     showOnDesktop: true,
   },
