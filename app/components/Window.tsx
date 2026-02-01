@@ -3,6 +3,7 @@
 import { Rnd } from "react-rnd";
 import { useWindowManager } from "@/app/contexts/WindowManagerContext";
 import type { ReactNode } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type WindowProps = {
   id: string;
@@ -15,17 +16,34 @@ export function Window({ id, title, children }: WindowProps) {
   
   const windowState = windows.find(w => w.id === id);
   
+  // Track animation and interaction states
+  const [animationClass, setAnimationClass] = useState<string>('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
+  const prevMaximizedRef = useRef<boolean>(false);
+  
   if (!windowState || (windowState.isMinimized && windowState.animationState !== 'minimizing')) {
     return null;
   }
+
+  // Handle maximize animation
+  useEffect(() => {
+    if (windowState.isMaximized && !prevMaximizedRef.current) {
+      // Window was just maximized
+      setAnimationClass('window-maximizing');
+      const timer = setTimeout(() => setAnimationClass(''), 200);
+      return () => clearTimeout(timer);
+    }
+    prevMaximizedRef.current = windowState.isMaximized;
+  }, [windowState.isMaximized]);
 
   // Log window dimensions for debugging
   console.log(`[Window] Rendering "${title}" - width: ${windowState.size.width}, height: ${windowState.size.height}`);
 
   const isActive = windowState.zIndex === Math.max(...windows.map(w => w.zIndex));
   
-  // Determine animation class
-  const getAnimationClass = () => {
+  // Determine base animation class from window state
+  const getBaseAnimationClass = () => {
     switch (windowState.animationState) {
       case 'opening':
         return 'window-opening';
@@ -37,6 +55,15 @@ export function Window({ id, title, children }: WindowProps) {
         return '';
     }
   };
+
+  // Combine all window classes
+  const windowClasses = [
+    'win98-window h-full flex flex-col',
+    getBaseAnimationClass(),
+    animationClass,
+    isDragging && 'window-dragging',
+    isResizing && 'window-resizing',
+  ].filter(Boolean).join(' ');
 
   const handleMinimize = () => {
     minimizeWindow(id);
@@ -118,10 +145,14 @@ export function Window({ id, title, children }: WindowProps) {
         x: windowState.position.x, 
         y: windowState.position.y 
       }}
+      onDragStart={() => setIsDragging(true)}
       onDragStop={(e, d) => {
+        setIsDragging(false);
         updateWindowPosition(id, { x: d.x, y: d.y });
       }}
+      onResizeStart={() => setIsResizing(true)}
       onResizeStop={(e, direction, ref, delta, position) => {
+        setIsResizing(false);
         updateWindowSize(id, { width: parseInt(ref.style.width), height: parseInt(ref.style.height) });
         updateWindowPosition(id, { x: position.x, y: position.y });
       }}
@@ -135,7 +166,7 @@ export function Window({ id, title, children }: WindowProps) {
       enableResizing={true}
     >
       <div 
-        className={`win98-window h-full flex flex-col ${getAnimationClass()}`}
+        className={windowClasses}
         data-window-id={id}
       >
         {/* Title Bar */}
