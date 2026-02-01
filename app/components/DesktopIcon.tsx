@@ -129,13 +129,15 @@ export function DesktopIcon({
         transition: isDragging ? 'none' : 'all 0.2s ease',
       }}
     >
-      <div className="w-12 h-12 relative">
+      <div className="w-12 h-12 relative flex items-center justify-center">
         <Image
           src={icon}
           alt={label}
-          fill
+          width={48}
+          height={48}
           className="object-contain"
           draggable={false}
+          style={{ width: '48px', height: '48px' }}
         />
       </div>
       <div className="icon-label">{label}</div>
