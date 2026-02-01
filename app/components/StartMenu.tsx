@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 type StartMenuProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -26,6 +28,7 @@ const menuItems: MenuItem[] = [
 const programItems: MenuItem[] = [
   { id: "notepad", label: "Notepad", icon: "📝" },
   { id: "paint", label: "Paint", icon: "🎨" },
+  { id: "solitaire", label: "Solitaire", icon: "🃏" },
   { id: "my-computer", label: "My Computer", icon: "💻" },
   { id: "recycle-bin", label: "Recycle Bin", icon: "🗑️" },
   { id: "chatroom", label: "Chat Room", icon: "💬" },
@@ -33,6 +36,8 @@ const programItems: MenuItem[] = [
 ];
 
 export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
   if (!isOpen) {
     return null;
   }
@@ -67,10 +72,12 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
           {menuItems.map((item) => (
             <div
               key={item.id}
-              className="start-menu-item"
+              className="start-menu-item relative"
+              onMouseEnter={() => setHoveredItem(item.id)}
+              onMouseLeave={() => setHoveredItem(null)}
               onClick={() => {
                 if (item.id === "programs") {
-                  // Show submenu (simplified for now)
+                  // Submenu handled by hover
                   return;
                 }
                 if (item.id === "shutdown") {
@@ -82,27 +89,33 @@ export function StartMenu({ isOpen, onClose, onProgramClick }: StartMenuProps) {
               <span>{item.icon}</span>
               <span>{item.label}</span>
               {item.hasSubmenu && <span className="ml-auto">▶</span>}
+              
+              {/* Programs Submenu */}
+              {item.id === "programs" && hoveredItem === "programs" && (
+                <div 
+                  className="start-menu-submenu"
+                  onMouseEnter={() => setHoveredItem("programs")}
+                >
+                  {programItems.map((program) => (
+                    <div
+                      key={program.id}
+                      className="start-menu-item"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onProgramClick(program.id);
+                        onClose();
+                      }}
+                    >
+                      <span>{program.icon}</span>
+                      <span>{program.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
           
           <div className="border-t border-gray-500 my-1" />
-          
-          {/* Programs submenu inline for demo */}
-          <div className="pl-4">
-            {programItems.map((program) => (
-              <div
-                key={program.id}
-                className="start-menu-item"
-                onClick={() => {
-                  onProgramClick(program.id);
-                  onClose();
-                }}
-              >
-                <span>{program.icon}</span>
-                <span>{program.label}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </>
