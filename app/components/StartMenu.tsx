@@ -26,6 +26,8 @@ const menuItems: MenuItem[] = [
 const programItems: MenuItem[] = [
   { id: "notepad", label: "Notepad", icon: "📝" },
   { id: "paint", label: "Paint", icon: "🎨" },
+  { id: "minesweeper", label: "Minesweeper", icon: "💣" },
+  { id: "pinball", label: "3D Pinball", icon: "🎱" },
   { id: "my-computer", label: "My Computer", icon: "💻" },
   { id: "recycle-bin", label: "Recycle Bin", icon: "🗑️" },
   { id: "chatroom", label: "Chat Room", icon: "💬" },
