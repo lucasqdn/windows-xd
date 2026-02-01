@@ -162,6 +162,8 @@ function DesktopContent() {
   };
 
   const handleDesktopContextMenu = (e: React.MouseEvent) => {
+    const { theme } = useWindowManager();
+    
     const menuItems: ContextMenuItem[] = [
       {
         label: "Arrange Icons",
@@ -184,6 +186,15 @@ function DesktopContent() {
         label: "Paste",
         icon: "📋",
         disabled: true,
+      },
+      { divider: true },
+      {
+        label: "Appearance",
+        submenu: theme.availableThemes.map((t) => ({
+          label: t.displayName,
+          radioSelected: theme.currentTheme === t.name,
+          onClick: () => theme.setTheme(t.name),
+        })),
       },
       { divider: true },
       {
