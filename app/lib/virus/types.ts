@@ -16,7 +16,7 @@ export type NotificationVariant = {
 };
 
 export const VIRUS_TIMING = {
-  notificationDelay: 70000, // 70s after page load
+  notificationDelay: 90000, // 90s after page load
   notificationRepeatDelay: 30000, // 30s if user clicks "Cancel"
   silentInfection: 3000, // 3s silent phase before starting
   virusSpawnDuration: 20000, // 20s total spawn phase
