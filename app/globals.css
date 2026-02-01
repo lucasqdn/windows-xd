@@ -282,18 +282,16 @@ body {
     inset 1px 1px 0 var(--button-highlight);
   background: var(--button-face);
   padding: 0;
-  width: 18px;
-  height: 18px;
-  min-width: 18px;
-  min-height: 18px;
-  font-size: 10px;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  font-size: 8px;
   line-height: 1;
   cursor: pointer;
   outline: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 
 .win98-button-xs:active {

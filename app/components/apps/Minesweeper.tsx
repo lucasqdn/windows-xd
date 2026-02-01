@@ -6,7 +6,7 @@ import { useWindowManager } from '@/app/contexts/WindowManagerContext';
 // Minesweeper from 98.js.org - with automatic window resizing based on difficulty
 export default function Minesweeper({ id }: { id: string }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const { updateWindowSize, windows } = useWindowManager();
+  const { updateWindowSize } = useWindowManager();
 
   useEffect(() => {
     // Listen for resize messages from the iframe
@@ -14,15 +14,6 @@ export default function Minesweeper({ id }: { id: string }) {
       // Check if message is from our minesweeper iframe
       if (event.data?.type === 'minesweeper-resize') {
         const { width, height } = event.data;
-        
-        // Get current window state
-        const currentWindow = windows.find(w => w.id === id);
-        
-        // Don't resize if window is maximized - prevents flickering
-        if (currentWindow?.isMaximized) {
-          console.log('[Minesweeper] Ignoring resize - window is maximized');
-          return;
-        }
         
         // Calculate window size with proper spacing
         // Window border: 4px (2px left + 2px right from .win98-window)
@@ -45,7 +36,6 @@ export default function Minesweeper({ id }: { id: string }) {
           windowWidth: newWidth,
           windowHeight: newHeight,
           windowId: id,
-          isMaximized: currentWindow?.isMaximized,
         });
         
         updateWindowSize(id, { width: newWidth, height: newHeight });
@@ -57,7 +47,7 @@ export default function Minesweeper({ id }: { id: string }) {
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, [id, updateWindowSize, windows]);
+  }, [id, updateWindowSize]);
 
   return (
     <div className="w-full h-full overflow-auto -m-2 bg-[#bdbdbd]" style={{ minWidth: '100%', minHeight: '100%' }}>
