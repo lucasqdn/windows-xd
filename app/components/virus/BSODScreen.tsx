@@ -1,20 +1,36 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useSoundEffects } from "@/app/hooks/useSoundEffects";
 
 type BSODScreenProps = {
   onComplete: () => void;
 };
 
 export function BSODScreen({ onComplete }: BSODScreenProps) {
+  const { stopAllSounds, playAudioFile } = useSoundEffects();
+  const hasPlayedSound = useRef(false);
+
   useEffect(() => {
+    // Only play sound once using ref guard
+    if (!hasPlayedSound.current) {
+      // Stop all sounds immediately
+      stopAllSounds();
+
+      // Play shutdown sound once
+      const audio = playAudioFile('/sounds/shutdown.mp3', 0.6);
+      audio.loop = false; // Ensure it doesn't loop
+      
+      hasPlayedSound.current = true;
+    }
+
     // Auto-advance to ransomware after 5 seconds
     const timer = setTimeout(() => {
       onComplete();
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, [onComplete, stopAllSounds, playAudioFile]);
 
   return (
     <div 

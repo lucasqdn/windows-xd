@@ -29,5 +29,13 @@ export function useSoundEffects() {
     soundManager.setMuted(muted);
   }, []);
 
-  return { playSound, setVolume, setMuted };
+  const stopAllSounds = useCallback(() => {
+    soundManager.stopAllSounds();
+  }, []);
+
+  const playAudioFile = useCallback((url: string, volume?: number) => {
+    return soundManager.playAudioFile(url, volume);
+  }, []);
+
+  return { playSound, setVolume, setMuted, stopAllSounds, playAudioFile };
 }

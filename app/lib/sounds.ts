@@ -284,6 +284,43 @@ export class SoundManager {
   }
 
   /**
+   * Stop all currently playing sounds immediately
+   * Suspends the AudioContext to halt all audio operations
+   */
+  stopAllSounds(): void {
+    if (this.audioContext && this.audioContext.state === 'running') {
+      this.audioContext.suspend().catch(error => {
+        console.error('Failed to suspend AudioContext:', error);
+      });
+    }
+  }
+
+  /**
+   * Resume audio context after stopping all sounds
+   */
+  resumeAudio(): void {
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+      this.audioContext.resume().catch(error => {
+        console.error('Failed to resume AudioContext:', error);
+      });
+    }
+  }
+
+  /**
+   * Play an external audio file (MP3, WAV, etc.)
+   * Returns the Audio element for further control if needed
+   */
+  playAudioFile(url: string, volume: number = 1.0): HTMLAudioElement {
+    const audio = new Audio(url);
+    audio.volume = Math.max(0, Math.min(1, volume)) * this.volume;
+    audio.loop = false; // Ensure audio doesn't loop
+    audio.play().catch(error => {
+      console.error(`Failed to play audio file "${url}":`, error);
+    });
+    return audio;
+  }
+
+  /**
    * Cleanup - close AudioContext if needed
    */
   destroy(): void {
