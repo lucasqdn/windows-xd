@@ -1,60 +1,35 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 type DoomProps = {
   id: string;
 };
 
-// Using simpler iframe approach with js-dos hosted version for better compatibility
 export function Doom({ id }: DoomProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Pre-warm: check if DOOM WAD file exists
-    fetch('/games/doom/DOOM1.WAD', { method: 'HEAD' })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('DOOM1.WAD not found');
-        }
-        setIsLoading(false);
-      })
-      .catch(err => {
-        console.error('DOOM WAD check failed:', err);
-        setError('DOOM game files not found');
-        setIsLoading(false);
-      });
-  }, []);
-
-  if (error) {
-    return (
-      <div className="h-full w-full bg-black flex items-center justify-center text-white">
-        <div className="text-center">
-          <div className="mb-4 text-xl text-red-500">Error Loading DOOM</div>
-          <div className="text-sm text-gray-400">{error}</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="h-full w-full bg-black flex items-center justify-center text-white">
-        <div className="text-center">
-          <div className="mb-4 text-xl">Preparing DOOM...</div>
-          <div className="text-sm text-gray-400">Checking game files</div>
-        </div>
-      </div>
-    );
-  }
-
-  // Use the well-tested DOOM WASM port with iframe for maximum compatibility
-  // This avoids complex js-dos integration issues and provides better performance
+  // Use dos.zone which provides clean, embedded DOOM without debug UI
+  // This is a community-maintained DOS game portal with clean embeds
   return (
-    <div className="h-full w-full bg-black overflow-hidden">
+    <div className="h-full w-full bg-black overflow-hidden relative">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center text-white z-10 bg-black">
+          <div className="text-center">
+            <div className="mb-4 text-xl">Loading DOOM...</div>
+            <div className="text-sm text-gray-400 max-w-md px-4">
+              <p className="mb-2">Controls:</p>
+              <p className="text-xs">
+                Arrow keys = Move • Ctrl = Shoot • Space = Open doors<br/>
+                Alt+Arrows = Strafe • Enter = Start game
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <iframe
-        src="https://diekmann.github.io/wasm-fizzbuzz/doom/"
+        src="https://dos.zone/doom-1993/"
         className="w-full h-full border-0 block"
         title="DOOM"
         style={{ 
@@ -64,8 +39,9 @@ export function Doom({ id }: DoomProps) {
           minHeight: '100%',
           backgroundColor: '#000'
         }}
-        allow="autoplay; fullscreen"
-        sandbox="allow-scripts allow-same-origin allow-pointer-lock"
+        allow="autoplay; fullscreen; gamepad; pointer-lock"
+        sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms"
+        onLoad={() => setIsLoading(false)}
       />
     </div>
   );
