@@ -220,6 +220,40 @@ import Image from "next/image";
 - **Branch strategy**: Feature branches merged into main
 - Keep commits atomic and focused on single changes
 
+## Architecture Overview
+
+### Window Management System
+The app uses a **centralized Context Provider** pattern for managing all window states:
+
+- **Component**: `WindowManagerContext.tsx` (single source of truth)
+- **Hook**: `useWindowManager()` for window operations
+- **Library**: `react-rnd` for drag/resize functionality
+
+Key operations:
+- `openWindow()`: Create new window
+- `closeWindow()`: Remove window
+- `focusWindow()`: Bring to front and restore if minimized
+- `minimizeWindow()`: Hide window (keep in taskbar)
+- `maximizeWindow()`: Toggle fullscreen
+- `updateWindowPosition()`, `updateWindowSize()`: Update dimensions
+
+### Component Communication
+All components communicate through the WindowManagerContext:
+
+```
+Desktop (Provider)
+  ↓ Context
+WindowManager
+  ↓ Hook
+Window Components ↔ Taskbar ↔ StartMenu
+```
+
+### Z-Index Management
+Z-index is normalized on every focus operation to prevent infinite growth:
+- Windows are re-indexed (0, 1, 2, ..., N) on each focus
+- Focused window always gets highest index
+- Prevents z-index overflow issues
+
 ## Important Notes
 
 - **Strict TypeScript**: All type errors must be resolved before committing
