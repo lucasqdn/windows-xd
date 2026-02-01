@@ -96,6 +96,18 @@ export const WINDOW_SIZES: Record<AppId, WindowSize> = {
     height: 600,  // Tall for multiple items
   },
 
+  // Task Manager - system monitoring and task management
+  "task-manager": {
+    width: 500,   // Compact width for task list
+    height: 400,  // Enough for processes and stats
+  },
+
+  // Windows Media Player - classic video player with controls
+  "media-player": {
+    width: 640,   // Classic 640px for 4:3 video
+    height: 560,  // 480px video + ~80px controls
+  },
+
   // Default fallback size for any unlisted apps - generous sizing
   // Default fallback size for any unlisted apps - generous sizing
   default: {

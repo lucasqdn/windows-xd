@@ -111,6 +111,11 @@ export function TaskManager({ id }: TaskManagerProps) {
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
+      // Set canvas size based on its display size
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
       const width = canvas.width;
       const height = canvas.height;
       const padding = 10;
@@ -248,16 +253,15 @@ export function TaskManager({ id }: TaskManagerProps) {
       {/* Content Area */}
       <div className="flex-1 flex flex-col p-2 overflow-hidden">
         {activeTab === "performance" && (
-          <div className="flex-1 flex flex-col gap-4 p-2">
+          <div className="flex-1 flex flex-col gap-4">
             {/* CPU Usage Graph */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col min-h-0">
               <div className="text-xs font-bold mb-1">CPU Usage</div>
-              <div className="flex-1 win98-inset bg-black p-1 relative">
+              <div className="flex-1 win98-inset bg-black p-1 relative min-h-0">
                 <canvas
                   ref={cpuCanvasRef}
-                  width={500}
-                  height={120}
                   className="w-full h-full"
+                  style={{ display: 'block' }}
                 />
               </div>
               <div className="text-xs mt-1 flex justify-between">
@@ -268,14 +272,13 @@ export function TaskManager({ id }: TaskManagerProps) {
             </div>
 
             {/* Memory Usage Graph */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col min-h-0">
               <div className="text-xs font-bold mb-1">Memory Usage</div>
-              <div className="flex-1 win98-inset bg-black p-1 relative">
+              <div className="flex-1 win98-inset bg-black p-1 relative min-h-0">
                 <canvas
                   ref={memCanvasRef}
-                  width={500}
-                  height={120}
                   className="w-full h-full"
+                  style={{ display: 'block' }}
                 />
               </div>
               <div className="text-xs mt-1 flex justify-between">
@@ -286,7 +289,7 @@ export function TaskManager({ id }: TaskManagerProps) {
             </div>
 
             {/* System Info */}
-            <div className="win98-raised p-2 text-xs">
+            <div className="win98-raised p-2 text-xs flex-shrink-0">
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <span className="font-bold">Totals</span>
@@ -410,68 +413,6 @@ export function TaskManager({ id }: TaskManagerProps) {
               </button>
             </div>
           </>
-        )}
-
-        {activeTab === "performance" && (
-          <div className="flex-1 flex flex-col gap-4 p-2">
-            {/* CPU Usage Graph */}
-            <div className="flex-1 flex flex-col">
-              <div className="text-xs font-bold mb-1">CPU Usage</div>
-              <div className="flex-1 win98-inset bg-black p-1 relative">
-                <canvas
-                  ref={cpuCanvasRef}
-                  width={500}
-                  height={120}
-                  className="w-full h-full"
-                />
-              </div>
-              <div className="text-xs mt-1 flex justify-between">
-                <span>Current: {cpuUsage}%</span>
-                <span>Max: {Math.max(...history.cpu)}%</span>
-                <span>Avg: {Math.floor(history.cpu.reduce((a, b) => a + b, 0) / history.cpu.length)}%</span>
-              </div>
-            </div>
-
-            {/* Memory Usage Graph */}
-            <div className="flex-1 flex flex-col">
-              <div className="text-xs font-bold mb-1">Memory Usage</div>
-              <div className="flex-1 win98-inset bg-black p-1 relative">
-                <canvas
-                  ref={memCanvasRef}
-                  width={500}
-                  height={120}
-                  className="w-full h-full"
-                />
-              </div>
-              <div className="text-xs mt-1 flex justify-between">
-                <span>Current: {memUsage}M / 128M</span>
-                <span>Usage: {Math.floor((memUsage / 128) * 100)}%</span>
-                <span>Available: {128 - memUsage}M</span>
-              </div>
-            </div>
-
-            {/* System Info */}
-            <div className="win98-raised p-2 text-xs">
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <span className="font-bold">Totals</span>
-                  <div className="ml-2">
-                    <div>Handles: {Math.floor(Math.random() * 5000) + 3000}</div>
-                    <div>Threads: {Math.floor(Math.random() * 200) + 100}</div>
-                    <div>Processes: {processes.length}</div>
-                  </div>
-                </div>
-                <div>
-                  <span className="font-bold">Physical Memory (K)</span>
-                  <div className="ml-2">
-                    <div>Total: 131072</div>
-                    <div>Available: {(128 - memUsage) * 1024}</div>
-                    <div>System Cache: {Math.floor(Math.random() * 20000) + 10000}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         )}
       </div>
 
